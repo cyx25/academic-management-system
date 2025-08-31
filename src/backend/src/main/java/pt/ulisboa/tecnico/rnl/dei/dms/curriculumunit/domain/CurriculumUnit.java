@@ -1,0 +1,73 @@
+package pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Data;
+import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
+
+
+@Data
+@Entity
+@Table(name = "curriculum_units")
+public class CurriculumUnit {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "code", nullable = false, unique = true)
+    private String code;
+
+    @Column(name = "semester", nullable = false)
+    private int semester;
+
+    @Column(name = "ects", nullable = false)
+    private int ects;
+
+    @ManyToMany
+    @JoinTable(
+        name = "curriculum_unit_students",
+        joinColumns = @JoinColumn(name = "curriculum_unit_id"),
+        inverseJoinColumns = @JoinColumn(name = "person_id")
+    )
+    private Set<Person> students = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "curriculum_unit_tas",
+        joinColumns = @JoinColumn(name = "curriculum_unit_id"),
+        inverseJoinColumns = @JoinColumn(name = "person_id")
+    )
+    private Set<Person> teachingAssistants = new HashSet<>();
+
+
+    @ManyToOne
+    @JoinColumn(name = "main_teacher_id")
+    private Person mainTeacher;
+
+    protected CurriculumUnit() {
+    }
+
+    public CurriculumUnit(String name, String code, int semester, int ects) {
+        this.name = name;
+        this.code = code;
+        this.semester = semester;
+        this.ects = ects;
+    }
+
+    
+
+}

@@ -12,10 +12,10 @@ import { useAppearanceStore } from '@/stores/appearance'
 const theme = useTheme()
 const appearanceStore = useAppearanceStore()
 
-theme.global.name.value = appearanceStore.currentTheme
+theme.change(appearanceStore.currentTheme)
 
 const toggleTheme = () => {
   appearanceStore.toggleTheme()
-  theme.global.name.value = appearanceStore.currentTheme
+  theme.change(appearanceStore.currentTheme)
 }
 </script>

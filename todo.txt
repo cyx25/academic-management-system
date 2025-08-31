@@ -1,0 +1,27 @@
+COISAS A TER EM CONTA:
+1.nome do curso vai ser unique ou n?
+2. criar um package mapping para tudo ou só deixar no domain
+
+
+
+
+
+POR FAZER
+- Input validation em people (ist id)
+- Visualizar todos os Cursos numa tabela, incluindo código, nome e duração;
+- Criar, atualizar e remover Unidades Curriculares (apenas pelos Administradores);
+- Visualizar todas as Unidades Curriculares numa tabela, incluindo código, nome, semestre, curso e Professor Regente associado;
+- Visualizar todos os alunos de uma UC, incluindo nome, IST ID, email e estado (inscrito, aprovado, reprovado);
+- Visualizar todos os professores de uma UC, incluindo nome, IST ID, email e tipo (regente, assistente);
+- Criar, atualizar e remover Unidades Curriculares (apenas pelos Administradores);
+- Gerir as pessoas associadas a cada UC: adicionar/remover Alunos e Professores Assistentes (apenas pelo Professor Regente);
+- Visualizar todas as pessoas associadas a uma UC, incluindo nome, IST ID, email e tipo (aluno, professor regente, professor assistente);
+- Criar, visualizar e gerir testes e projetos associados a uma UC;
+- Gerir grupos de projeto: criação, modificação e atribuição de alunos;
+- Fazer upload e gerir recursos (enunciados, materiais) por UC;
+- Atribuir notas a alunos em testes e projetos (pelos Professores Regentes e Assistentes);
+- Submissão de projetos por parte dos alunos (individual ou em grupo);
+- Implementar o workflow completo de revisão de provas conforme descrito;
+- Consultar notas individuais de cada aluno numa UC, bem como a sua média final (com base nos pesos dos testes e projetos);
+- Visualizar calendário de avaliações com deteção de conflitos;
+- Consultar o perfil do aluno, onde contém as suas UCs, notas, avaliações pendentes e projetos submetidos (apenas visível para o próprio aluno e Administradores).

@@ -1,9 +1,14 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.person.domain;
 
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 
 import lombok.Data;
+import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
 
 // Domain class representing a person in the system
@@ -30,27 +35,40 @@ public class Person {
 	@Column(name = "ist_id", nullable = false, unique = true)
 	private String istId;
 
+	@Column(name = "email", nullable = true, unique = true)
+	private String email;
+
 	@Column(name = "type", nullable = false)
 	@Enumerated(EnumType.STRING)
     private PersonType type;
 
+	@ManyToMany(mappedBy = "enrolled_cu")
+    private HashMap<String, Integer> enrolledCurriculumUnits = new HashMap<String, Integer>();
 
-	// TODO: maybe add more fields? ...or maybe not? what makes sense here?
+    @ManyToMany(mappedBy = "assisting_cu")
+    private Set<CurriculumUnit> assistingCurriculumUnits = new HashSet<>();
+
+    @OneToMany(mappedBy = "main_cu")
+    private Set<CurriculumUnit> mainTeachingUnits = new HashSet<>();
+
 
 	protected Person() {
 	}
 
-	public Person(String name, String istId, PersonType type) {
+	public Person(String name, String istId, String email, PersonType type) {
 		this.name = name;
 		this.istId = istId;
+		this.email = email;
 		this.type = type;
 	}
 
 	public Person(PersonDto personDto) {
-		this(personDto.name(), personDto.istId(),
+		this(personDto.name(), personDto.istId(), personDto.email(),
 				PersonType.valueOf(personDto.type().toUpperCase()));
 		System.out.println("PersonDto: " + personDto);
 		System.out.println("PersonType: " + personDto.type());
 
 	}
+
+
 }
