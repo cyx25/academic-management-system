@@ -39,5 +39,27 @@ public class CourseService {
 		return new CourseDto(fetchCourseOrThrow(id));
 	}
 
+    @Transactional
+	public CourseDto createCourse(CourseDto courseDto) {
+		return saveCourseDto(null, courseDto);
+	}
+
+	@Transactional
+	public CourseDto updateCourse(long id, CourseDto courseDto) {
+		fetchCourseOrThrow(id); // ensure exists
+		return saveCourseDto(id, courseDto);
+	}
+
+	private CourseDto saveCourseDto(Long id, CourseDto courseDto) {
+		Course course = new Course(courseDto);
+		course.setId(id); // null for create, actual id for update
+		return new CourseDto(courseRepository.save(course));
+	}
+
+    @Transactional
+	public void deleteCourse(long id) {
+		fetchCourseOrThrow(id); // ensure exists
+		courseRepository.deleteById(id);
+	}
 
 }

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useRoleStore = defineStore('role', {
   state: () => ({
-    currentRole: 'administrator',
+    currentRole: 'none',
   }),
   getters: {
     isAdministrator(): boolean {

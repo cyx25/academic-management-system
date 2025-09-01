@@ -56,6 +56,7 @@ import type PeopleDto from '@/models/PeopleDto'
 import RemoteService from '@/services/RemoteService'
 import CreatePersonDialog from './CreatePersonDialog.vue'
 import { reactive, ref } from 'vue'
+import { fuzzySearch } from '@/utils/utilities'
 
 let search = ref('')
 let loading = ref(true)
@@ -111,10 +112,5 @@ const deletePerson = (person: PeopleDto) => {
 }
 
 
-const fuzzySearch = (value: string, search: string) => {
-  // Regex to match any character in between the search characters
-  let searchRegex = new RegExp(search.split('').join('.*'), 'i')
-  return searchRegex.test(value)
-}
 
 </script>

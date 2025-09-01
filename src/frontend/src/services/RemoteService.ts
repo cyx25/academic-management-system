@@ -3,6 +3,7 @@ import type { AxiosResponse } from 'axios'
 import { useAppearanceStore } from '@/stores/appearance'
 import DeiError from '@/models/DeiError'
 import type PersonDto from '@/models/PersonDto'
+import type CourseDto from '@/models/CourseDto'
 
 const httpClient = axios.create()
 httpClient.defaults.timeout = 50000
@@ -14,8 +15,16 @@ export default class RemoteServices {
     return httpClient.get('/people')
   }
 
+  static async getCourses(): Promise<CourseDto[]> {
+    return httpClient.get('/courses')
+  }
+
   static async createPerson(person: PersonDto): Promise<PersonDto> {
     return httpClient.post('/people', person)
+  }
+
+  static async createCourse(course: CourseDto): Promise<CourseDto> {
+    return httpClient.post('/courses', course)
   }
 
   static async errorMessage(error: any): Promise<string> {

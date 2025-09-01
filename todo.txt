@@ -1,8 +1,10 @@
 COISAS A TER EM CONTA:
-1.nome do curso vai ser unique ou n?
-2. criar um package mapping para tudo ou só deixar no domain
 
-
+validacoes frontend
+Add validation annotations to entity and DTO fields to ensure data integrity.
+Improve error handling in service layers to cover edge cases.
+Use proper annotations to manage bidirectional relationships and avoid serialization issues.
+Add unit tests to validate the behavior of services and controllers.
 
 
 
@@ -25,3 +27,4 @@ POR FAZER
 - Consultar notas individuais de cada aluno numa UC, bem como a sua média final (com base nos pesos dos testes e projetos);
 - Visualizar calendário de avaliações com deteção de conflitos;
 - Consultar o perfil do aluno, onde contém as suas UCs, notas, avaliações pendentes e projetos submetidos (apenas visível para o próprio aluno e Administradores).
+
