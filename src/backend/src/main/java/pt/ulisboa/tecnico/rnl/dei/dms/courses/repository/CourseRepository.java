@@ -8,6 +8,6 @@ import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
 
 @Repository
 @Transactional
-public interface CourseRepository extends JpaRepository<Course, Integer> {
+public interface CourseRepository extends JpaRepository<Course, Long> {
 
 }

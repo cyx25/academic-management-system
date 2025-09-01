@@ -1,7 +1,6 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.person.domain;
 
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,13 +41,12 @@ public class Person {
 	@Enumerated(EnumType.STRING)
     private PersonType type;
 
-	@ManyToMany(mappedBy = "enrolled_cu")
-    private HashMap<String, Integer> enrolledCurriculumUnits = new HashMap<String, Integer>();
+	
 
-    @ManyToMany(mappedBy = "assisting_cu")
+    @ManyToMany(mappedBy = "teachingAssistants")
     private Set<CurriculumUnit> assistingCurriculumUnits = new HashSet<>();
 
-    @OneToMany(mappedBy = "main_cu")
+    @OneToMany(mappedBy = "mainTeacher")
     private Set<CurriculumUnit> mainTeachingUnits = new HashSet<>();
 
 

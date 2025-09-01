@@ -1,12 +1,20 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.courses.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.dto.CourseDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
+
 
 @Data
 @Entity
@@ -17,7 +25,7 @@ public class Course {
 
 	@Id
 	@GeneratedValue
-	private Integer id;  // long overkill para num de cursos
+	private Long id;  // long overkill para num de cursos
 
     // será que isto fica unique tambem? 
     @Column(name = "name", nullable = false) 
@@ -29,6 +37,15 @@ public class Course {
     // in years
     @Column(name = "duration", nullable = false)
     private int duration;
+
+    @ManyToMany
+    @JoinTable(
+        name = "course_curriculum_units",
+        joinColumns = @JoinColumn(name = "course_id"),
+        inverseJoinColumns = @JoinColumn(name = "curriculum_unit_id")
+    )
+    private Set<CurriculumUnit> curriculumUnits = new HashSet<>();
+
 
 
     protected Course() {

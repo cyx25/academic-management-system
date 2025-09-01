@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
 
 
@@ -37,14 +39,7 @@ public class CurriculumUnit {
     @Column(name = "ects", nullable = false)
     private int ects;
 
-    @ManyToMany
-    @JoinTable(
-        name = "curriculum_unit_students",
-        joinColumns = @JoinColumn(name = "curriculum_unit_id"),
-        inverseJoinColumns = @JoinColumn(name = "person_id")
-    )
-    private Set<Person> students = new HashSet<>();
-
+    
     @ManyToMany
     @JoinTable(
         name = "curriculum_unit_tas",
@@ -55,8 +50,12 @@ public class CurriculumUnit {
 
 
     @ManyToOne
-    @JoinColumn(name = "main_teacher_id")
+    @JoinColumn(name = "main_teacher_id", nullable = false)
     private Person mainTeacher;
+
+    // course
+    @ManyToMany(mappedBy = "curriculumUnits")
+    private Set<Course> courses = new HashSet<>();
 
     protected CurriculumUnit() {
     }
