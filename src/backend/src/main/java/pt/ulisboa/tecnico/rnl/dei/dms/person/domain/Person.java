@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 
 import lombok.Data;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
+import pt.ulisboa.tecnico.rnl.dei.dms.enrollments.Enrollment;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
 
 // Domain class representing a person in the system
@@ -48,6 +49,10 @@ public class Person {
 
     @OneToMany(mappedBy = "mainTeacher")
     private Set<CurriculumUnit> mainTeachingUnits = new HashSet<>();
+
+	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Enrollment> studentCurriculumUnits = new HashSet<>();
+
 
 
 	protected Person() {
