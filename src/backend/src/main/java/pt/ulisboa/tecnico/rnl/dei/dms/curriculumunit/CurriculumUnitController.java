@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.dto.CourseDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.service.CourseService;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.CurriculumUnitDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.service.CurriculumUnitService;
 
+@RestController
 public class CurriculumUnitController {
 
 
