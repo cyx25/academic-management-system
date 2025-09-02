@@ -1,8 +1,10 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,8 +19,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
+import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.CurriculumUnitDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.enrollments.Enrollment;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
+
 
 
 @Data
@@ -41,6 +45,7 @@ public class CurriculumUnit {
 
     @Column(name = "ects", nullable = false)
     private int ects;
+
 
     
     @ManyToMany
@@ -73,6 +78,16 @@ public class CurriculumUnit {
         this.ects = ects;
     }
 
-    
+    public CurriculumUnit(CurriculumUnitDto curriculumUnitDto, Person mainTeacher, Collection<Course> courses) {
+        this(
+            curriculumUnitDto.name(),
+            curriculumUnitDto.code(),
+            curriculumUnitDto.semester(),
+            curriculumUnitDto.ects()
+        );
+        this.mainTeacher = mainTeacher;
+        this.courses = new HashSet<>(courses);
+    }
 
+    // TODO implement additions
 }
