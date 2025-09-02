@@ -10,7 +10,7 @@ Add unit tests to validate the behavior of services and controllers.
 
 POR FAZER
 - Input validation em people (ist id)
-- Visualizar todos os Cursos numa tabela, incluindo código, nome e duração;
+! Visualizar todos os Cursos numa tabela, incluindo código, nome e duração; DONE
 - Criar, atualizar e remover Unidades Curriculares (apenas pelos Administradores);
 - Visualizar todas as Unidades Curriculares numa tabela, incluindo código, nome, semestre, curso e Professor Regente associado;
 - Visualizar todos os alunos de uma UC, incluindo nome, IST ID, email e estado (inscrito, aprovado, reprovado);

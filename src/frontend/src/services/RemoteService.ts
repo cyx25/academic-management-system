@@ -4,6 +4,7 @@ import { useAppearanceStore } from '@/stores/appearance'
 import DeiError from '@/models/DeiError'
 import type PersonDto from '@/models/PersonDto'
 import type CourseDto from '@/models/CourseDto'
+import type CurriculumUnitDto from '@/models/CurriculumUnitDto'
 
 const httpClient = axios.create()
 httpClient.defaults.timeout = 50000
@@ -11,21 +12,75 @@ httpClient.defaults.baseURL = import.meta.env.VITE_ROOT_API
 httpClient.defaults.headers.post['Content-Type'] = 'application/json'
 
 export default class RemoteServices {
+
+  // ! PEOPLE
+
   static async getPeople(): Promise<PersonDto[]> {
     return httpClient.get('/people')
   }
 
-  static async getCourses(): Promise<CourseDto[]> {
-    return httpClient.get('/courses')
-  }
 
   static async createPerson(person: PersonDto): Promise<PersonDto> {
     return httpClient.post('/people', person)
   }
 
+  static async deletePerson(id: number): Promise<void> {
+    return httpClient.delete(`/people/${id}`)
+  }
+
+  static async updatePerson(id: number, person: PersonDto): Promise<PersonDto> {
+  return httpClient.put(`/people/${id}`, person)
+  }
+
+    static async getMainTeachers(): Promise<PersonDto[]> {
+
+    return httpClient.get('/people/main-teachers')
+  }
+
+  // ! COURSES
+
+  static async getCourses(): Promise<CourseDto[]> {
+    return httpClient.get('/courses')
+  }
+
+  static async updateCourse(id: number, course: CourseDto): Promise<CourseDto> {
+    return httpClient.put(`/courses/${id}`, course)
+  }
+
   static async createCourse(course: CourseDto): Promise<CourseDto> {
     return httpClient.post('/courses', course)
   }
+
+  static async deleteCourse(id: number): Promise<void> {
+    return httpClient.delete(`/courses/${id}`)
+  
+  }
+
+  // ! CURRICULUM UNITS
+
+  static async getCurriculumUnits(): Promise<CurriculumUnitDto[]> {
+    return httpClient.get('/curriculum-units')
+  }
+
+  static async createCurriculumUnit(unit: CurriculumUnitDto): Promise<CurriculumUnitDto> {
+    return httpClient.post('/curriculum-units', unit)
+  }
+
+  static async updateCurriculumUnit(id: number, unit: CurriculumUnitDto): Promise<CurriculumUnitDto> {
+  return httpClient.put(`/curriculum-units/${id}`, unit)
+  }
+  
+  static async getCurriculumUnit(id: number): Promise<CurriculumUnitDto> {
+    return httpClient.get(`/curriculum-units/${id}`)
+  }
+
+  static async deleteCurriculumUnit(id: number): Promise<void> {
+    return httpClient.delete(`/curriculum-units/${id}`)
+   
+  }
+
+
+
 
   static async errorMessage(error: any): Promise<string> {
     if (error.message === 'Network Error') {

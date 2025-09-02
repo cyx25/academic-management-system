@@ -47,7 +47,7 @@ public class CurriculumUnitService {
     }
 
     @Transactional
-    public void saveCurriculumUnit(long id, CurriculumUnitDto curriculumUnitDto) {
+    public CurriculumUnitDto saveCurriculumUnit(Long id, CurriculumUnitDto curriculumUnitDto) {
         Person mainTeacher = personRepository.findById(curriculumUnitDto.mainTeacher().id())
                 .orElseThrow(() -> new DEIException(ErrorMessage.NO_SUCH_PERSON));
                 
@@ -58,24 +58,12 @@ public class CurriculumUnitService {
               
         CurriculumUnit curriculumUnit = new CurriculumUnit(curriculumUnitDto, mainTeacher, courses);
         curriculumUnit.setId(id);
-        curriculumUnitRepository.save(curriculumUnit);
+        return new CurriculumUnitDto( curriculumUnitRepository.save(curriculumUnit));
     }
 
     @Transactional
     public CurriculumUnitDto createCurriculumUnit(CurriculumUnitDto curriculumUnitDto) {
-        Person mainTeacher = personRepository.findById(curriculumUnitDto.mainTeacher().id())
-                .orElseThrow(() -> new DEIException(ErrorMessage.NO_SUCH_PERSON));
-
-        CurriculumUnit curriculumUnit = new CurriculumUnit(
-                curriculumUnitDto.name(),
-                curriculumUnitDto.code(),
-                curriculumUnitDto.semester(),
-                curriculumUnitDto.ects()
-        );
-        curriculumUnit.setMainTeacher(mainTeacher);
-
-        curriculumUnitRepository.save(curriculumUnit);
-        return new CurriculumUnitDto(curriculumUnit);
+        return saveCurriculumUnit(null, curriculumUnitDto);
     }
 
     @Transactional
@@ -85,15 +73,8 @@ public class CurriculumUnitService {
 
     @Transactional
     public CurriculumUnitDto updateCurriculumUnit(long curriculumUnitId, CurriculumUnitDto curriculumUnitDto) {
-        CurriculumUnit curriculumUnit = fetchCurriculumUnitOrThrow(curriculumUnitId);
-
-        curriculumUnit.setName(curriculumUnitDto.name());
-        curriculumUnit.setCode(curriculumUnitDto.code());
-        curriculumUnit.setSemester(curriculumUnitDto.semester());
-        curriculumUnit.setEcts(curriculumUnitDto.ects());
-
-        curriculumUnitRepository.save(curriculumUnit);
-        return new CurriculumUnitDto(curriculumUnit);
+        fetchCurriculumUnitOrThrow(curriculumUnitId);
+        return saveCurriculumUnit(curriculumUnitId, curriculumUnitDto);
     }
 
 

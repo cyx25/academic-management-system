@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.person;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person.PersonType;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.service.PersonService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class PersonController {
@@ -43,4 +47,11 @@ public class PersonController {
 	public void deletePerson(@PathVariable long id) {
 		personService.deletePerson(id);
 	}
+
+	@GetMapping("/people/main-teachers")
+	public List<PersonDto> getTeachers() {
+
+		return personService.getPeopleByType(PersonType.MAIN_TEACHER);
+	}
+	
 }

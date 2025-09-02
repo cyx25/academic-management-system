@@ -4,11 +4,23 @@ import jakarta.persistence.*;
 import lombok.Data;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
+// import pt.ulisboa.tecnico.rnl.dei.dms.evaluation.domain.Evaluation; // New entity
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "enrollments")
-public class Enrollment { // this will have projects and evaluations later
+@Table(name = "enrollments", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"student_id", "curriculum_unit_id"})
+})
+public class Enrollment {
+
+    public enum EnrollmentStatus {
+        ENROLLED,
+        APPROVED,
+        FAILED
+    }
 
     @Id
     @GeneratedValue
@@ -22,14 +34,18 @@ public class Enrollment { // this will have projects and evaluations later
     @JoinColumn(name = "curriculum_unit_id", nullable = false)
     private CurriculumUnit curriculumUnit;
 
-    @Column(name = "grade", nullable = false)
-    private double grade;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EnrollmentStatus status;
 
 
-    public Enrollment(Person student, CurriculumUnit curriculumUnit, double grade) {
+    protected Enrollment() {}
+
+    public Enrollment(Person student, CurriculumUnit curriculumUnit) {
         this.student = student;
         this.curriculumUnit = curriculumUnit;
-        this.grade = grade;
+        this.status = EnrollmentStatus.ENROLLED;
     }
+
 
 }

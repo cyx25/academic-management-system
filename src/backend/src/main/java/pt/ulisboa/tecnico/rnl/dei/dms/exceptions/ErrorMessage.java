@@ -5,7 +5,9 @@ public enum ErrorMessage {
 	NO_SUCH_PERSON("Não existe nenhuma pessoa com o ID %s", 1001),
 	PERSON_NAME_NOT_VALID("O nome da pessoa especificado não é válido.", 1002),
 	PERSON_ALREADY_EXISTS("Já existe uma pessoa com o ID %s", 1003),
-	NO_SUCH_COURSE("Não existe nenhum curso com o ID %s", 2001);
+	NO_SUCH_COURSE("Não existe nenhum curso com o ID %s", 1004),
+	NO_SUCH_CU("Não existe unidade curricular com o ID %s", 1005),
+	INVALID_PERSON_TYPE("O tipo de pessoa especificado não é válido.", 1006);
 
 	private final String label;
 	private final int code;

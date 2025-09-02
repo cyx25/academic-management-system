@@ -3,8 +3,11 @@
     <v-col>
       <h2 class="text-left ml-1">Listagem de Cursos</h2>
     </v-col>
-    <v-col cols="auto">
-      <CreateCourseDialog @course-created="getCourses" />
+    <v-col cols="auto" v-if="isAdmin">
+      <div class="pa-4 text-center">
+        <CourseDialog mode="create" v-model="createDialog" @course-saved="getCourses" />
+      </div>
+
     </v-col>
   </v-row>
 
@@ -30,55 +33,74 @@
     <template v-slot:[`item.duration`]="{ item }">
       {{ item.duration }} anos
     </template>
-    <template v-slot:[`item.actions`]="{ item }">
-      <v-icon @click="editCourse(item)" class="mr-2">mdi-pencil</v-icon>
-      <v-icon @click="deleteCourse(item)">mdi-delete</v-icon>
+    <template v-slot:[`item.actions`]="{ item }" v-if="isAdmin">
+      <v-tooltip text="Edit">
+        <template v-slot:activator="{ props }">
+          <v-icon v-bind="props" @click="editCourse(item)" class="mr-2">mdi-pencil</v-icon>
+        </template>
+      </v-tooltip>
+      <v-tooltip text="Delete">
+        <template v-slot:activator="{ props }">
+          <v-icon v-bind="props" @click="deleteCourse(item)">mdi-delete</v-icon>
+        </template>
+      </v-tooltip>
     </template>
   </v-data-table>
+
+  <CourseDialog
+    mode="edit"
+    v-model="editDialog"
+    :course="editingCourse"
+    @course-saved="getCourses"
+  />
+
+  <DeleteConfirmationDialog
+    v-model="deleteDialog"
+    title="Delete Course"
+    message="Are you sure you want to delete this course?"
+    @confirm="confirmDelete"
+  />
 </template>
 
 <script setup lang="ts">
 import type CourseDto from '@/models/CourseDto'
 import RemoteService from '@/services/RemoteService'
-import CreateCourseDialog from './CreateCourseDialog.vue'
-import { reactive, ref } from 'vue'
+import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog.vue'
+import CourseDialog from './CourseDialog.vue'
+import { reactive, ref, computed } from 'vue'
+import { useRoleStore } from '@/stores/role'
 import { fuzzySearch } from '@/utils/utilities'
 
 let search = ref('')
 let loading = ref(true)
+const courses: CourseDto[] = reactive([])
+const editDialog = ref(false)
+const createDialog = ref(false)
+const deleteDialog = ref(false)
+const courseToDelete = ref<CourseDto | null>(null)
+const editingCourse = ref<CourseDto>({
+  id: 0,
+  code: '',
+  name: '',
+  duration: 3
+})
+
+
+
+// Role-based access control
+const roleStore = useRoleStore()
+const isAdmin = computed(() => roleStore.isAdministrator)
+
 const headers = [
   { title: 'ID', key: 'id', value: 'id', sortable: true, filterable: false },
-  {
-    title: 'Código',
-    key: 'code',
-    value: 'code',
-    sortable: true,
-    filterable: true
-  },
-  {
-    title: 'Nome',
-    key: 'name',
-    value: 'name',
-    sortable: true,
-    filterable: true
-  },
-  {
-    title: 'Duração',
-    key: 'duration',
-    value: 'duration',
-    sortable: true,
-    filterable: true
-  },
-  {
-    title: 'Ações',
-    key: 'actions',
-    value: 'actions',
-    sortable: false,
-    filterable: false
-  }
+  { title: 'Código', key: 'code', value: 'code', sortable: true, filterable: true },
+  { title: 'Nome', key: 'name', value: 'name', sortable: true, filterable: true },
+  { title: 'Duração', key: 'duration', value: 'duration', sortable: true, filterable: true },
+ 
+  { title: 'Ações', key: 'actions', value: 'actions', sortable: false, filterable: false }
 ]
 
-const courses: CourseDto[] = reactive([])
+
 
 getCourses()
 async function getCourses() {
@@ -89,12 +111,20 @@ async function getCourses() {
 }
 
 const editCourse = (course: CourseDto) => {
-  console.log('Editing course:', course)
+  editingCourse.value = { ...course }
+  editDialog.value = true
 }
 
 const deleteCourse = (course: CourseDto) => {
-  console.log('Deleting course:', course)
+  courseToDelete.value = course
+  deleteDialog.value = true
 }
 
-
+const confirmDelete = async () => {
+  if (courseToDelete.value) {
+    await RemoteService.deleteCourse(courseToDelete.value.id)
+    getCourses()
+    courseToDelete.value = null
+  }
+}
 </script>

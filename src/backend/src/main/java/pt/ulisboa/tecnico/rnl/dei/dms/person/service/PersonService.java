@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.person.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.ErrorMessage;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
+import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person.PersonType;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.repository.PersonRepository;
 
@@ -47,6 +49,8 @@ public class PersonService {
 		return savePersonDto(id, personDto);
 	}
 
+
+	// TODO: implement validations
 	private PersonDto savePersonDto(Long id, PersonDto personDto) {
 		Person person = new Person(personDto);
 		person.setId(id); // null for create, actual id for update
@@ -59,4 +63,11 @@ public class PersonService {
 
 		personRepository.deleteById(id);
 	}
+
+	@Transactional(readOnly = true)
+    public List<PersonDto> getPeopleByType(PersonType type) {
+        return personRepository.findByType(type).stream()
+                .map(PersonDto::new)
+                .collect(Collectors.toList());
+    }
 }

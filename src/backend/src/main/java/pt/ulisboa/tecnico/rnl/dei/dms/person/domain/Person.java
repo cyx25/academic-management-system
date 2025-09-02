@@ -44,12 +44,12 @@ public class Person {
 
 	
 
-    @ManyToMany(mappedBy = "teachingAssistants")
+    /* @ManyToMany(mappedBy = "teachingAssistants")
     private Set<CurriculumUnit> assistingCurriculumUnits = new HashSet<>();
 
     @OneToMany(mappedBy = "mainTeacher")
     private Set<CurriculumUnit> mainTeachingUnits = new HashSet<>();
-
+ */
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Enrollment> studentCurriculumUnits = new HashSet<>();
 

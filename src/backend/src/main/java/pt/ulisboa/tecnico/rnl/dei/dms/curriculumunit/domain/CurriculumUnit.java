@@ -87,6 +87,22 @@ public class CurriculumUnit {
         );
         this.mainTeacher = mainTeacher;
         this.courses = new HashSet<>(courses);
+        // debug in console, print everything
+        System.out.println("=== Creating CurriculumUnit ===");
+        System.out.println("Name: " + curriculumUnitDto.name());
+        System.out.println("Code: " + curriculumUnitDto.code());
+        System.out.println("Semester: " + curriculumUnitDto.semester());
+        System.out.println("ECTS: " + curriculumUnitDto.ects());
+        System.out.println("Main Teacher: " + (mainTeacher != null ? mainTeacher.getName() : "None"));
+        System.out.println("Courses Count: " + (courses != null ? courses.size() : 0));
+        if (courses != null && !courses.isEmpty()) {
+            System.out.println("Course Codes: " + 
+                courses.stream()
+                    .map(Course::getCode)
+                    .collect(Collectors.joining(", ")));
+        }
+        System.out.println("===============================");
+
     }
 
     // TODO implement additions
