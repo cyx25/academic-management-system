@@ -10,4 +10,5 @@ import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
 @Transactional
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
+    Course findByCode(String code);
 }

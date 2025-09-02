@@ -65,12 +65,16 @@ watch(dialog, (newVal) => {
 })
 
 const savePerson = async () => {
-  if (props.mode === 'create') {
-    await RemoteService.createPerson(person.value)
-  } else {
-    await RemoteService.updatePerson(person.value.id, person.value)
+  try {
+    if (props.mode === 'create') {
+      await RemoteService.createPerson(person.value)
+    } else {
+      await RemoteService.updatePerson(props.person.id, person.value)
+    }
+    emit('person-saved')
+    dialog.value = false
+  } catch (error) {
+    console.error('Error saving person:', error)
   }
-  emit('person-saved')
-  dialog.value = false
 }
 </script>

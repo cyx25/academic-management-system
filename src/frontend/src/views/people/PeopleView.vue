@@ -103,6 +103,8 @@ const editingPerson = ref<PersonDto>({  // Initialize with empty object instead 
 const roleStore = useRoleStore()
 const isAdmin = computed(() => roleStore.isAdministrator)
 
+
+// remover id dos headers
 const headers = [
   { title: 'ID', key: 'id', value: 'id', sortable: true, filterable: false },
   {

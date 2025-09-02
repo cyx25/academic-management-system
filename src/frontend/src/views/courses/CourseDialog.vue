@@ -19,7 +19,7 @@
           v-model.number="course.duration"
           type="number"
           min="1"
-          max="10"
+          max="5"
           required
         ></v-text-field>
       </v-card-text>

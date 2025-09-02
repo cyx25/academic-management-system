@@ -27,7 +27,7 @@
           v-model.number="unit.ects"
           type="number"
           min="1"
-          max="30"
+          max="12"
           required
         ></v-text-field>
         <v-autocomplete
@@ -103,7 +103,7 @@ watch(() => props.modelValue, (newVal) => {
   if (newVal) {
     unit.value = { ...props.unit }
     mainTeacherId.value = props.unit.mainTeacher?.id || null
-
+    // we want this so that when editing we keep the courses, but when creating we start fresh
     if (props.mode === 'create') {
       courseIds.value = [] 
     }

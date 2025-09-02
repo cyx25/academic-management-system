@@ -6,4 +6,7 @@ import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 
 @Repository
 public interface CurriculumUnitRepository extends JpaRepository<CurriculumUnit, Long> {
+
+    CurriculumUnit findByCode(String code);
+
 }

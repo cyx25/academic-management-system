@@ -36,7 +36,7 @@ public class Course {
 
     // in years
     @Column(name = "duration", nullable = false)
-    private int duration;
+    private String duration;
 
     @ManyToMany
     @JoinTable(
@@ -52,7 +52,7 @@ public class Course {
         
     }
 
-    public Course(String name, String code, int duration) {
+    public Course(String name, String code, String duration) {
         this.name = name;
         this.code = code;
         this.duration = duration;

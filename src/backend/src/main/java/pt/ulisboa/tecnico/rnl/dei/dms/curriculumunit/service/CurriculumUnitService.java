@@ -78,6 +78,55 @@ public class CurriculumUnitService {
     }
 
 
+    private void validateCurriculumUnitDto(CurriculumUnitDto curriculumUnitDto, Long id) {
+        
+        if (curriculumUnitDto.name() == null || curriculumUnitDto.name().trim().isEmpty()) {
+        throw new DEIException(ErrorMessage.CU_NAME_REQUIRED);
+        }
+        if (curriculumUnitDto.code() == null || curriculumUnitDto.code().trim().isEmpty()) {
+            throw new DEIException(ErrorMessage.CU_CODE_REQUIRED);
+        }
+        if (curriculumUnitDto.semester() == null) {
+            throw new DEIException(ErrorMessage.CU_SEMESTER_REQUIRED);
+        }
+        if (curriculumUnitDto.ects() == null) {
+            throw new DEIException(ErrorMessage.CU_ECTS_REQUIRED);
+        }
+        if (curriculumUnitDto.mainTeacher() == null) {
+            throw new DEIException(ErrorMessage.CU_MAIN_TEACHER_REQUIRED);
+        }
+        int cu_semester;
+        try {
+            cu_semester = Integer.parseInt(curriculumUnitDto.semester());
+        } catch (NumberFormatException e) {
+            throw new DEIException(ErrorMessage.CU_INVALID_SEMESTER);
+        }
+        if (cu_semester != 1 && cu_semester != 2) {
+            throw new DEIException(ErrorMessage.CU_INVALID_SEMESTER);
+        }
+
+        int cu_ects;
+        try {
+            cu_ects = Integer.parseInt(curriculumUnitDto.ects());
+        } catch (NumberFormatException e) {
+            throw new DEIException(ErrorMessage.CU_INVALID_ECTS);
+        }
+        if (cu_ects < 1 || cu_ects > 12) {
+            throw new DEIException(ErrorMessage.CU_INVALID_ECTS);
+        }
+
+        // Validate code uniqueness
+		if (curriculumUnitDto.code() != null && !curriculumUnitDto.code().isEmpty()) {
+			CurriculumUnit existingUnit = curriculumUnitRepository.findByCode(curriculumUnitDto.code());
+			if (existingUnit != null) {
+				// For updates, allow if it's the same unit
+				if (id == null || !existingUnit.getId().equals(id)) {
+					throw new DEIException(ErrorMessage.CU_CODE_ALREADY_EXISTS, curriculumUnitDto.code());
+				}
+			}
+		}
+    }
+
 
     @Transactional
     public void deleteCurriculumUnit(long curriculumUnitId) {

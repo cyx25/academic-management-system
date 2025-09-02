@@ -11,8 +11,8 @@ public record CurriculumUnitDto(
     long id,
     String name,
     String code,
-    int semester,
-    int ects,
+    String semester,
+    String ects,
     PersonDto mainTeacher,
     List<CourseDto> courses
 ) {

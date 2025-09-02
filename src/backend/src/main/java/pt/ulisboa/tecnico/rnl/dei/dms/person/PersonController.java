@@ -53,5 +53,14 @@ public class PersonController {
 
 		return personService.getPeopleByType(PersonType.MAIN_TEACHER);
 	}
-	
+
+	@GetMapping("/people/assistant-teachers")
+	public List<PersonDto> getAssistantTeachers() {
+		return personService.getPeopleByType(PersonType.TEACHING_ASSISTANT);
+	}
+
+	@GetMapping("/people/students")
+	public List<PersonDto> getStudents() {
+		return personService.getPeopleByType(PersonType.STUDENT);
+	}
 }

@@ -1,7 +1,6 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,10 +40,10 @@ public class CurriculumUnit {
     private String code;
 
     @Column(name = "semester", nullable = false)
-    private int semester;
+    private String semester;
 
     @Column(name = "ects", nullable = false)
-    private int ects;
+    private String ects;
 
 
     
@@ -71,7 +70,7 @@ public class CurriculumUnit {
     protected CurriculumUnit() {
     }
 
-    public CurriculumUnit(String name, String code, int semester, int ects) {
+    public CurriculumUnit(String name, String code, String semester, String ects) {
         this.name = name;
         this.code = code;
         this.semester = semester;

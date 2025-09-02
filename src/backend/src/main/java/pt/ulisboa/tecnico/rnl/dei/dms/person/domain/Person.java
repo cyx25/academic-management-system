@@ -7,7 +7,6 @@ import java.util.Set;
 import jakarta.persistence.*;
 
 import lombok.Data;
-import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.enrollments.Enrollment;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
 
@@ -35,7 +34,7 @@ public class Person {
 	@Column(name = "ist_id", nullable = false, unique = true)
 	private String istId;
 
-	@Column(name = "email", nullable = true, unique = true)
+	@Column(name = "email", nullable = true)
 	private String email;
 
 	@Column(name = "type", nullable = false)
