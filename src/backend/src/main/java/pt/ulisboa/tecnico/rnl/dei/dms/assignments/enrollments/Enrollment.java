@@ -1,13 +1,10 @@
-package pt.ulisboa.tecnico.rnl.dei.dms.enrollments;
+package pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
-// import pt.ulisboa.tecnico.rnl.dei.dms.evaluation.domain.Evaluation; // New entity
 
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Entity
@@ -37,6 +34,8 @@ public class Enrollment {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EnrollmentStatus status;
+
+    // this will then have projects, etc
 
 
     protected Enrollment() {}

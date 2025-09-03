@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
+import pt.ulisboa.tecnico.rnl.dei.dms.courses.dto.CourseDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.repository.CourseRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.CurriculumUnitDto;
@@ -73,17 +74,8 @@ public class CurriculumUnitService {
 
     @Transactional
     public CurriculumUnitDto saveCurriculumUnit(Long id, CurriculumUnitDto curriculumUnitDto) {
-        Person mainTeacher = personRepository.findById(curriculumUnitDto.mainTeacher().id())
-                .orElseThrow(() -> new DEIException(ErrorMessage.NO_SUCH_PERSON));
-                
-        Set<Course> courses = new HashSet<>();
-        if (curriculumUnitDto.courses() != null) {
-            for (var courseDto : curriculumUnitDto.courses()) {
-                Course course = courseRepository.findById(courseDto.id())
-                        .orElseThrow(() -> new DEIException(ErrorMessage.NO_SUCH_COURSE, Long.toString(courseDto.id())));
-                courses.add(course);
-            }
-        }
+        Person mainTeacher = fetchMainTeacher(curriculumUnitDto.mainTeacher().id());
+        Set<Course> courses = fetchCourses(curriculumUnitDto.courses());
               
         CurriculumUnit curriculumUnit;
         if (id == null) {
@@ -92,36 +84,61 @@ public class CurriculumUnitService {
         } else {
             // Update existing
             curriculumUnit = fetchCurriculumUnitOrThrow(id);
-            Set<Course> oldCourses = new HashSet<>(curriculumUnit.getCourses());
-            
-            // Remove from old courses
-            for (Course oldCourse : oldCourses) {
-                if (!courses.contains(oldCourse)) {
-                    oldCourse.removeCurriculumUnit(curriculumUnit);
-                    courseRepository.save(oldCourse);
-                }
-            }
-            
-            // Update fields
-            curriculumUnit.setName(curriculumUnitDto.name());
-            curriculumUnit.setCode(curriculumUnitDto.code());
-            curriculumUnit.setSemester(curriculumUnitDto.semester());
-            curriculumUnit.setEcts(curriculumUnitDto.ects());
-            curriculumUnit.setMainTeacher(mainTeacher);
-            curriculumUnit.setCourses(courses);
+            updateCurriculumUnitFields(curriculumUnit, curriculumUnitDto, mainTeacher, courses);
         }
         
         curriculumUnit = curriculumUnitRepository.save(curriculumUnit);
+        updateBidirectionalRelationships(curriculumUnit, courses);
         
-        // Add to new courses (for both create and update)
+        return new CurriculumUnitDto(curriculumUnit);
+    }
+
+    private Person fetchMainTeacher(Long id) {
+        return personRepository.findById(id)
+                .orElseThrow(() -> new DEIException(ErrorMessage.NO_SUCH_PERSON, id.toString()));
+    }
+
+    private Set<Course> fetchCourses(List<CourseDto> courseDtos) {
+        Set<Course> courses = new HashSet<>();
+        if (courseDtos != null) {
+            for (CourseDto courseDto : courseDtos) {
+                Course course = courseRepository.findById(courseDto.id())
+                        .orElseThrow(() -> new DEIException(ErrorMessage.NO_SUCH_COURSE, courseDto.id().toString()));
+                courses.add(course);
+            }
+        }
+        return courses;
+    }
+
+    private void updateCurriculumUnitFields(CurriculumUnit curriculumUnit, CurriculumUnitDto dto, Person mainTeacher, Set<Course> courses) {
+        Set<Course> oldCourses = new HashSet<>(curriculumUnit.getCourses());
+        
+        curriculumUnit.setName(dto.name());
+        curriculumUnit.setCode(dto.code());
+        curriculumUnit.setSemester(dto.semester());
+        curriculumUnit.setEcts(dto.ects());
+        curriculumUnit.setTeaching(mainTeacher);
+        curriculumUnit.setCourses(courses);
+        
+        removeFromOldCourses(curriculumUnit, oldCourses, courses);
+    }
+
+    private void removeFromOldCourses(CurriculumUnit curriculumUnit, Set<Course> oldCourses, Set<Course> newCourses) {
+        for (Course oldCourse : oldCourses) {
+            if (!newCourses.contains(oldCourse)) {
+                oldCourse.getCurriculumUnits().remove(curriculumUnit);
+                courseRepository.save(oldCourse);
+            }
+        }
+    }
+
+    private void updateBidirectionalRelationships(CurriculumUnit curriculumUnit, Set<Course> courses) {
         for (Course course : courses) {
             if (!course.getCurriculumUnits().contains(curriculumUnit)) {
-                course.addCurriculumUnit(curriculumUnit);
+                course.getCurriculumUnits().add(curriculumUnit);
                 courseRepository.save(course);
             }
         }
-        
-        return new CurriculumUnitDto(curriculumUnit);
     }
 
     @Transactional
@@ -199,6 +216,7 @@ public class CurriculumUnitService {
      
         for (Course course : curriculumUnit.getCourses()) {
             course.removeCurriculumUnit(curriculumUnit);
+            courseRepository.save(course);
         }
         
         curriculumUnitRepository.deleteById(curriculumUnitId);

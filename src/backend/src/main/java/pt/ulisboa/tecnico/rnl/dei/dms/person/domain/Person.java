@@ -4,10 +4,13 @@ package pt.ulisboa.tecnico.rnl.dei.dms.person.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 import lombok.Data;
-import pt.ulisboa.tecnico.rnl.dei.dms.enrollments.Enrollment;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.Enrollment;
+import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
 
 // Domain class representing a person in the system
@@ -40,7 +43,6 @@ public class Person {
 	@Column(name = "type", nullable = false)
 	@Enumerated(EnumType.STRING)
     private PersonType type;
-
 
 
 	protected Person() {

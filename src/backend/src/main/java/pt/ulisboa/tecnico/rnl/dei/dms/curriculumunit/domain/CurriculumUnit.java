@@ -18,6 +18,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,17 +26,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.Assist;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.Enrollment;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.teachings.Teaching;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.CurriculumUnitDto;
-import pt.ulisboa.tecnico.rnl.dei.dms.enrollments.Enrollment;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
 
 
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"courses", "teachingAssistants"})
-@EqualsAndHashCode(exclude = {"courses", "teachingAssistants", "mainTeacher", "studentCurriculumUnits"})
+@ToString(exclude = {"courses", "teaching", "assists", "enrollments"})
+@EqualsAndHashCode(exclude = {"courses", "teaching", "assists", "enrollments"})
 @Entity
 @Table(name = "curriculum_units")
 public class CurriculumUnit {
@@ -57,20 +60,6 @@ public class CurriculumUnit {
     private String ects;
 
 
-    
-    @ManyToMany
-    @JoinTable(
-        name = "curriculum_unit_tas",
-        joinColumns = @JoinColumn(name = "curriculum_unit_id"),
-        inverseJoinColumns = @JoinColumn(name = "person_id")
-    )
-    private Set<Person> teachingAssistants = new HashSet<>();
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "main_teacher_id", nullable = false)
-    private Person mainTeacher;
-
     // course
     @ManyToMany
     @JoinTable(
@@ -78,8 +67,38 @@ public class CurriculumUnit {
         joinColumns = @JoinColumn(name = "curriculum_unit_id"),
         inverseJoinColumns = @JoinColumn(name = "course_id")
     )
+
     @JsonManagedReference
     private Set<Course> courses = new HashSet<>();
+
+    @OneToOne(mappedBy = "curriculumUnit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Teaching teaching;
+
+    @OneToMany(mappedBy = "curriculumUnit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Assist> assists = new HashSet<>();
+
+    @OneToMany(mappedBy = "curriculumUnit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Enrollment> enrollments = new HashSet<>();
+
+
+
+    public void setTeaching(Person teacher) {
+        if (teacher != null) {
+            this.teaching = new Teaching(this, teacher);
+        } else {
+            this.teaching = null;
+        }
+    }
+
+    public void addAssistant(Person assistant) {
+        Assist assist = new Assist(this, assistant);
+        this.assists.add(assist);
+    }
+
+    public void addStudent(Person student) {
+        Enrollment enrollment = new Enrollment(student, this);
+        this.enrollments.add(enrollment);
+    }
 
 
     public CurriculumUnit(String name, String code, String semester, String ects) {
@@ -96,14 +115,11 @@ public class CurriculumUnit {
             curriculumUnitDto.semester(),
             curriculumUnitDto.ects()
         );
-        this.mainTeacher = mainTeacher;
+        setTeaching(mainTeacher);
         this.courses = courses != null ? courses : new HashSet<>();
+
         // debug in console, print everything
         System.out.println("=== Creating CurriculumUnit ===");
-        System.out.println("Name: " + curriculumUnitDto.name());
-        System.out.println("Code: " + curriculumUnitDto.code());
-        System.out.println("Semester: " + curriculumUnitDto.semester());
-        System.out.println("ECTS: " + curriculumUnitDto.ects());
         System.out.println("Main Teacher: " + (mainTeacher != null ? mainTeacher.getName() : "None"));
         System.out.println("Courses Count: " + (courses != null ? courses.size() : 0));
         if (courses != null && !courses.isEmpty()) {

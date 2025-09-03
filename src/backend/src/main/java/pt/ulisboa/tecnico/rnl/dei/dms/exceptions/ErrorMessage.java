@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.exceptions;
 
 public enum ErrorMessage {
+	// TODO: mudar para ist id
 
 	NO_SUCH_PERSON("Não existe nenhuma pessoa com o ID %s", 1001),
 	PERSON_NAME_NOT_VALID("O nome da pessoa especificado não é válido.", 1002),
@@ -26,7 +27,12 @@ public enum ErrorMessage {
 	CU_CODE_REQUIRED("O código da unidade curricular é obrigatório.", 3006),
 	CU_SEMESTER_REQUIRED("O semestre da unidade curricular é obrigatório.", 3007),
 	CU_ECTS_REQUIRED("Os ECTS da unidade curricular são obrigatórios.", 3008),
-	CU_MAIN_TEACHER_REQUIRED("O professor regente da unidade curricular é obrigatório.", 3009);
+	CU_MAIN_TEACHER_REQUIRED("O professor regente da unidade curricular é obrigatório.", 3009),
+	ENROLLMENT_ALREADY_EXISTS("O estudante com o ID %s já está inscrito na unidade curricular com o ID %s", 4001),
+	NO_SUCH_ENROLLMENT("Não existe matrícula com o aluno ID %s", 4002),
+	ASSIST_ALREADY_EXISTS("O assistente com o ID %s já está associado à unidade curricular", 5001),
+	NO_SUCH_ASSIST("Não existe assistência do professor com o ID %s", 5002);
+
 
 
 
