@@ -46,58 +46,7 @@
               </v-col>
             </v-row>
 
-            <v-divider class="my-6"></v-divider>
-
-            <v-row justify="space-around">
-              <v-col cols="12" sm="6" md="3">
-                <v-btn
-                  block
-                  color="primary"
-                  size="large"
-                  class="mb-2"
-                  @click="navigateToSection('pessoal')"
-                >
-                  <v-icon start>mdi-account-group</v-icon>
-                  PESSOAL
-                </v-btn>
-              </v-col>
-              <v-col cols="12" sm="6" md="3">
-                <v-btn
-                  block
-                  color="success"
-                  size="large"
-                  class="mb-2"
-                  @click="navigateToSection('projetos')"
-                >
-                  <v-icon start>mdi-folder-multiple</v-icon>
-                  PROJETOS
-                </v-btn>
-              </v-col>
-              <v-col cols="12" sm="6" md="3">
-                <v-btn
-                  block
-                  color="warning"
-                  size="large"
-                  class="mb-2"
-                  @click="navigateToSection('testes')"
-                >
-                  <v-icon start>mdi-clipboard-check</v-icon>
-                  TESTES
-                </v-btn>
-              </v-col>
-              <v-col cols="12" sm="6" md="3">
-                <v-btn
-                  block
-                  color="error"
-                  size="large"
-                  class="mb-2"
-                  @click="navigateToSection('recursos')"
-                >
-                  <v-icon start>mdi-book-open-variant</v-icon>
-                  RECURSOS
-                </v-btn>
-              </v-col>
-            </v-row>
+           
           </v-card-text>
         </v-card>
       </v-col>
@@ -127,9 +76,4 @@ onMounted(async () => {
   }
 })
 
-const navigateToSection = (section: string) => {
-  // Placeholder for future navigation
-  console.log(`Navigate to ${section} section`)
-  // TODO: Implement navigation to specific sections
-}
 </script>

@@ -43,7 +43,7 @@ import RemoteService from '@/services/RemoteService'
 const personTypes = [
   { text: 'Administrador', value: 'ADMINISTRATOR' },
   { text: 'Professor Regente', value: 'MAIN_TEACHER' },
-  { text: 'Assistente de Ensino', value: 'TEACHING_ASSISTANT' },
+  { text: 'Professor Assistente', value: 'TEACHING_ASSISTANT' },
   { text: 'Estudante', value: 'STUDENT' }
 ]
 

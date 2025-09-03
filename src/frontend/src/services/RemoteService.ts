@@ -5,6 +5,8 @@ import DeiError from '@/models/DeiError'
 import type PersonDto from '@/models/PersonDto'
 import type CourseDto from '@/models/CourseDto'
 import type CurriculumUnitDto from '@/models/CurriculumUnitDto'
+import type EnrollmentDto from '@/models/EnrollmentDto'
+import type AssistDto from '@/models/AssistDto'
 
 const httpClient = axios.create()
 httpClient.defaults.timeout = 50000
@@ -79,8 +81,30 @@ export default class RemoteServices {
    
   }
 
+  static async getAssistants(unitId: number): Promise<AssistDto[]> {
+    return httpClient.get(`/curriculum-units/${unitId}/assistants`)
+  }
 
 
+  static async addAssistant(unitId: number, personId: number): Promise<AssistDto> {
+    return httpClient.post(`/curriculum-units/${unitId}/assistants`, { id: personId })
+  }
+
+  static async removeAssistant(unitId: number, personId: number): Promise<void> {
+    return httpClient.delete(`/curriculum-units/${unitId}/assistants/${personId}`)
+  }
+
+  static async getStudents(unitId: number): Promise<EnrollmentDto[]> {
+    return httpClient.get(`/curriculum-units/${unitId}/students`)
+  }
+
+  static async addStudent(unitId: number, personId: number): Promise<EnrollmentDto> {
+    return httpClient.post(`/curriculum-units/${unitId}/students`, { id: personId })
+  }
+
+  static async removeStudent(unitId: number, personId: number): Promise<void> {
+    return httpClient.delete(`/curriculum-units/${unitId}/students/${personId}`)
+  }
 
   static async errorMessage(error: any): Promise<string> {
     if (error.message === 'Network Error') {

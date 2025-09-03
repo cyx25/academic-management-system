@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type DeiError from '@/models/DeiError'
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive} from 'vue'
 
 export const useAppearanceStore = defineStore('appearance', {
   state: () => ({

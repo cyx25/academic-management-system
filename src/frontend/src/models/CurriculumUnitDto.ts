@@ -1,5 +1,5 @@
-import PersonDto from './PersonDto'
 import CourseDto from './CourseDto'
+import PersonDto from './PersonDto'
 
 export default class CurriculumUnitDto {
   id?: number
