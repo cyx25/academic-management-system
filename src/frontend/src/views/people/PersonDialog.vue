@@ -19,7 +19,9 @@
         <v-select
           label="Tipo*"
           v-model="person.type"
-          :items="['ADMINISTRATOR', 'MAIN_TEACHER', 'TEACHING_ASSISTANT', 'STUDENT']"
+          :items="personTypes"
+          item-title="text"
+          item-value="value"
           required
         ></v-select>
       </v-card-text>
@@ -37,6 +39,14 @@
 import { ref, watch } from 'vue'
 import type PersonDto from '@/models/PersonDto'
 import RemoteService from '@/services/RemoteService'
+
+const personTypes = [
+  { text: 'Administrador', value: 'ADMINISTRATOR' },
+  { text: 'Professor Regente', value: 'MAIN_TEACHER' },
+  { text: 'Assistente de Ensino', value: 'TEACHING_ASSISTANT' },
+  { text: 'Estudante', value: 'STUDENT' }
+]
+
 
 interface Props {
   mode: 'create' | 'edit'

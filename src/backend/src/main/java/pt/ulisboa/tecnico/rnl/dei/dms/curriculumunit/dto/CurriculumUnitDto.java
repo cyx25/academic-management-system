@@ -1,10 +1,11 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto;
 
+
 import java.util.List;
 import java.util.stream.Collectors;
-
-import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.dto.CourseDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
+
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
 
 public record CurriculumUnitDto(

@@ -5,9 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -17,14 +20,22 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.CurriculumUnitDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.enrollments.Enrollment;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
 
 
-
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude = {"courses", "teachingAssistants"})
+@EqualsAndHashCode(exclude = {"courses", "teachingAssistants", "mainTeacher", "studentCurriculumUnits"})
 @Entity
 @Table(name = "curriculum_units")
 public class CurriculumUnit {
@@ -56,19 +67,20 @@ public class CurriculumUnit {
     private Set<Person> teachingAssistants = new HashSet<>();
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "main_teacher_id", nullable = false)
     private Person mainTeacher;
 
     // course
-    @ManyToMany(mappedBy = "curriculumUnits")
+    @ManyToMany
+    @JoinTable(
+        name = "curriculum_unit_courses",
+        joinColumns = @JoinColumn(name = "curriculum_unit_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    @JsonManagedReference
     private Set<Course> courses = new HashSet<>();
 
-    @OneToMany(mappedBy = "curriculumUnit", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Enrollment> studentCurriculumUnits = new HashSet<>();
-
-    protected CurriculumUnit() {
-    }
 
     public CurriculumUnit(String name, String code, String semester, String ects) {
         this.name = name;
@@ -77,7 +89,7 @@ public class CurriculumUnit {
         this.ects = ects;
     }
 
-    public CurriculumUnit(CurriculumUnitDto curriculumUnitDto, Person mainTeacher, Collection<Course> courses) {
+    public CurriculumUnit(CurriculumUnitDto curriculumUnitDto, Person mainTeacher, Set<Course> courses) {
         this(
             curriculumUnitDto.name(),
             curriculumUnitDto.code(),
@@ -85,7 +97,7 @@ public class CurriculumUnit {
             curriculumUnitDto.ects()
         );
         this.mainTeacher = mainTeacher;
-        this.courses = new HashSet<>(courses);
+        this.courses = courses != null ? courses : new HashSet<>();
         // debug in console, print everything
         System.out.println("=== Creating CurriculumUnit ===");
         System.out.println("Name: " + curriculumUnitDto.name());

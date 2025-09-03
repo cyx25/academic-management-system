@@ -41,17 +41,6 @@ public class Person {
 	@Enumerated(EnumType.STRING)
     private PersonType type;
 
-	
-
-    /* @ManyToMany(mappedBy = "teachingAssistants")
-    private Set<CurriculumUnit> assistingCurriculumUnits = new HashSet<>();
-
-    @OneToMany(mappedBy = "mainTeacher")
-    private Set<CurriculumUnit> mainTeachingUnits = new HashSet<>();
- */
-	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Enrollment> studentCurriculumUnits = new HashSet<>();
-
 
 
 	protected Person() {

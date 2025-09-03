@@ -1,7 +1,7 @@
 <template>
-  <v-row align="center">
+  <v-row align="center" :class="{ 'pa-4 pl-0': !isAdmin }">
     <v-col>
-      <h2 class="text-left ml-1">Listagem Unidades Curriculares</h2>
+        <h2 class="text-left ml-1">Listagem Unidades Curriculares</h2>
     </v-col>
 
     <v-col cols="auto" v-if="isAdmin">
@@ -30,13 +30,25 @@
     class="text-left"
     no-data-text="Sem unidades curriculares a apresentar."
   >
-    <template v-slot:[`item.actions`]="{ item }" v-if="isAdmin">
-      <v-tooltip text="Edit">
+    <template v-slot:[`item.courses`]="{ item }">
+      <span v-if="item.courses && item.courses.length > 0">
+        {{ item.courses.map(course => course.code).join(', ') }}
+      </span>
+      <span v-else class="text-grey">Nenhum curso associado</span>
+    </template>
+
+    <template v-slot:[`item.actions`]="{ item }">
+      <v-tooltip text="Open">
+        <template v-slot:activator="{ props }">
+          <v-icon v-bind="props" @click="viewCurriculumUnit(item.id)" class="mr-2">mdi-eye</v-icon>
+        </template>
+      </v-tooltip>
+      <v-tooltip text="Edit" v-if="isAdmin">
         <template v-slot:activator="{ props }">
           <v-icon v-bind="props" @click="editCurriculumUnit(item)" class="mr-2">mdi-pencil</v-icon>
         </template>
       </v-tooltip>
-      <v-tooltip text="Delete">
+      <v-tooltip text="Delete" v-if="isAdmin">
         <template v-slot:activator="{ props }">
           <v-icon v-bind="props" @click="deleteCurriculumUnit(item)">mdi-delete</v-icon>
         </template>
@@ -69,6 +81,7 @@ import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog.vue'
 import CurriculumUnitDialog from './CurriculumUnitDialog.vue'
 import { useRoleStore } from '@/stores/role'
 import { fuzzySearch } from '@/utils/utilities'
+import { useRouter } from 'vue-router'
 import PersonDto from '../../models/PersonDto'
 
 let search = ref('')
@@ -91,6 +104,12 @@ const editingUnit = ref<CurriculumUnitDto>({
 const roleStore = useRoleStore()
 const isAdmin = computed(() => roleStore.isAdministrator)
 
+const router = useRouter()
+
+const viewCurriculumUnit = (id: number) => {
+  router.push(`/curriculum-units/${id}`)
+  console.log(`/curriculum-units/${id}`)
+}
 
 // Table headers
 const headers = [
@@ -99,7 +118,9 @@ const headers = [
   { title: 'Semestre', key: 'semester', value: 'semester', sortable: true },
   { title: 'ECTS', key: 'ects', value: 'ects', sortable: true },
   { title: 'Professor Regente', key: 'mainTeacher', value: 'mainTeacher.name', sortable: true },
-  { title: 'Ações', key: 'actions', value: 'actions', sortable: false }
+  { title: 'Cursos', key: 'courses', value: 'courses', sortable: false },
+  { title: 'Ações', key: 'actions', value: 'actions', sortable: false },
+  
 ]
 
 // Fetch curriculum units
@@ -110,9 +131,15 @@ async function getCurriculumUnits() {
     curriculumUnits.splice(0, curriculumUnits.length)
     curriculumUnits.push(...(await RemoteService.getCurriculumUnits()))
   } finally {
+    debugPrintUnits()
     loading.value = false
   }
 }
+
+function debugPrintUnits() {
+  console.log('Curriculum Units:', curriculumUnits)
+}
+
 
 // Edit curriculum unit
 const editCurriculumUnit = (unit: CurriculumUnitDto) => {

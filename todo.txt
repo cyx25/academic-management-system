@@ -10,6 +10,7 @@ Add unit tests to validate the behavior of services and controllers.
 
 POR FAZER
 
+-- input validation no frontend
 **FALTA METER OS CURSOS A MOSTRA -Visualizar todas as Unidades Curriculares numa tabela, incluindo código, nome, semestre, curso e Professor Regente associado;
 - Visualizar todos os alunos de uma UC, incluindo nome, IST ID, email e estado (inscrito, aprovado, reprovado);
 - Visualizar todos os professores de uma UC, incluindo nome, IST ID, email e tipo (regente, assistente);

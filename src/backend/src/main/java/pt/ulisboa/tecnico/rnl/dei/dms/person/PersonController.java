@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person.PersonType;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.service.PersonService;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController

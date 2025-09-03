@@ -70,8 +70,8 @@ public class PersonService {
 			throw new DEIException(ErrorMessage.PERSON_TYPE_REQUIRED);
 		}	
 
-		if (!personDto.name().matches("[a-zA-Z]+")) {
-			throw new DEIException(ErrorMessage.PERSON_NAME_NOT_VALID);
+		if (!personDto.name().matches("^[a-zA-Z]+(\\s[a-zA-Z]+)*$")) {
+    		throw new DEIException(ErrorMessage.PERSON_NAME_NOT_VALID);
 		}
 
 		int person_istID;
@@ -81,8 +81,8 @@ public class PersonService {
 			throw new DEIException(ErrorMessage.PERSON_IST_ID_NOT_VALID);
 		}
 
-		// Validate ID (only for updates, since create uses auto-generated ID)
-		if (id != null && id < 0) {
+	
+		if (person_istID < 0) {
 			throw new DEIException(ErrorMessage.INVALID_PERSON_ID);
 		}
 

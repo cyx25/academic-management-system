@@ -103,9 +103,12 @@ watch(() => props.modelValue, (newVal) => {
   if (newVal) {
     unit.value = { ...props.unit }
     mainTeacherId.value = props.unit.mainTeacher?.id || null
-    // we want this so that when editing we keep the courses, but when creating we start fresh
-    if (props.mode === 'create') {
-      courseIds.value = [] 
+
+    // Preserve courses only in edit mode
+    if (props.mode === 'edit') {
+      courseIds.value = props.unit.courses?.map(c => c.id) || []
+    } else {
+      courseIds.value = [] // Reset for create mode
     }
   }
 })

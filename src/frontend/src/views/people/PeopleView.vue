@@ -1,5 +1,5 @@
 <template>
-  <v-row align="center">
+  <v-row align="center" :class="{ 'pa-4 pl-0': !isAdmin }">
     <v-col>
       <h2 class="text-left ml-1">Listagem de Pessoas</h2>
     </v-col>
@@ -106,7 +106,7 @@ const isAdmin = computed(() => roleStore.isAdministrator)
 
 // remover id dos headers
 const headers = [
-  { title: 'ID', key: 'id', value: 'id', sortable: true, filterable: false },
+  //{ title: 'ID', key: 'id', value: 'id', sortable: true, filterable: false },
   {
     title: 'Nome',
     key: 'name',

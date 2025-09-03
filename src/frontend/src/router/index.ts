@@ -4,6 +4,7 @@ import PeopleView from '@/views/people/PeopleView.vue'
 import StatisticsView from '@/views/statistics/StatisticsView.vue'
 import CoursesView from '@/views/courses/CoursesView.vue'
 import CurriculumUnitsView from '@/views/curriculumunits/CurriculumUnitsView.vue'
+import UnitView from '@/views/curriculumunits/UnitView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -28,9 +29,15 @@ const router = createRouter({
       component: CoursesView
     },
     {
-    path: '/curriculum-units',
-    name: 'curriculum-units',
-    component: CurriculumUnitsView
+      path: '/curriculum-units',
+      name: 'curriculum-units',
+      component: CurriculumUnitsView
+    },
+    {
+      path: '/curriculum-units/:id',
+      name: 'CurriculumUnitDetail',
+      component: UnitView,
+      props: true
     }
   ]
 })

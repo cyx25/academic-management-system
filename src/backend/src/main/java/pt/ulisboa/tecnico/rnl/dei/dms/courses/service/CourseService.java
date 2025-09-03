@@ -11,7 +11,6 @@ import pt.ulisboa.tecnico.rnl.dei.dms.courses.dto.CourseDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.repository.CourseRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.ErrorMessage;
-import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
 
 
 @Service
