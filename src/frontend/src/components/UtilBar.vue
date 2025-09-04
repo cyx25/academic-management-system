@@ -11,45 +11,87 @@
       </v-btn>
     </v-toolbar-items>
     <v-spacer />
-    <span>Current Role: {{ currentRole }}</span>
+    <span v-if="roleStore.isLoggedIn">
+      Welcome, {{ roleStore.currentUser?.name }} ({{ currentRole }})
+    </span>
+    <span v-else>Current Role: {{ currentRole }}</span>
     <v-spacer />
     <v-toolbar-items class="align-center">
       <DarkModeSwitch />
     </v-toolbar-items>
 
     <v-toolbar-items class="ms-2">
-      <v-btn size="small" @click="changeRole('student')">Aluno</v-btn>
-      <v-btn size="small" @click="changeRole('teaching_assistant')">Professor Assistente</v-btn>
-      <v-btn size="small" @click="changeRole('main_teacher')">Professor Regente</v-btn>
-      <v-btn size="small" @click="changeRole('administrator')">Administrador</v-btn>
+      <v-btn size="small" @click="promptLogin('student')">Aluno</v-btn>
+      <v-btn size="small" @click="promptLogin('teaching_assistant')">Professor Assistente</v-btn>
+      <v-btn size="small" @click="promptLogin('main_teacher')">Professor Regente</v-btn>
+      <v-btn size="small" @click="handleRoleChange('administrator')">Administrador</v-btn>
     </v-toolbar-items>
     <v-toolbar-items class="ms-2">
-      <v-btn size="small" @click="changeRole('none')" variant="text">
+      <v-btn size="small" @click="handleLogout" variant="text">
         Terminar sessão
         <v-icon size="small" class="ms-1" icon="mdi-logout"></v-icon>
       </v-btn>
     </v-toolbar-items>
+
+    <LoginDialog
+      v-model="loginDialog"
+      :role="roleToLogin"
+      :error="loginError"
+      @login="handleLogin"
+    />
   </v-app-bar>
 </template>
 
 <script setup lang="ts">
 import DarkModeSwitch from './DarkModeSwitch.vue'
+import LoginDialog from './LoginDialog.vue'
 import { useRoleStore } from '@/stores/role'
-import { ref } from 'vue'
-import { watch } from 'vue'
+import { ref, watch, computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 const roleStore = useRoleStore()
+const router = useRouter()
 
-const changeRole = (role: string) => {
-  roleStore.currentRole = role
+const loginDialog = ref(false)
+const roleToLogin = ref('')
+const loginError = ref('')
+
+const currentRole = computed(() => roleStore.currentRole.replace('_', ' '))
+
+const promptLogin = (role: string) => {
+  roleToLogin.value = role
+  loginError.value = ''
+  loginDialog.value = true
 }
 
-const currentRole = ref(roleStore.currentRole)
+const handleLogin = async (personId: number) => {
+  const success = await roleStore.login(roleToLogin.value, personId)
+  if (success) {
+    loginDialog.value = false
+    router.push({ name: `home` })
+  } else {
+    loginError.value = `ID invalido para ${roleToLogin.value}. Tente novamente.`
+  }
+}
+
+const handleRoleChange = (role: string) => {
+  roleStore.setRole(role)
+  if (role === 'administrator') {
+    router.push({ name: 'home' }) // Or an admin home
+  }
+}
+
+const handleLogout = () => {
+  roleStore.logout()
+  router.push({ name: 'home' })
+}
 
 watch(
   () => roleStore.currentRole,
   (newRole) => {
-    currentRole.value = newRole
+    if (newRole === 'none' && router.currentRoute.value.meta.requiresAuth) {
+      router.push({ name: 'home' })
+    }
   }
 )
 </script>

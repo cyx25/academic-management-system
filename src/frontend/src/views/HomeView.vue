@@ -7,4 +7,7 @@
 
 <script setup lang="ts">
 const appName = import.meta.env.VITE_NAME;
+
+
+
 </script>
