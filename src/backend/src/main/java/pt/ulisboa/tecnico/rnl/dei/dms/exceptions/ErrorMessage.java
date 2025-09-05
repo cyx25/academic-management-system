@@ -47,7 +47,8 @@ public enum ErrorMessage {
 	NO_SUCH_GROUP("Não existe nenhum grupo com o ID %s", 8002),
 	INVALID_GRADE("A nota especificada não é válida.", 8003),
 	NO_SUCH_SUBMISSION("Não existe nenhuma submissão com o ID %s", 9001),
-	SUBMISSION_DATE_EXPIRED("A data limite para submissão do projeto já expirou.", 9002);
+	SUBMISSION_DATE_EXPIRED("A data limite para submissão do projeto já expirou.", 9002),
+	NO_SUCH_MATERIAL("Não existe nenhum material com o ID %s", 10001);
 
 
 

@@ -15,6 +15,7 @@ nano.save
 .sts4-cache
 backend/.mvn/
 backend/mvnw
+backend/uploads/*
 backend/src/main/resources/application.properties
 frontend/node_modules/
 node_modules/

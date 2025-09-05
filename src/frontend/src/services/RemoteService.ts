@@ -8,6 +8,8 @@ import type CurriculumUnitDto from '@/models/CurriculumUnitDto'
 import type EnrollmentDto from '@/models/EnrollmentDto'
 import type AssistDto from '@/models/AssistDto'
 import type StudentGroupDto from '@/models/StudentGroupDto'
+import type MaterialDto from '@/models/MaterialDto'
+import type { CreateMaterialDto } from '@/models/MaterialDto'
 
 const httpClient = axios.create()
 httpClient.defaults.timeout = 50000
@@ -111,6 +113,8 @@ export default class RemoteServices {
     return httpClient.get(`/curriculum-units/person/${personId}`)
   }
 
+
+  // ! PROJECTS
     static async getProjects(unitId: number): Promise<ProjectDto[]> {
     return httpClient.get(`/curriculum-units/${unitId}/projects`);
   }
@@ -157,6 +161,35 @@ export default class RemoteServices {
   static async getMyProjectGroup(projectId: number, studentId: number): Promise<StudentGroupDto> {
     
     return httpClient.get(`/projects/${projectId}/${studentId}`);
+  }
+
+
+  // ! MATERIALS
+  static async getMaterials(unitId: number): Promise<MaterialDto[]> {
+    return httpClient.get(`/curriculum-units/${unitId}/materials`)
+  }
+
+  static async createMaterial(material: CreateMaterialDto): Promise<MaterialDto> {
+    return httpClient.post('/materials', material)
+  }
+
+  static async addFileToMaterial(materialId: number, file: File): Promise<MaterialDto> {
+    const formData = new FormData()
+    formData.append('file', file)
+    
+    return httpClient.post(`/materials/${materialId}/files`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+  }
+
+  static async deleteMaterial(materialId: number): Promise<void> {
+    return httpClient.delete(`/materials/${materialId}`)
+  }
+
+  static async deleteFile(fileId: number): Promise<void> {
+    return httpClient.delete(`/files/${fileId}`)
   }
 
   static async submitToGroup(groupId: number, studentId: number, formData: FormData): Promise<void> {
