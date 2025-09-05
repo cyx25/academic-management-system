@@ -12,6 +12,9 @@ export const useRoleStore = defineStore('role', {
     isAdministrator: (state) => state.currentRole === 'administrator',
     isMainTeacher: (state) => state.currentRole === 'main_teacher',
     isStudent: (state) => state.currentRole === 'student',
+    isTeachingAssistant: (state) => state.currentRole === 'teaching_assistant',
+    isTeacher: (state) => state.currentRole === 'main_teacher' || state.currentRole === 'teaching_assistant',
+    getCurrentUserID: (state) => state.currentUser ? state.currentUser.id : null,
   },
   actions: {
     async login(role: string, personId: number): Promise<boolean> {

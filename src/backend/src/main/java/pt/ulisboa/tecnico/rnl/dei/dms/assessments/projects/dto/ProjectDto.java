@@ -2,14 +2,14 @@ package pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.dto;
 
 import java.time.LocalDateTime;
 
-import pt.ulisboa.tecnico.rnl.dei.dms.assessments.files.AssessmentFileDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.domain.Project;
+import pt.ulisboa.tecnico.rnl.dei.dms.files.FileDto;
 
 public record ProjectDto (
     Long id,
     String title,
     Float weight,
-    AssessmentFileDto file,
+    FileDto statementFile,
     LocalDateTime dueDate,
     Integer maxGroupSize
 ) {
@@ -18,7 +18,7 @@ public record ProjectDto (
             project.getId(),
             project.getTitle(),
             project.getWeight(),
-            new AssessmentFileDto(project.getStatementFile()),
+            new FileDto(project.getStatementFile()),
             project.getDueDate(),
             project.getMaxGroupSize()
         );

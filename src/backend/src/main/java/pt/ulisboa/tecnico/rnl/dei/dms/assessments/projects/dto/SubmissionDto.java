@@ -3,25 +3,25 @@ package pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.dto;
 
 import java.time.LocalDateTime;
 
-import pt.ulisboa.tecnico.rnl.dei.dms.assessments.files.AssessmentFileDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.domain.Submission;
+import pt.ulisboa.tecnico.rnl.dei.dms.files.FileDto;
 
 public record SubmissionDto(
     Long id,
-    AssessmentFileDto file,
+    FileDto submissionFile,
     float grade,
-    LocalDateTime submissionTime,
-    String studentName
+    LocalDateTime submissionDate,
+    String submittedBy
     
 ) {
 
     public SubmissionDto(Submission submission) {
         this(
             submission.getId(),
-            new AssessmentFileDto(submission.getSubmissionFile()),
+            submission.getSubmissionFile() != null ? new FileDto(submission.getSubmissionFile()) : null,
             submission.getGrade(),
-            submission.getSubmissionTime(),
-            submission.getStudent().getName()
+            submission.getSubmissionDate(),
+            submission.getStudent() != null ? submission.getStudent().getName() : "Unknown"
         );
     }
     

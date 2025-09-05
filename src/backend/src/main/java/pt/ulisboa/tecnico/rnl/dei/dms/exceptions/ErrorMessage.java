@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.exceptions;
 
+import org.postgresql.translation.messages_bg;
+
 public enum ErrorMessage {
 	// TODO: mudar para ist id
 
@@ -36,7 +38,16 @@ public enum ErrorMessage {
 	ENROLLMENT_ALREADY_EXISTS("O estudante com o ID %s já está inscrito na unidade curricular com o ID %s", 4001),
 	NO_SUCH_ENROLLMENT("Não existe matrícula com o aluno ID %s", 4002),
 	ASSIST_ALREADY_EXISTS("O assistente com o ID %s já está associado à unidade curricular", 5001),
-	NO_SUCH_ASSIST("Não existe assistência do professor com o ID %s", 5002);
+	NO_SUCH_ASSIST("Não existe assistência do professor com o ID %s", 5002),
+	NO_SUCH_PROJECT("Não existe nenhum projeto com o ID %s", 6001),
+	FILE_REQUIRED("É necessário fazer upload de um ficheiro.", 7001),
+	NO_SUCH_FILE("Não existe nenhum ficheiro com o ID %s", 7002),
+	EMPTY_FILE("O ficheiro está vazio.", 7003),
+	STUDENT_NOT_IN_GROUP("O estudante não pertence a nenhum grupo do projeto", 8001),
+	NO_SUCH_GROUP("Não existe nenhum grupo com o ID %s", 8002),
+	INVALID_GRADE("A nota especificada não é válida.", 8003),
+	NO_SUCH_SUBMISSION("Não existe nenhuma submissão com o ID %s", 9001),
+	SUBMISSION_DATE_EXPIRED("A data limite para submissão do projeto já expirou.", 9002);
 
 
 

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { AxiosResponse } from 'axios'
+import type ProjectDto from '@/models/ProjectDto'
 import { useAppearanceStore } from '@/stores/appearance'
 import DeiError from '@/models/DeiError'
 import type PersonDto from '@/models/PersonDto'
@@ -7,6 +7,7 @@ import type CourseDto from '@/models/CourseDto'
 import type CurriculumUnitDto from '@/models/CurriculumUnitDto'
 import type EnrollmentDto from '@/models/EnrollmentDto'
 import type AssistDto from '@/models/AssistDto'
+import type StudentGroupDto from '@/models/StudentGroupDto'
 
 const httpClient = axios.create()
 httpClient.defaults.timeout = 50000
@@ -110,6 +111,72 @@ export default class RemoteServices {
     return httpClient.get(`/curriculum-units/person/${personId}`)
   }
 
+    static async getProjects(unitId: number): Promise<ProjectDto[]> {
+    return httpClient.get(`/curriculum-units/${unitId}/projects`);
+  }
+
+  static async createProject(unitId: number, formData: FormData): Promise<ProjectDto> {
+    
+    
+    return httpClient.post(`/curriculum-units/${unitId}/projects`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }
+
+  static async updateProject(projectId: number, formData: FormData): Promise<ProjectDto> {
+
+    
+  
+    return httpClient.put(`/projects/${projectId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }
+
+  static getProjectStatementUrl(projectId: number): string {
+    return `${import.meta.env.VITE_ROOT_API}/projects/${projectId}/statement`;
+  }
+
+  static getSubmissionFileUrl(fileId: number): string {
+    
+    return `${import.meta.env.VITE_ROOT_API}/projects/submissions/${fileId}`;
+  }
+
+  static getFileUrl(fileId: number): string {
+    return `${import.meta.env.VITE_ROOT_API}/files/${fileId}`
+  }
+
+
+  static async getProjectGroups(projectId: number): Promise<StudentGroupDto[]> {
+    return httpClient.get(`/projects/${projectId}`);
+  }
+
+  static async getMyProjectGroup(projectId: number, studentId: number): Promise<StudentGroupDto> {
+    
+    return httpClient.get(`/projects/${projectId}/${studentId}`);
+  }
+
+  static async submitToGroup(groupId: number, studentId: number, formData: FormData): Promise<void> {
+
+    // Backend expects groupId and studentId as request parameters, not path variables.
+    return httpClient.post(`/groups/submit`, formData, {
+      params: {
+        groupId,
+        studentId,
+      },
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  }
+
+  static async gradeGroup(groupId: number, teacherId: number, grade: number): Promise<void> {
+  
+    // Backend expects a GradingDto object in the request body.
+    return httpClient.put(`/groups/grade`, { groupId, teacherId, grade });
+  }
+
   static async errorMessage(error: any): Promise<string> {
     if (error.message === 'Network Error') {
       return 'Unable to connect to the server'
@@ -119,6 +186,8 @@ export default class RemoteServices {
       return error.response?.data?.message ?? 'Unknown Error'
     }
   }
+
+
 
   static async handleError(error: any): Promise<never> {
     const deiErr = new DeiError(

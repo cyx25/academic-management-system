@@ -2,8 +2,13 @@ package pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.domain;
 
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,10 +21,10 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.dto.StudentGroupDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
 
 
@@ -35,6 +40,7 @@ public class StudentGroup {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
+    @JsonIgnore
     private Project project;
 
    
@@ -52,27 +58,22 @@ public class StudentGroup {
     @Column
     private Float grade;
 
-    @Column
-    private Float tempGrade;
-
-
-
     @OneToMany(mappedBy = "studentGroup", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Submission> submissions = new HashSet<>();
+    @OrderBy("submissionDate DESC")
+    @JsonManagedReference
+    private List<Submission> submissions = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "responsible_graded_teacher_id")
     private Person responsibleGradedTeacher;
 
-    public StudentGroup(StudentGroupDto studentGroupDto, Project project, Set<Person> students) {
-        
-        this.grade = studentGroupDto.grade();
-        this.tempGrade = studentGroupDto.tempGrade();
-        this.submissions = new HashSet<>();
+    public StudentGroup(Project project, int groupID) {
+
+        this.grade = null;
+        this.submissions = new ArrayList<>();
         this.responsibleGradedTeacher = null;
         this.project = project;
-        this.students = students;
-        this.groupID = studentGroupDto.groupID();
+        this.groupID = groupID;
     }
 
     

@@ -1,31 +1,30 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.dto;
 
-import java.util.List;
-
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.domain.StudentGroup;
+import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 public record StudentGroupDto(
     Long id,
+    Integer groupId,
     Float grade,
-    Float tempGrade,
-    String gradedTeacherName,
-    Integer groupID,
-    List<SubmissionDto> submissions
-
+    List<PersonDto> members,
+    List<SubmissionDto> submissions,
+    String gradedTeacherName
 ) {
-
     public StudentGroupDto(StudentGroup studentGroup, List<SubmissionDto> submissions) {
         this(
             studentGroup.getId(),
-            studentGroup.getGrade(),
-            studentGroup.getTempGrade(),
-            studentGroup.getResponsibleGradedTeacher().getName(),
             studentGroup.getGroupID(),
-            submissions
+            studentGroup.getGrade(),
+            studentGroup.getStudents().stream()
+                .map(PersonDto::new)
+                .collect(Collectors.toList()),
+            submissions,
+            studentGroup.getResponsibleGradedTeacher() != null ? 
+                studentGroup.getResponsibleGradedTeacher().getName() : "POR CORRIGIR"
         );
     }
-
-
-    
 }

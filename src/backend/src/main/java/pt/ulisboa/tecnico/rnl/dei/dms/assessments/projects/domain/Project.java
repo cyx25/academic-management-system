@@ -13,9 +13,9 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pt.ulisboa.tecnico.rnl.dei.dms.assessments.files.AssessmentFile;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.dto.ProjectDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
+import pt.ulisboa.tecnico.rnl.dei.dms.files.File;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -41,26 +41,25 @@ public class Project {
     @Column(nullable = false)
     private Float weight;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "statement_file_id")
-    private AssessmentFile statementFile;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "statement_file_id", nullable = false)
+    private File statementFile;
 
     @Column(name = "due_date", nullable = false)
     private LocalDateTime dueDate;
 
-    @Column(name = "max_group_size")
+    @Column(name = "max_group_size", nullable = false)
     private Integer maxGroupSize;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<StudentGroup> studentGroups = new HashSet<>();
 
-    public Project(ProjectDto projectDto, CurriculumUnit curriculumUnit) {
-        this.id = projectDto.id();
+    public Project(ProjectDto projectDto, CurriculumUnit curriculumUnit, File statementFile) {
         this.title = projectDto.title();
         this.weight = projectDto.weight();
-        this.statementFile = new AssessmentFile(projectDto.file());
         this.dueDate = projectDto.dueDate();
-        this.curriculumUnit = curriculumUnit;
         this.maxGroupSize = projectDto.maxGroupSize();
+        this.curriculumUnit = curriculumUnit;
+        this.statementFile = statementFile;
     }
 }
