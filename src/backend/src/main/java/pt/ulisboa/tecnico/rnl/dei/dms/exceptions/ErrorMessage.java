@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.rnl.dei.dms.exceptions;
 public enum ErrorMessage {
 	// TODO: mudar para ist id
 
+	
 	NO_SUCH_PERSON("Não existe nenhuma pessoa com o ID %s", 1001),
 	PERSON_NAME_NOT_VALID("O nome da pessoa especificado não é válido.", 1002),
 	PERSON_ALREADY_EXISTS("Já existe uma pessoa com o ID %s", 1003),
@@ -19,6 +20,8 @@ public enum ErrorMessage {
 	COURSE_NAME_REQUIRED("O nome do curso é obrigatório.", 2004),
 	COURSE_CODE_REQUIRED("O código do curso é obrigatório.", 2005),
 	COURSE_DURATION_REQUIRED("A duração do curso é obrigatória.", 2006),
+	COURSE_CODE_TOO_LONG("O código especificado é demasiado longo.", 2007),
+	COURSE_CODE_NOT_VALID("O código especificado não é válido.", 2008),
 	NO_SUCH_CU("Não existe unidade curricular com o ID %s", 3001),
 	CU_INVALID_SEMESTER("O semestre da unidade curricular especificado não é válido.", 3002),
 	CU_INVALID_ECTS("Os ECTS da unidade curricular especificada não são válidos.", 3003),
@@ -28,6 +31,8 @@ public enum ErrorMessage {
 	CU_SEMESTER_REQUIRED("O semestre da unidade curricular é obrigatório.", 3007),
 	CU_ECTS_REQUIRED("Os ECTS da unidade curricular são obrigatórios.", 3008),
 	CU_MAIN_TEACHER_REQUIRED("O professor regente da unidade curricular é obrigatório.", 3009),
+	CU_CODE_TOO_LONG("O código especificado é demasiado longo.", 3010),
+	CU_CODE_NOT_VALID("O código especificado não é válido.", 3011),
 	ENROLLMENT_ALREADY_EXISTS("O estudante com o ID %s já está inscrito na unidade curricular com o ID %s", 4001),
 	NO_SUCH_ENROLLMENT("Não existe matrícula com o aluno ID %s", 4002),
 	ASSIST_ALREADY_EXISTS("O assistente com o ID %s já está associado à unidade curricular", 5001),

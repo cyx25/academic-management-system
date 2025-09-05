@@ -3,7 +3,6 @@ package pt.ulisboa.tecnico.rnl.dei.dms.courses.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.task.TaskExecutionProperties.Simple;
 
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.SimpleCurriculumUnitDto;

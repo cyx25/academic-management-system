@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.AssistRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.EnrollmentRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.dto.CourseDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.repository.CourseRepository;
@@ -34,6 +37,14 @@ public class CurriculumUnitService {
     @Autowired
     private CourseRepository courseRepository;
 
+
+/* 
+    @Autowired
+    private AssistRepository assistRepository;
+
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
+ */
 
     private CurriculumUnit fetchCurriculumUnitOrThrow(long id) {
 		return curriculumUnitRepository.findById(id)
@@ -117,7 +128,7 @@ public class CurriculumUnitService {
         curriculumUnit.setCode(dto.code());
         curriculumUnit.setSemester(dto.semester());
         curriculumUnit.setEcts(dto.ects());
-        curriculumUnit.setTeaching(mainTeacher);
+        curriculumUnit.setMainTeacher(mainTeacher);
         curriculumUnit.setCourses(courses);
         
         removeFromOldCourses(curriculumUnit, oldCourses, courses);
@@ -166,8 +177,16 @@ public class CurriculumUnitService {
         throw new DEIException(ErrorMessage.CU_NAME_REQUIRED);
         }
         if (curriculumUnitDto.code() == null || curriculumUnitDto.code().trim().isEmpty()) {
-            throw new DEIException(ErrorMessage.CU_CODE_REQUIRED);
+            throw new DEIException(ErrorMessage.CU_CODE_REQUIRED);   
         }
+
+        if(curriculumUnitDto.code().length() > 10) {
+			throw new DEIException(ErrorMessage.CU_CODE_TOO_LONG);
+		}
+		if(!curriculumUnitDto.code().matches("\\S+")) {
+			throw new DEIException(ErrorMessage.CU_CODE_NOT_VALID);
+		}
+
         if (curriculumUnitDto.semester() == null) {
             throw new DEIException(ErrorMessage.CU_SEMESTER_REQUIRED);
         }
@@ -209,6 +228,47 @@ public class CurriculumUnitService {
 		}
     }
 
+    // !talvez implementar se tiver tempo
+   /*  @Transactional
+    public List<CurriculumUnitDto> getCurriculumUnitsByPerson(Long personId) {
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new DEIException(ErrorMessage.NO_SUCH_PERSON));
+
+        List<CurriculumUnit> curriculumUnits = new ArrayList<>();
+
+        switch (person.getType().toString()) {
+            case "TEACHER":
+                curriculumUnits.addAll(
+                        teachingRepository.findByTeacherId(personId).stream()
+                                .map(Teaching::getCurriculumUnit)
+                                .toList()
+                );
+                // A teacher can also be an assistant in other CUs
+            case "TEACHING_ASSISTANT":
+                curriculumUnits.addAll(
+                        assistRepository.findByAssistantId(personId).stream()
+                                .map(Assist::getCurriculumUnit)
+                                .toList()
+                );
+                break;
+            case "STUDENT":
+                curriculumUnits.addAll(
+                        enrollmentRepository.findByStudentId(personId).stream()
+                                .map(Enrollment::getCurriculumUnit)
+                                .toList()
+                );
+                break;
+            default:
+                
+                break;
+        }
+
+        // Remove duplicates in case a person is both a main teacher and an assistant
+        return curriculumUnits.stream()
+                .map(CurriculumUnitDto::new)
+                .collect(Collectors.toList());
+    }
+ */
 
    @Transactional
     public void deleteCurriculumUnit(long curriculumUnitId) {
@@ -222,5 +282,6 @@ public class CurriculumUnitService {
         curriculumUnitRepository.deleteById(curriculumUnitId);
     }
 
+   
 
 }

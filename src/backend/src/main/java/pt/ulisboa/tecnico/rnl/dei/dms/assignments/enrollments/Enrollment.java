@@ -23,6 +23,9 @@ public class Enrollment {
     @GeneratedValue
     private Long id;
 
+    @Column
+    private Integer finalGrade;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "student_id", nullable = false)
     private Person student;

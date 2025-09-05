@@ -106,6 +106,10 @@ export default class RemoteServices {
     return httpClient.delete(`/curriculum-units/${unitId}/students/${personId}`)
   }
 
+  static async getCurriculumUnitsByPerson(personId: number): Promise<CurriculumUnitDto[]> {
+    return httpClient.get(`/curriculum-units/person/${personId}`)
+  }
+
   static async errorMessage(error: any): Promise<string> {
     if (error.message === 'Network Error') {
       return 'Unable to connect to the server'

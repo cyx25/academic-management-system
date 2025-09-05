@@ -1,8 +1,6 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto;
 
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.AssistDto;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.EnrollmentDto;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.teachings.TeachingDto;
+
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.dto.CourseDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
@@ -29,7 +27,7 @@ public record CurriculumUnitDto(
             unit.getSemester(),
             unit.getEcts(),
             unit.getCourses().stream().map(CourseDto::new).collect(Collectors.toList()),
-            unit.getTeaching() != null ? new PersonDto(unit.getTeaching().getTeacher()) : null
+            unit.getMainTeacher() != null ? new PersonDto(unit.getMainTeacher()) : null
            /*  unit.getAssists().stream().map(AssistDto::new).collect(Collectors.toList()),
             unit.getEnrollments().stream().map(EnrollmentDto::new).collect(Collectors.toList()) */
         );

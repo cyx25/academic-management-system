@@ -20,6 +20,7 @@
           type="number"
           min="1"
           max="2"
+          autocomplete="off"
           required
         ></v-text-field>
         <v-text-field
@@ -28,6 +29,7 @@
           type="number"
           min="1"
           max="12"
+          autocomplete="off"
           required
         ></v-text-field>
         <v-autocomplete
@@ -35,6 +37,7 @@
           v-model="mainTeacherId"
           :items="teachers"
           item-title="name"
+          autocomplete="off"
           item-value="id"
           required
         ></v-autocomplete>
@@ -43,10 +46,12 @@
           v-model="courseIds"
           :items="courses"
           item-title="name"
+          autocomplete="off"
           item-value="id"
           multiple
           chips
           closable-chips
+          no-data-text="Não há cursos disponíveis"
         ></v-select>
       </v-card-text>
 

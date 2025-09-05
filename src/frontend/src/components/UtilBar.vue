@@ -76,9 +76,6 @@ const handleLogin = async (personId: number) => {
 
 const handleRoleChange = (role: string) => {
   roleStore.setRole(role)
-  if (role === 'administrator') {
-    router.push({ name: 'home' }) // Or an admin home
-  }
 }
 
 const handleLogout = () => {

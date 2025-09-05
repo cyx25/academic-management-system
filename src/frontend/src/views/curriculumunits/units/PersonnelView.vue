@@ -72,6 +72,13 @@
               hide-default-footer
               no-data-text="Nenhum assistente associado."
             >
+              <template v-slot:[`item.type`]="{ item }">
+              
+              <v-chip v-if="item.type === 'TEACHING_ASSISTANT'" color="purple" text-color="white">
+              Professor Assistente
+              </v-chip>
+             
+            </template>
               <template v-slot:[`item.actions`]="{ item }">
                 <v-tooltip text="Remover">
                   <template v-slot:activator="{ props }">
@@ -112,6 +119,20 @@
               autocomplete="off"
               no-data-text="Nenhum aluno associado."
             >
+              <template v-slot:[`item.status`]="{ item }">
+              
+              <v-chip v-if="item.status === 'ENROLLED'" color="blue" text-color="white">
+              INSCRITO
+              </v-chip>
+              <v-chip v-if="item.status === 'APPROVED'" color="green" text-color="white">
+              APROVADO
+              </v-chip>
+              <v-chip v-if="item.status === 'FAILED'" color="red" text-color="white">
+              REPROVADO
+              </v-chip>
+             
+            </template>
+
               <template v-slot:[`item.actions`]="{ item }">
                 <v-tooltip text="Remover">
                   <template v-slot:activator="{ props }">
@@ -149,6 +170,7 @@
                 variant="outlined"
                 prepend-inner-icon="mdi-magnify"
                 autocomplete="off"
+                :no-data-text="`Não há ${personTypeToAdd === 'student' ? 'alunos' : 'assistentes'} disponíveis`"
               >
                 <template v-slot:item="{ props, item }">
                   <v-list-item v-bind="props">

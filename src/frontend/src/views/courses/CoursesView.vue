@@ -17,6 +17,7 @@
     prepend-inner-icon="mdi-magnify"
     variant="outlined"
     hide-details
+    autocomplete="off"
     single-line
   ></v-text-field>
 

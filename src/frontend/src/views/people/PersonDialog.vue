@@ -13,14 +13,15 @@
     <v-card>
       <v-card-title>{{ mode === 'create' ? 'Nova Pessoa' : 'Editar Pessoa' }}</v-card-title>
       <v-card-text>
-        <v-text-field label="Nome*" v-model="person.name" required></v-text-field>
-        <v-text-field label="IST ID*" v-model="person.istId" required></v-text-field>
-        <v-text-field label="Email" v-model="person.email"></v-text-field>
+        <v-text-field label="Nome*" v-model="person.name" autocomplete="off" required></v-text-field>
+        <v-text-field label="IST ID*" v-model="person.istId" autocomplete="off" required></v-text-field>
+        <v-text-field label="Email" v-model="person.email" ></v-text-field>
         <v-select
           label="Tipo*"
           v-model="person.type"
           :items="personTypes"
           item-title="text"
+          autocomplete="off"
           item-value="value"
           required
         ></v-select>

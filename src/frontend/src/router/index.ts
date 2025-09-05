@@ -2,11 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import PeopleView from '@/views/people/PeopleView.vue'
 import StatisticsView from '@/views/statistics/StatisticsView.vue'
-import UnitLayout from '@/views/curriculumunits/UnitLayout.vue'
-import PersonnelView from '@/views/curriculumunits/PersonnelView.vue'
+import UnitLayout from '../views/curriculumunits/units/UnitLayout.vue'
+import PersonnelView from '../views/curriculumunits/units/PersonnelView.vue'
 import CoursesView from '@/views/courses/CoursesView.vue'
 import CurriculumUnitsView from '@/views/curriculumunits/CurriculumUnitsView.vue'
-import UnitView from '@/views/curriculumunits/UnitView.vue'
+import UnitView from '../views/curriculumunits/units/UnitView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

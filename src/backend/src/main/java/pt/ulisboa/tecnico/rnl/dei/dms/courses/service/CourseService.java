@@ -9,6 +9,8 @@ import jakarta.transaction.Transactional;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.dto.CourseDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.repository.CourseRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
+import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.repository.CurriculumUnitRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.ErrorMessage;
 
@@ -19,6 +21,10 @@ public class CourseService {
 
     @Autowired
     private CourseRepository courseRepository;
+
+	@Autowired
+    private CurriculumUnitRepository curriculumUnitRepository;
+
 
 
     private Course fetchCourseOrThrow(long id) {
@@ -67,6 +73,13 @@ public class CourseService {
 			throw new DEIException(ErrorMessage.COURSE_CODE_REQUIRED);
 		}
 
+		if(courseDto.code().length() > 10) {
+			throw new DEIException(ErrorMessage.COURSE_CODE_TOO_LONG);
+		}
+		if(!courseDto.code().matches("\\S+")) {
+			throw new DEIException(ErrorMessage.COURSE_CODE_NOT_VALID);
+		}
+
 		if (courseDto.duration() == null || courseDto.duration().trim().isEmpty()) {
 			throw new DEIException(ErrorMessage.COURSE_DURATION_REQUIRED);
 		}
@@ -94,10 +107,19 @@ public class CourseService {
 		}
 	}
 
-    @Transactional
-	public void deleteCourse(long id) {
-		fetchCourseOrThrow(id); // ensure exists
-		courseRepository.deleteById(id);
-	}
+	@Transactional
+    public void deleteCourse(long id) {
+        
+        Course courseToDelete = fetchCourseOrThrow(id);
 
+     
+        List<CurriculumUnit> associatedUnits = curriculumUnitRepository.findByCoursesContaining(courseToDelete);
+
+     
+        for (CurriculumUnit unit : associatedUnits) {
+            unit.getCourses().remove(courseToDelete);
+        }
+
+        courseRepository.delete(courseToDelete);
+    }
 }

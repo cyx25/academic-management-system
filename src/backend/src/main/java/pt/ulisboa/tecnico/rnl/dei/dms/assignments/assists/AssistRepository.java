@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface AssistRepository extends JpaRepository<Assist, Long> {
     Optional<Assist> findByCurriculumUnitIdAndAssistantId(long curriculumUnitId, long assistantId);
     List<Assist> findByCurriculumUnitId(long curriculumUnitId);
+    List<Assist> findByAssistantId(Long assistantId);
 }

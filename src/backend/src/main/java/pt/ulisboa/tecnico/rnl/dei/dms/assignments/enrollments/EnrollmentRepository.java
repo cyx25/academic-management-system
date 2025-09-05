@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     List<Enrollment> findByCurriculumUnitId(long curriculumUnitId);
+    List<Enrollment> findByStudentId(Long studentId);
     Optional<Enrollment> findByCurriculumUnitIdAndStudentId(long curriculumUnitId, long studentId);
 }

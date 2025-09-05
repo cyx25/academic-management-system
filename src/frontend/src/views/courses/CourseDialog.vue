@@ -12,14 +12,15 @@
 
     <v-card prepend-icon="mdi-school" :title="mode === 'create' ? 'Novo Curso' : 'Editar Curso'">
       <v-card-text>
-        <v-text-field label="Código*" v-model="course.code" required></v-text-field>
-        <v-text-field label="Nome*" v-model="course.name" required></v-text-field>
+        <v-text-field label="Código*" v-model="course.code" autocomplete="off" required></v-text-field>
+        <v-text-field label="Nome*" v-model="course.name" autocomplete="off" required></v-text-field>
         <v-text-field
           label="Duração (anos)*"
           v-model.number="course.duration"
           type="number"
           min="1"
           max="5"
+          autocomplete="off"
           required
         ></v-text-field>
       </v-card-text>
