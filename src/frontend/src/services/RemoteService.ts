@@ -10,6 +10,10 @@ import type AssistDto from '@/models/AssistDto'
 import type StudentGroupDto from '@/models/StudentGroupDto'
 import type MaterialDto from '@/models/MaterialDto'
 import type { CreateMaterialDto } from '@/models/MaterialDto'
+import type TesteDto from '@/models/TesteDto'
+import type { CreateTesteDto } from '@/models/TesteDto'
+import type StudentTesteDto from '@/models/StudentTesteDto'
+import type RevisionDto from '@/models/RevisionDto'
 
 const httpClient = axios.create()
 httpClient.defaults.timeout = 50000
@@ -208,6 +212,82 @@ export default class RemoteServices {
   
     // Backend expects a GradingDto object in the request body.
     return httpClient.put(`/groups/grade`, { groupId, teacherId, grade });
+  }
+
+
+  // ! TESTS
+  static async getTests(unitId: number): Promise<TesteDto[]> {
+  return httpClient.get(`/curriculum-units/${unitId}/tests`)
+  }
+
+  static async createTest(unitId: number, test: CreateTesteDto): Promise<TesteDto> {
+    return httpClient.post(`/curriculum-units/${unitId}/tests`, test)
+  }
+
+  static async addStatementFile(testId: number, file: File): Promise<TesteDto> {
+    const formData = new FormData()
+    formData.append('file', file)
+    return httpClient.post(`/tests/${testId}/statement`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  }
+
+  static async addCorrectionFile(testId: number, file: File): Promise<TesteDto> {
+    const formData = new FormData()
+    formData.append('file', file)
+    return httpClient.post(`/tests/${testId}/correction`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  }
+
+  static async getStudentTests(testId: number): Promise<StudentTesteDto[]> {
+    return httpClient.get(`/tests/${testId}/student-tests`)
+  }
+
+  static async getStudentTest(testId: number, studentId: number): Promise<StudentTesteDto> {
+    return httpClient.get(`/tests/${testId}/students/${studentId}`)
+  }
+
+  static async getStudentTestsForStudent(unitId: number, studentId: number): Promise<StudentTesteDto[]> {
+    return httpClient.get(`/curriculum-units/${unitId}/students/${studentId}/tests`)
+  }
+
+  static async gradeStudentTest(studentTestId: number, teacherId: number, grade: number): Promise<void> {
+    return httpClient.post(`/student-tests/${studentTestId}/grade`, { teacherId, grade })
+  }
+
+  // !Revision Management
+  static async requestTestRevision(studentTesteId: number, justification: string): Promise<RevisionDto> {
+  return httpClient.post('/revisions', {
+    studentTesteId,
+    justification
+  })
+  }
+
+  static async getPendingRevisions(unitId: number): Promise<RevisionDto[]> {
+    return httpClient.get(`/curriculum-units/${unitId}/revisions/pending`)
+  }
+
+  static async getAllRevisions(unitId: number): Promise<RevisionDto[]> {
+    return httpClient.get(`/curriculum-units/${unitId}/revisions`)
+  }
+
+  static async gradeRevision(revisionId: number, teachingAssistantId: number, newGrade: number): Promise<RevisionDto> {
+    return httpClient.post(`/revisions/${revisionId}/grade`, {
+      teachingAssistantId,
+      newGrade
+    })
+  }
+
+  static async processRevision(revisionId: number, action: string, mainTeacherId: number): Promise<RevisionDto> {
+    return httpClient.post(`/revisions/${revisionId}/process`, {
+      action,
+      mainTeacherId
+    })
+  }
+
+  static async getTestRevisions(studentTestId: number): Promise<RevisionDto> {
+    return httpClient.get(`/student-tests/${studentTestId}/revisions`)
   }
 
   static async errorMessage(error: any): Promise<string> {

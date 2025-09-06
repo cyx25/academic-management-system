@@ -5,11 +5,14 @@ import StatisticsView from '@/views/statistics/StatisticsView.vue'
 import MaterialsView from '@/views/curriculumunits/units/materials/MaterialsView.vue'
 import UnitLayout from '../views/curriculumunits/units/UnitLayout.vue'
 import SubmissionsView from '../views/curriculumunits/units/Projects/SubmissionsView.vue'
-import PersonnelView from '../views/curriculumunits/units/PersonnelView.vue'
+import PersonnelView from '../views/curriculumunits/units/personnel/PersonnelView.vue'
 import CoursesView from '@/views/courses/CoursesView.vue'
 import CurriculumUnitsView from '@/views/curriculumunits/CurriculumUnitsView.vue'
 import UnitView from '../views/curriculumunits/units/UnitView.vue'
 import ProjectsView from '@/views/curriculumunits/units/Projects/ProjectsView.vue'
+import TestsView from '@/views/curriculumunits/units/tests/TestsView.vue'
+import StudentTestsView from '@/views/curriculumunits/units/tests/StudentTestsView.vue'
+import RevisionsView from '@/views/curriculumunits/units/tests/RevisionsView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -67,6 +70,22 @@ const router = createRouter({
         name: 'project-submissions',
         component: SubmissionsView,
         },
+        {
+        path: '/curriculum-units/:id/tests',
+        name: 'TestsView',
+        component: TestsView,
+        },
+        {
+          path: 'tests/:testId/students',
+          name: 'StudentTestsView',
+          component: StudentTestsView,
+          props: true,
+        },
+        {
+          path: 'revisions',
+          name: 'RevisionsView',
+          component: RevisionsView,
+        }
       ]
     },
   ]
