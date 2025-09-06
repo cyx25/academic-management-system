@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments;
+package pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;

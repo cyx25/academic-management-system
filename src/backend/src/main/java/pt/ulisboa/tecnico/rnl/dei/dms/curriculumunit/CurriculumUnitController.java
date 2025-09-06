@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.AssistDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.AssistService;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.EnrollmentDto;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.EnrollmentService;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.EnrollmentDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.services.EnrollmentService;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.dto.CourseDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.service.CourseService;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.CurriculumUnitDto;

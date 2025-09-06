@@ -13,7 +13,9 @@ import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.dto.SubmissionDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.repository.ProjectRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.repository.StudentGroupRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.repository.SubmissionRepository;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.Enrollment;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.repository.TesteRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.domain.Enrollment;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.services.FinalGradeCalculationService;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.repository.CurriculumUnitRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
@@ -35,6 +37,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class ProjectService {
 
+    private final FinalGradeCalculationService finalGradeCalculationService;
+
     private final ProjectRepository projectRepository;
     private final CurriculumUnitRepository curriculumUnitRepository;
     private final PersonRepository personRepository;
@@ -42,6 +46,7 @@ public class ProjectService {
     private final FileRepository assessmentFileRepository;
     private final SubmissionRepository submissionRepository;
     private final FileService fileService;
+    private final TesteRepository testeRepository;
 
 
 
@@ -50,15 +55,18 @@ public class ProjectService {
                           PersonRepository personRepository,
                           StudentGroupRepository studentGroupRepository,
                           FileRepository assessmentFileRepository,
+                          TesteRepository testeRepository,
                           SubmissionRepository submissionRepository,
-                          FileService fileService) {
+                          FileService fileService, FinalGradeCalculationService finalGradeCalculationService) {
         this.projectRepository = projectRepository;
         this.curriculumUnitRepository = curriculumUnitRepository;
         this.personRepository = personRepository;
         this.studentGroupRepository = studentGroupRepository;
         this.assessmentFileRepository = assessmentFileRepository;
+        this.testeRepository = testeRepository;
         this.fileService = fileService;
         this.submissionRepository = submissionRepository;
+        this.finalGradeCalculationService = finalGradeCalculationService;
     }
 
 
@@ -80,6 +88,8 @@ public class ProjectService {
         CurriculumUnit curriculumUnit = curriculumUnitRepository.findById(unitId)
                 .orElseThrow(() -> new DEIException(ErrorMessage.NO_SUCH_CU));
 
+        validateTotalWeight(unitId, projectDto.weight().intValue(), null);
+
         // Store file using FileService
         File assessmentFile = fileService.storeFile(file);
         System.out.println("[DEBUG] File stored with path: " + assessmentFile.getPath());
@@ -92,6 +102,40 @@ public class ProjectService {
         System.out.println("--- [DEBUG] Finished automatic group creation ---\n");
 
         return new ProjectDto(project);
+    }
+
+    private void validateTotalWeight(Long curriculumUnitId, Integer newWeight, Long excludeProjectId) {
+        // Calculate current total weight from all projects
+        List<Project> existingProjects = projectRepository.findByCurriculumUnitId(curriculumUnitId);
+        int currentProjectsWeight = 0;
+        
+        for (Project project : existingProjects) {
+            // Skip the project being updated
+            if (excludeProjectId == null || !project.getId().equals(excludeProjectId)) {
+                currentProjectsWeight += project.getWeight();
+            }
+        }
+
+        // Calculate current total weight from all tests
+        var existingTestes = testeRepository.findByCurriculumUnitId(curriculumUnitId);
+        int currentTestsWeight = 0;
+        
+        for (var teste : existingTestes) {
+            currentTestsWeight += teste.getWeight();
+        }
+
+        // Calculate total weight with new project weight
+        int totalWeight = currentProjectsWeight + currentTestsWeight + newWeight;
+
+        // Validate total doesn't exceed 100
+        if (totalWeight > 100) {
+            throw new DEIException(ErrorMessage.WEIGHT_EXCEEDS_MAXIMUM);
+        }
+
+        System.out.println("[DEBUG] Weight validation passed: Projects=" + currentProjectsWeight + 
+                          ", Tests=" + currentTestsWeight + 
+                          ", New=" + newWeight + 
+                          ", Total=" + totalWeight);
     }
 
 
@@ -141,7 +185,8 @@ public class ProjectService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new DEIException(ErrorMessage.NO_SUCH_PROJECT));
 
-       
+        validateTotalWeight(project.getCurriculumUnit().getId(), projectDto.weight().intValue(), projectId);
+
         project.setWeight(projectDto.weight());
         project.setDueDate(projectDto.dueDate());
 
@@ -257,6 +302,13 @@ public class ProjectService {
         }
         group.setResponsibleGradedTeacher(teacher);
         group.setGrade(grade);
+
+        for (Person student : group.getStudents()) {
+        finalGradeCalculationService.calculateAndUpdateFinalGrade(
+                student.getId(),
+                group.getProject().getCurriculumUnit().getId()
+        );
+    }
     }
 
 }

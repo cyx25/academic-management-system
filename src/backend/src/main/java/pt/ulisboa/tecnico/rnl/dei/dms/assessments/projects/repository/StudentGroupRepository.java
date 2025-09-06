@@ -12,6 +12,7 @@ import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.domain.StudentGroup;
 public interface StudentGroupRepository extends JpaRepository<StudentGroup, Long> {
     List<StudentGroup> findByProjectId(Long projectId);
     Optional<StudentGroup> findByProject_IdAndStudents_Id(Long projectId, Long studentId);
+    List<StudentGroup> findByStudents_Id(Long studentId);
 
 
    

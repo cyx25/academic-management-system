@@ -26,7 +26,7 @@ import lombok.Setter;
 import lombok.ToString;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.domain.Project;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.Assist;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.Enrollment;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.domain.Enrollment;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.CurriculumUnitDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;

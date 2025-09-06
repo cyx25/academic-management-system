@@ -3,6 +3,8 @@ package pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.services;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.repository.ProjectRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.domain.StudentTeste;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.domain.Teste;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.dto.CreateTesteDto;
@@ -10,7 +12,8 @@ import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.dto.StudentTesteDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.dto.TesteDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.repository.StudentTesteRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.repository.TesteRepository;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.Enrollment;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.domain.Enrollment;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.services.FinalGradeCalculationService;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.repository.CurriculumUnitRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.files.File;
@@ -28,9 +31,12 @@ import java.util.stream.Collectors;
 @Transactional
 public class TesteService {
 
+    private final FinalGradeCalculationService finalGradeCalculationService;
+
     private final TesteRepository testeRepository;
     private final StudentTesteRepository studentTesteRepository;
     private final CurriculumUnitRepository curriculumUnitRepository;
+    private final ProjectRepository projectRepository;
     private final PersonRepository personRepository;
     private final FileService fileService;
 
@@ -38,12 +44,15 @@ public class TesteService {
                        StudentTesteRepository studentTesteRepository,
                        CurriculumUnitRepository curriculumUnitRepository,
                        PersonRepository personRepository,
-                       FileService fileService) {
+                        ProjectRepository projectRepository,
+                       FileService fileService, FinalGradeCalculationService finalGradeCalculationService) {
         this.testeRepository = testeRepository;
         this.studentTesteRepository = studentTesteRepository;
         this.curriculumUnitRepository = curriculumUnitRepository;
+        this.projectRepository = projectRepository;
         this.personRepository = personRepository;
         this.fileService = fileService;
+        this.finalGradeCalculationService = finalGradeCalculationService;
     }
 
     @Transactional(readOnly = true)
@@ -58,13 +67,52 @@ public class TesteService {
         CurriculumUnit curriculumUnit = curriculumUnitRepository.findById(curriculumUnitId)
                 .orElseThrow(() -> new DEIException(ErrorMessage.NO_SUCH_CU));
 
+        validateTotalWeight(curriculumUnitId, createTesteDto.weight().intValue(), null);
+
         Teste teste = new Teste(createTesteDto, curriculumUnit);
         Teste savedTeste = testeRepository.save(teste);
+
 
         // Create StudentTeste entries for all enrolled students
         createStudentTestesForEnrolledStudents(savedTeste, curriculumUnit);
 
         return new TesteDto(savedTeste);
+    }
+
+
+   
+    private void validateTotalWeight(Long curriculumUnitId, Integer newWeight, Long excludeTesteId) {
+      
+        List<Teste> existingTestes = testeRepository.findByCurriculumUnitId(curriculumUnitId);
+        int currentTestsWeight = 0;
+        
+        for (Teste teste : existingTestes) {
+           
+            if (excludeTesteId == null || !teste.getId().equals(excludeTesteId)) {
+                currentTestsWeight += teste.getWeight();
+            }
+        }
+
+   
+        var existingProjects = projectRepository.findByCurriculumUnitId(curriculumUnitId);
+        int currentProjectsWeight = 0;
+        
+        for (var project : existingProjects) {
+            currentProjectsWeight += project.getWeight();
+        }
+
+      
+        int totalWeight = currentTestsWeight + currentProjectsWeight + newWeight;
+
+        // Validate total doesn't exceed 100
+        if (totalWeight > 100) {
+            throw new DEIException(ErrorMessage.WEIGHT_EXCEEDS_MAXIMUM);
+        }
+
+        System.out.println("[DEBUG] Weight validation passed: Tests=" + currentTestsWeight + 
+                          ", Projects=" + currentProjectsWeight + 
+                          ", New=" + newWeight + 
+                          ", Total=" + totalWeight);
     }
 
     public TesteDto addStatementFile(Long testeId, MultipartFile file) throws IOException {
@@ -116,6 +164,11 @@ public class TesteService {
         studentTeste.setGrade(grade);
         studentTeste.setGradedTeacher(teacher);
         studentTesteRepository.save(studentTeste);
+
+        finalGradeCalculationService.calculateAndUpdateFinalGrade(
+            studentTeste.getStudent().getId(),
+            studentTeste.getTeste().getCurriculumUnit().getId()
+    );
     }
 
     @Transactional(readOnly = true)

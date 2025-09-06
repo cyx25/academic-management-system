@@ -8,6 +8,7 @@ import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.revisions.domain.Revisi
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.revisions.dto.CreateRevisionDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.revisions.dto.RevisionDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.revisions.repository.RevisionRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.services.FinalGradeCalculationService;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.repository.PersonRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
@@ -21,16 +22,19 @@ import java.util.stream.Collectors;
 @Transactional
 public class RevisionService {
 
+    private final FinalGradeCalculationService finalGradeCalculationService;
+
     private final RevisionRepository revisionRepository;
     private final StudentTesteRepository studentTesteRepository;
     private final PersonRepository personRepository;
 
     public RevisionService(RevisionRepository revisionRepository,
                           StudentTesteRepository studentTesteRepository,
-                          PersonRepository personRepository) {
+                          PersonRepository personRepository, FinalGradeCalculationService finalGradeCalculationService) {
         this.revisionRepository = revisionRepository;
         this.studentTesteRepository = studentTesteRepository;
         this.personRepository = personRepository;
+        this.finalGradeCalculationService = finalGradeCalculationService;
     }
 
     public RevisionDto requestRevision(Long studentTesteId, String justification) {
@@ -121,6 +125,11 @@ public class RevisionService {
             studentTeste.setGrade(revision.getNewGrade());
             studentTeste.setGradedTeacher(mainTeacher);
             studentTesteRepository.save(studentTeste);
+
+            finalGradeCalculationService.calculateAndUpdateFinalGrade(
+                studentTeste.getStudent().getId(),
+                studentTeste.getTeste().getCurriculumUnit().getId()
+        );
             
         } else if ("REJECT".equals(action)) {
             revision.setStatus(Revision.Status.REJECTED);

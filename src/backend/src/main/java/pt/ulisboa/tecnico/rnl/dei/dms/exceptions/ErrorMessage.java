@@ -50,15 +50,16 @@ public enum ErrorMessage {
 	SUBMISSION_DATE_EXPIRED("A data limite para submissão do projeto já expirou.", 9002),
 	NO_SUCH_MATERIAL("Não existe nenhum material com o ID %s", 10001),
 	TESTE_NOT_FOUND("Test not found", 11001),
-	STUDENT_TESTE_NOT_FOUND("Student test not found", 11002),
-	REVISION_NOT_FOUND("Revision not found", 11003),
-	REVISION_ALREADY_PENDING("A revision request is already pending for this test", 11004),
-	REVISION_ALREADY_PROCESSED("This revision has already been processed", 11005),
-	NEW_GRADE_REQUIRED("New grade is required when approving a revision", 11006),
-	INVALID_REVISION_ACTION("Invalid revision action. Use APPROVE or REJECT", 11007),
-	TEST_NOT_GRADED("Cannot request a revision for a test that has not been graded", 11008),
-	REVISION_NOT_READY_FOR_APPROVAL("This revision is not ready for approval", 11009);
-	
+	STUDENT_TESTE_NOT_FOUND("Não existe nenhum teste de aluno com o ID %s", 11002),
+	REVISION_NOT_FOUND("Não existe nenhuma revisão com o ID %s", 11003),
+	REVISION_ALREADY_PENDING("Esta revisão já está pendente", 11004),
+	REVISION_ALREADY_PROCESSED("Esta revisão já foi processada", 11005),
+	NEW_GRADE_REQUIRED("Nova nota é obrigatória ao aprovar uma revisão", 11006),
+	INVALID_REVISION_ACTION("Ação de revisão inválida. Use APROVAR ou REJEITAR", 11007),
+	TEST_NOT_GRADED("Não é possível solicitar uma revisão para um teste que não foi avaliado", 11008),
+	REVISION_NOT_READY_FOR_APPROVAL("Esta revisão não está pronta para aprovação", 11009),
+	WEIGHT_EXCEEDS_MAXIMUM("O peso total de testes e projetos excede 100%", 12001);
+
 
 
 
