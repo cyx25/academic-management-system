@@ -1,6 +1,6 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.exceptions;
 
-import org.postgresql.translation.messages_bg;
+
 
 public enum ErrorMessage {
 	// TODO: mudar para ist id
@@ -48,7 +48,17 @@ public enum ErrorMessage {
 	INVALID_GRADE("A nota especificada não é válida.", 8003),
 	NO_SUCH_SUBMISSION("Não existe nenhuma submissão com o ID %s", 9001),
 	SUBMISSION_DATE_EXPIRED("A data limite para submissão do projeto já expirou.", 9002),
-	NO_SUCH_MATERIAL("Não existe nenhum material com o ID %s", 10001);
+	NO_SUCH_MATERIAL("Não existe nenhum material com o ID %s", 10001),
+	TESTE_NOT_FOUND("Test not found", 11001),
+	STUDENT_TESTE_NOT_FOUND("Student test not found", 11002),
+	REVISION_NOT_FOUND("Revision not found", 11003),
+	REVISION_ALREADY_PENDING("A revision request is already pending for this test", 11004),
+	REVISION_ALREADY_PROCESSED("This revision has already been processed", 11005),
+	NEW_GRADE_REQUIRED("New grade is required when approving a revision", 11006),
+	INVALID_REVISION_ACTION("Invalid revision action. Use APPROVE or REJECT", 11007),
+	TEST_NOT_GRADED("Cannot request a revision for a test that has not been graded", 11008),
+	REVISION_NOT_READY_FOR_APPROVAL("This revision is not ready for approval", 11009);
+	
 
 
 
