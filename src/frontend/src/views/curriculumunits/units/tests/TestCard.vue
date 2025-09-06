@@ -151,7 +151,7 @@
     </v-card-actions>
 
     <RevisionDialog 
-      v-if="studentTestData && revisionDialog"
+      v-if="studentTestData"
       v-model="revisionDialog"
       :student-teste-id="studentTestData.id"
       @revision-requested="handleRevisionRequested"

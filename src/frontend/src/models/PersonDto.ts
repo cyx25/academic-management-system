@@ -1,11 +1,7 @@
-export default class PersonDto {
+export default interface PersonDto {
   id?: number
   name?: string
   email?: string
   istId?: string
-  type?: string
-
-  constructor(obj?: Partial<PersonDto>) {
-    Object.assign(this, obj)
-  }
+  type?: 'STUDENT' | 'TEACHING_ASSISTANT' | 'MAIN_TEACHER' // Make type more specific
 }

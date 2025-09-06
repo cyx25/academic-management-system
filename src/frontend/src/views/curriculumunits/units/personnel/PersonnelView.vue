@@ -42,7 +42,6 @@
                   :color="primaryColor"
                 ></v-text-field>
               </v-col>
-    
             </v-row>
           </v-card-text>
           <v-card-text v-else class="text-grey text-center pa-4">
@@ -73,12 +72,10 @@
               no-data-text="Nenhum assistente associado."
             >
               <template v-slot:[`item.type`]="{ item }">
-              
-              <v-chip v-if="item.type === 'TEACHING_ASSISTANT'" color="purple" text-color="white">
-              Professor Assistente
-              </v-chip>
-             
-            </template>
+                <v-chip v-if="item.type === 'TEACHING_ASSISTANT'" color="purple" text-color="white">
+                  Professor Assistente
+                </v-chip>
+              </template>
               <template v-slot:[`item.actions`]="{ item }">
                 <v-tooltip text="Remover">
                   <template v-slot:activator="{ props }">
@@ -120,32 +117,62 @@
               no-data-text="Nenhum aluno associado."
             >
               <template v-slot:[`item.status`]="{ item }">
-              
-              <v-chip v-if="item.status === 'ENROLLED'" color="blue" text-color="white">
-              INSCRITO
-              </v-chip>
-              <v-chip v-if="item.status === 'APPROVED'" color="green" text-color="white">
-              APROVADO
-              </v-chip>
-              <v-chip v-if="item.status === 'FAILED'" color="red" text-color="white">
-              REPROVADO
-              </v-chip>
-             
-            </template>
+                <v-chip v-if="item.status === 'ENROLLED'" color="blue" text-color="white">
+                  INSCRITO
+                </v-chip>
+                <v-chip v-if="item.status === 'APPROVED'" color="green" text-color="white">
+                  APROVADO
+                </v-chip>
+                <v-chip v-if="item.status === 'FAILED'" color="red" text-color="white">
+                  REPROVADO
+                </v-chip>
+              </template>
+
+              <!-- New Final Grade Column -->
+              <template v-slot:[`item.finalGrade`]="{ item }">
+                <div v-if="item.finalGrade !== null">
+                  <v-chip 
+                    :color="getGradeColor(item.finalGrade)" 
+                    variant="elevated"
+                    class="font-weight-bold"
+                    size="small"
+                  >
+                    {{ item.finalGrade }}/20
+                  </v-chip>
+                </div>
+                <span v-else class="text-medium-emphasis">-</span>
+              </template>
 
               <template v-slot:[`item.actions`]="{ item }">
-                <v-tooltip text="Remover">
-                  <template v-slot:activator="{ props }">
-                    <v-icon
-                      v-if="canManage"
-                      v-bind="props"
-                      color="error"
-                      @click="removePerson(item, 'student')"
-                    >
-                      mdi-delete
-                    </v-icon>
-                  </template>
-                </v-tooltip>
+                <div class="d-flex align-center gap-1">
+                  <!-- Grade Breakdown Button -->
+                  <v-tooltip v-if="item.finalGrade !== null" text="Ver detalhes da nota">
+                    <template v-slot:activator="{ props }">
+                      <v-btn
+                        v-bind="props"
+                        icon="mdi-calculator"
+                        variant="text"
+                        color="primary"
+                        size="small"
+                        @click="openGradeBreakdown(item)"
+                      ></v-btn>
+                    </template>
+                  </v-tooltip>
+                  
+                  <!-- Remove Button -->
+                  <v-tooltip text="Remover">
+                    <template v-slot:activator="{ props }">
+                      <v-icon
+                        v-if="canManage"
+                        v-bind="props"
+                        color="error"
+                        @click="removePerson(item, 'student')"
+                      >
+                        mdi-delete
+                      </v-icon>
+                    </template>
+                  </v-tooltip>
+                </div>
               </template>
             </v-data-table>
           </v-card-text>
@@ -188,6 +215,13 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+
+        <!-- Grade Breakdown Dialog -->
+        <GradeBreakdownDialog
+          v-model="gradeBreakdownDialog"
+          :student-id="selectedStudentForGrade?.id || null"
+          :curriculum-unit-id="unitId"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -200,6 +234,14 @@ import { useRoleStore } from '@/stores/role'
 import RemoteService from '@/services/RemoteService'
 import type CurriculumUnitDto from '@/models/CurriculumUnitDto'
 import type PersonDto from '@/models/PersonDto'
+import type EnrollmentDto from '@/models/EnrollmentDto'
+import GradeBreakdownDialog from '@/components/GradeBreakdownDialog.vue'
+
+// Interface to extend PersonDto with enrollment properties
+interface StudentWithGrade extends PersonDto {
+  status: 'ENROLLED' | 'APPROVED' | 'FAILED'
+  finalGrade: number | null
+}
 
 const route = useRoute()
 const roleStore = useRoleStore()
@@ -207,12 +249,14 @@ const roleStore = useRoleStore()
 const unitId = Number(route.params.id)
 const unit = ref<CurriculumUnitDto | null>(null)
 const assistants = ref<PersonDto[]>([])
-const students = ref<PersonDto[]>([])
+const students = ref<StudentWithGrade[]>([])
 const allPeople = ref<PersonDto[]>([])
 
 const addDialog = ref(false)
+const gradeBreakdownDialog = ref(false)
 const personTypeToAdd = ref<'student' | 'assistant'>('student')
 const selectedPerson = ref<PersonDto | null>(null)
+const selectedStudentForGrade = ref<StudentWithGrade | null>(null)
 
 // Role-based colors
 const primaryColor = 'secondary'
@@ -250,11 +294,13 @@ const personHeaders = [
   { title: 'Ações', value: 'actions', sortable: false, align: 'end' as const }
 ]
 
+// Updated student headers with final grade column
 const studentHeaders = [
   { title: 'Nome', value: 'name', align: 'start' as const },
   { title: 'IST ID', value: 'istId', align: 'start' as const },
   { title: 'Email', value: 'email', align: 'start' as const },
   { title: 'Status', value: 'status', align: 'start' as const },
+  { title: 'Nota Final', value: 'finalGrade', align: 'center' as const },
   { title: 'Ações', value: 'actions', sortable: false, align: 'end' as const }
 ]
 
@@ -274,7 +320,13 @@ async function fetchData() {
     ])
     unit.value = unitData
     assistants.value = assistantsData.map(a => a.assistant)
-    students.value = studentsData.map(e => ({ ...e.student, status: e.status }))
+    
+    // Map enrollment data to include finalGrade
+    students.value = studentsData.map((enrollment: EnrollmentDto): StudentWithGrade => ({
+      ...enrollment.student,
+      status: enrollment.status,
+      finalGrade: enrollment.finalGrade
+    }))
   } catch (error) {
     console.error('Failed to fetch personnel data:', error)
   }
@@ -284,6 +336,18 @@ function openAddDialog(type: 'student' | 'assistant') {
   personTypeToAdd.value = type
   selectedPerson.value = null
   addDialog.value = true
+}
+
+function openGradeBreakdown(student: StudentWithGrade) {
+  selectedStudentForGrade.value = student
+  gradeBreakdownDialog.value = true
+}
+
+function getGradeColor(grade: number): string {
+  if (grade >= 16) return 'success'
+  if (grade >= 14) return 'info'
+  if (grade >= 10) return 'warning'
+  return 'error'
 }
 
 async function confirmAddPerson() {
