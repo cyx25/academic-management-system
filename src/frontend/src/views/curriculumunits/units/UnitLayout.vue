@@ -1,10 +1,11 @@
+<!-- filepath: /home/paulo/DEI/candidatura-projeto/projeto-dei/src/frontend/src/views/curriculumunits/units/UnitLayout.vue -->
 <template>
   <v-layout class="unit-layout">
     <!-- Enhanced Navigation Drawer -->
     <v-navigation-drawer 
       location="left" 
       permanent 
-      width="280"
+      width="340"
       class="modern-drawer"
       elevation="2"
     >
@@ -15,8 +16,8 @@
             <v-icon icon="mdi-school" color="primary" size="24"></v-icon>
           </v-avatar>
           <div>
-            <h3 class="text-h6 font-weight-medium mb-0">Curriculum Unit</h3>
-            <p class="text-caption text-medium-emphasis mb-0">Navigation</p>
+            <h3 class="text-h6 font-weight-medium mb-0">Unidade Curricular</h3>
+            <p class="text-caption text-medium-emphasis mb-0">Navegação</p>
           </div>
         </div>
         <v-divider></v-divider>
@@ -26,19 +27,19 @@
       <v-list nav class="px-3">
         <v-list-item
           v-for="item in navigationItems"
-          :key="item.name"
-          :class="['nav-item mb-1', { 'nav-item-active': isActiveRoute(item.routeName) }]"
+          :key="item.route"
+          :class="['nav-item mb-1', { 'nav-item-active': isActiveRoute(item.route) }]"
           :prepend-icon="item.icon"
           :title="item.title"
-          @click="navigateTo(item.routeName)"
+          @click="navigateTo(item.route)"
           rounded="lg"
           :color="item.color"
-          :variant="isActiveRoute(item.routeName) ? 'flat' : 'text'"
+          :variant="isActiveRoute(item.route) ? 'tonal' : 'text'"
         >
           <template v-slot:prepend>
             <v-icon 
               :icon="item.icon" 
-              :color="isActiveRoute(item.routeName) ? 'white' : item.color"
+              :color="getIconColor(item.color, isActiveRoute(item.route))"
               size="20"
             ></v-icon>
           </template>
@@ -46,6 +47,39 @@
           <v-list-item-title class="font-weight-medium">
             {{ item.title }}
           </v-list-item-title>
+        </v-list-item>
+
+        <!-- Revisions Item for Teachers -->
+        <v-list-item
+          v-if="roleStore.isTeacher"
+          :class="['nav-item mb-1', { 'nav-item-active': isActiveRoute('RevisionsView') }]"
+          prepend-icon="mdi-comment-question-outline"
+          title="Revisions"
+          @click="navigateTo('RevisionsView')"
+          rounded="lg"
+          color="purple"
+          :variant="isActiveRoute('RevisionsView') ? 'tonal' : 'text'"
+        >
+          <template v-slot:prepend>
+            <v-icon 
+              icon="mdi-comment-question-outline" 
+              :color="getIconColor('purple', isActiveRoute('RevisionsView'))"
+              size="20"
+            ></v-icon>
+          </template>
+          
+          <v-list-item-title class="font-weight-medium">
+            Revisions
+          </v-list-item-title>
+
+          <template v-slot:append v-if="pendingRevisionsCount > 0">
+            <v-badge 
+              :content="pendingRevisionsCount" 
+              color="error" 
+              inline 
+              class="ml-2"
+            />
+          </template>
         </v-list-item>
       </v-list>
 
@@ -77,15 +111,30 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useRoleStore } from '@/stores/role'
+import RemoteService from '@/services/RemoteService'
 
 const router = useRouter()
 const route = useRoute()
+const roleStore = useRoleStore()
+const pendingRevisionsCount = ref(0)
+
+onMounted(async () => {
+  if (roleStore.isTeacher) {
+    try {
+      const unitId = Number(route.params.id)
+      const revisions = await RemoteService.getPendingRevisions(unitId)
+      pendingRevisionsCount.value = revisions.length
+    } catch (error) {
+      console.error('Failed to fetch pending revisions count:', error)
+    }
+  }
+})
 
 interface NavigationItem {
-  name: string
-  routeName: string
+  route: string
   title: string
   icon: string
   color: string
@@ -93,36 +142,31 @@ interface NavigationItem {
 
 const navigationItems = computed<NavigationItem[]>(() => [
   {
-    name: 'overview',
-    routeName: 'UnitView',
+    route: 'UnitView',
     title: 'Overview',
     icon: 'mdi-view-dashboard',
     color: 'primary'
   },
   {
-    name: 'personnel',
-    routeName: 'PersonnelView',
+    route: 'PersonnelView',
     title: 'Personnel',
     icon: 'mdi-account-group',
     color: 'success'
   },
   {
-    name: 'projects',
-    routeName: 'ProjectsView',
+    route: 'ProjectsView',
     title: 'Projects',
     icon: 'mdi-folder-multiple',
     color: 'warning'
   },
   {
-    name: 'tests',
-    routeName: 'TestsView',
+    route: 'TestsView',
     title: 'Tests',
     icon: 'mdi-clipboard-check',
     color: 'error'
   },
   {
-    name: 'materials',
-    routeName: 'MaterialsView',
+    route: 'MaterialsView',
     title: 'Materials',
     icon: 'mdi-book-open-variant',
     color: 'info'
@@ -133,12 +177,23 @@ const isActiveRoute = (routeName: string): boolean => {
   return route.name === routeName
 }
 
+const getIconColor = (itemColor: string, isActive: boolean): string => {
+  if (isActive) {
+    // Use the item's theme color for active state - ensures good contrast
+    return itemColor
+  } else {
+    // Use medium emphasis for inactive state - works in both themes
+    return 'medium-emphasis'
+  }
+}
+
 const navigateTo = (routeName: string) => {
-  if (['PersonnelView', 'ProjectsView', 'MaterialsView', 'UnitView'].includes(routeName)) {
+  const validRoutes = ['PersonnelView', 'ProjectsView', 'MaterialsView', 'UnitView', 'TestsView', 'StudentTestsView', 'RevisionsView']
+  
+  if (validRoutes.includes(routeName)) {
     router.push({ name: routeName, params: { id: route.params.id } })
   } else {
-    // For now, show coming soon message for unimplemented routes
-    alert(`${routeName} is coming soon!`)
+    console.warn(`Route ${routeName} is not implemented yet`)
   }
 }
 </script>
@@ -149,26 +204,38 @@ const navigateTo = (routeName: string) => {
 }
 
 .modern-drawer {
-  border-right: 1px solid rgb(var(--v-theme-surface-variant));
+  border-right: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  background: rgb(var(--v-theme-surface));
 }
 
 .drawer-header {
-  background: rgb(var(--v-theme-surface-variant));
+  background: rgba(var(--v-theme-primary), 0.08);
   border-radius: 0 0 16px 16px;
   margin: 8px;
+  border: 1px solid rgba(var(--v-theme-primary), 0.12);
+  transition: background-color 0.3s ease;
 }
 
 .nav-item {
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   margin: 2px 0;
+  border-radius: 12px;
 }
 
 .nav-item:hover {
   transform: translateX(4px);
+  background: rgba(var(--v-theme-on-surface), 0.04);
 }
 
 .nav-item-active {
   transform: translateX(4px);
+  background: rgba(var(--v-theme-primary), 0.08);
+  border: 1px solid rgba(var(--v-theme-primary), 0.12);
+}
+
+.nav-item-active .v-list-item-title {
+  color: rgb(var(--v-theme-primary));
+  font-weight: 600;
 }
 
 .main-content {
@@ -179,11 +246,43 @@ const navigateTo = (routeName: string) => {
   padding: 24px;
   max-width: 100%;
   margin: 0 auto;
+  min-height: calc(100vh - 48px);
 }
 
 .drawer-footer {
-  background: rgb(var(--v-theme-surface-variant));
+  background: rgba(var(--v-theme-surface-variant), 0.5);
   border-radius: 16px;
   margin: 8px;
+  border: 1px solid rgba(var(--v-theme-outline), 0.2);
+  transition: background-color 0.3s ease;
+}
+
+/* Theme-specific enhancements */
+.v-theme--light .drawer-header {
+  background: rgba(var(--v-theme-primary), 0.05);
+  border-color: rgba(var(--v-theme-primary), 0.08);
+}
+
+.v-theme--dark .drawer-header {
+  background: rgba(var(--v-theme-primary), 0.12);
+  border-color: rgba(var(--v-theme-primary), 0.16);
+}
+
+.v-theme--light .nav-item-active {
+  background: rgba(var(--v-theme-primary), 0.06);
+  border-color: rgba(var(--v-theme-primary), 0.1);
+}
+
+.v-theme--dark .nav-item-active {
+  background: rgba(var(--v-theme-primary), 0.1);
+  border-color: rgba(var(--v-theme-primary), 0.14);
+}
+
+.v-theme--light .drawer-footer {
+  background: rgba(var(--v-theme-surface-variant), 0.3);
+}
+
+.v-theme--dark .drawer-footer {
+  background: rgba(var(--v-theme-surface-variant), 0.6);
 }
 </style>

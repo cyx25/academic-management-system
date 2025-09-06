@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" outlined>
+  <v-card class="mx-auto hover-card" outlined elevation="2">
     <v-card-title class="d-flex justify-space-between">
       <span>{{ project.title }}</span>
       <v-chip size="small" :color="project.weight > 0 ? 'blue' : 'grey'">
@@ -26,7 +26,7 @@
         color="info"
         text
         :to="{ name: 'project-submissions', params: { projectId: project.id } }"
-        :disabled="isPastDueDate"
+       
         prepend-icon="mdi-upload-multiple"
       >
         Submissões
@@ -68,3 +68,15 @@ function viewStatement() {
   }
 }
 </script>
+<style scoped>
+.v-card {
+  transition: all 0.3s ease;
+  background: rgba(var(--v-theme-surface), 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.hover-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+</style>

@@ -1,22 +1,22 @@
 <template>
-  <v-container fluid class="pa-4">
-    <v-row>
-      <v-col cols="12">
-        <div class="d-flex justify-space-between align-center mb-4">
-          <div>
-            <h1 class="text-h5 font-weight-medium mb-1">Materials & Resources</h1>
-            <p class="text-body-2 text-medium-emphasis mb-0">Course materials, documents and resources</p>
-          </div>
-          <v-btn
-            v-if="roleStore.isTeacher"
-            color="primary"
-            variant="elevated"
-            prepend-icon="mdi-plus"
-            @click="openCreateDialog"
-          >
-            New Material Tab
-          </v-btn>
+  <v-container fluid class="pa-6">
+    <v-row class="mb-4">
+      <v-col cols="12" class="d-flex justify-space-between align-items-center">
+        <div>
+          <h1 class="text-h4 font-weight-bold text-primary mb-2">Materials</h1>
+          <p class="text-body-1 text-medium-emphasis">
+            {{ roleStore.isStudent ? 'Access course materials and resources' : 'Manage and organize curriculum unit materials' }}
+          </p>
         </div>
+        <v-btn
+          v-if="roleStore.isTeacher"
+          color="primary"
+          prepend-icon="mdi-plus"
+          size="large"
+          @click="openCreateDialog"
+        >
+          Add Material
+        </v-btn>
       </v-col>
     </v-row>
 
@@ -74,15 +74,24 @@
 
     <!-- Empty State -->
     <v-row v-else>
-      <v-col>
-        <v-alert type="info" variant="tonal" class="text-center">
-          <div>
-            <v-icon icon="mdi-book-open-variant" size="48" class="mb-3"></v-icon>
-            <p class="text-h6 font-weight-medium mb-2">No Materials Available</p>
-            <p class="text-body-2 mb-0">
-              {{ roleStore.isTeacher ? 'Create your first material tab to get started.' : 'Materials will appear here when teachers add them.' }}
-            </p>
-          </div>
+      <v-col cols="12">
+        <v-alert type="info" variant="tonal" class="text-center py-8">
+          <v-icon icon="mdi-book-open-outline" size="48" class="mb-4"></v-icon>
+          <h3 class="text-h5 font-weight-bold mb-2">No Materials Available</h3>
+          <p class="text-body-1 mb-4">
+            {{ roleStore.isTeacher 
+              ? 'Add your first material to help students learn.' 
+              : 'Materials will appear here when teachers add them.' 
+            }}
+          </p>
+          <v-btn
+            v-if="roleStore.isTeacher"
+            color="primary"
+            prepend-icon="mdi-plus"
+            @click="openCreateDialog"
+          >
+            Add First Material
+          </v-btn>
         </v-alert>
       </v-col>
     </v-row>
