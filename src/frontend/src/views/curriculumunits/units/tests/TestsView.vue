@@ -4,9 +4,9 @@
     <v-row class="mb-4">
       <v-col cols="12" class="d-flex justify-space-between align-center">
         <div>
-          <h1 class="text-h4 font-weight-bold text-primary mb-2">Tests</h1>
+          <h1 class="text-h4 font-weight-bold text-primary mb-2">Testes</h1>
           <p class="text-body-1 text-medium-emphasis">
-            {{ roleStore.isStudent ? 'View your test results and request revisions' : 'Manage curriculum unit tests and assessments' }}
+            {{ roleStore.isStudent ? 'Ver os teus testes e resultados' : 'Gerir testes e avaliações da unidade curricular' }}
           </p>
         </div>
         <div class="d-flex gap-2">
@@ -18,7 +18,7 @@
             prepend-icon="mdi-comment-question-outline"
             @click="navigateToRevisions"
           >
-            View Revisions
+            Ver revisões
             <v-badge
               v-if="pendingRevisionsCount > 0"
               :content="pendingRevisionsCount"
@@ -35,7 +35,7 @@
             size="large"
             @click="openCreateDialog"
           >
-            Create Test
+            Criar Teste
           </v-btn>
         </div>
       </v-col>
@@ -63,7 +63,7 @@
       <v-col cols="12">
         <v-alert type="info" variant="tonal" class="text-center py-8">
           <v-icon icon="mdi-clipboard-check" size="48" class="mb-4"></v-icon>
-          <h3 class="text-h5 font-weight-bold mb-2">No Tests Available</h3>
+          <h3 class="text-h5 font-weight-bold mb-2">Nenhum Teste Disponível</h3>
           <p class="text-body-1 mb-4">
             {{ roleStore.isMainTeacher 
               ? 'Create your first test to get started with assessments.' 
@@ -76,7 +76,7 @@
             prepend-icon="mdi-plus"
             @click="openCreateDialog"
           >
-            Create First Test
+            Criar Primeiro Teste
           </v-btn>
         </v-alert>
       </v-col>

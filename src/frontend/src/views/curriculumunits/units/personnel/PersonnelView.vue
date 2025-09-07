@@ -68,7 +68,8 @@
               item-key="id"
               :items-per-page="5"
               class="text-left"
-              hide-default-footer
+              :items-per-page-options="[5, 10, 25, 50]"
+              show-current-page
               no-data-text="Nenhum assistente associado."
             >
               <template v-slot:[`item.type`]="{ item }">
@@ -112,7 +113,8 @@
               item-key="id"
               :items-per-page="5"
               class="text-left"
-              hide-default-footer
+              :items-per-page-options="[5, 10, 25, 50]"
+              show-current-page
               autocomplete="off"
               no-data-text="Nenhum aluno associado."
             >

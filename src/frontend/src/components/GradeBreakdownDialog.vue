@@ -234,7 +234,7 @@ function close() {
 }
 
 .grade-header {
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
+  background: linear-gradient(135deg, rgb(var(--v-theme-surface)) 0%, rgb(var(--v-theme-secondary)) 100%);
   color: white;
 }
 
@@ -270,13 +270,13 @@ function close() {
 
 .stat-label {
   font-size: 0.875rem;
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: rgb(var(--v-theme-on-surface));
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .assignment-card {
-  background: rgb(var(--v-theme-surface-variant));
+  background: rgb(var(--v-theme-surface));
   border-radius: 12px;
   padding: 16px;
   border-left: 4px solid rgb(var(--v-theme-primary));
@@ -293,7 +293,7 @@ function close() {
 
 .grade-max {
   font-size: 1rem;
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: rgb(var(--v-theme-on-surface));
 }
 
 .final-grade-large {
@@ -303,7 +303,7 @@ function close() {
 
 .grade-max-large {
   font-size: 1.5rem;
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: rgb(var(--v-theme-on-surface));
 }
 
 .not-graded {
