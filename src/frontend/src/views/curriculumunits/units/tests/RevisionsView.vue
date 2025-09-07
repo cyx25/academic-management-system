@@ -68,3 +68,10 @@ async function refreshRevisions() {
   }
 }
 </script>
+<style scoped>
+.v-container {
+  background: rgba(var(--v-theme-surface), 0.8);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+</style>

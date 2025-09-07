@@ -5,13 +5,13 @@ import java.util.Set;
 
 import jakarta.persistence.*;
 
-import lombok.Data;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.Assist;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.domain.Assist;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.domain.Enrollment;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;

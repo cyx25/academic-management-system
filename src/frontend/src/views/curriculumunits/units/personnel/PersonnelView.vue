@@ -143,37 +143,37 @@
                 <span v-else class="text-medium-emphasis">-</span>
               </template>
 
-              <template v-slot:[`item.actions`]="{ item }">
-                <div class="d-flex align-center gap-1">
+                <template v-slot:[`item.actions`]="{ item }">
+                <div class="d-flex justify-end align-center gap-1" style="min-width: 100px;">
                   <!-- Grade Breakdown Button -->
                   <v-tooltip v-if="item.finalGrade !== null" text="Ver detalhes da nota">
-                    <template v-slot:activator="{ props }">
-                      <v-btn
-                        v-bind="props"
-                        icon="mdi-calculator"
-                        variant="text"
-                        color="primary"
-                        size="small"
-                        @click="openGradeBreakdown(item)"
-                      ></v-btn>
-                    </template>
+                  <template v-slot:activator="{ props }">
+                    <v-btn
+                    v-bind="props"
+                    icon="mdi-calculator"
+                    variant="text"
+                    color="primary"
+                    size="small"
+                    @click="openGradeBreakdown(item)"
+                    ></v-btn>
+                  </template>
                   </v-tooltip>
                   
                   <!-- Remove Button -->
                   <v-tooltip text="Remover">
-                    <template v-slot:activator="{ props }">
-                      <v-icon
-                        v-if="canManage"
-                        v-bind="props"
-                        color="error"
-                        @click="removePerson(item, 'student')"
-                      >
-                        mdi-delete
-                      </v-icon>
-                    </template>
+                  <template v-slot:activator="{ props }">
+                    <v-icon
+                    v-if="canManage"
+                    v-bind="props"
+                    color="error"
+                    @click="removePerson(item, 'student')"
+                    >
+                    mdi-delete
+                    </v-icon>
+                  </template>
                   </v-tooltip>
                 </div>
-              </template>
+                </template>
             </v-data-table>
           </v-card-text>
         </v-card>

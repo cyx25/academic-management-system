@@ -38,15 +38,7 @@
           class="file-item mb-2 pa-3"
           rounded="lg"
         >
-          <template v-slot:prepend>
-            <v-avatar 
-              :color="getFileTypeColor(file.contentType)" 
-              size="40"
-              variant="tonal"
-            >
-              <v-icon :icon="getFileIcon(file.contentType)" size="20"></v-icon>
-            </v-avatar>
-          </template>
+         
 
           <v-list-item-title class="text-body-1 font-weight-medium">
             {{ file.fileName }}
@@ -159,7 +151,7 @@ async function deleteFile(fileId: number) {
 }
 
 function downloadFile(fileId: number) {
-  const url = RemoteService.getFileDownloadUrl(fileId)
+  const url = RemoteService.getFileUrl(fileId)
   window.open(url, '_blank')
 }
 
@@ -187,26 +179,7 @@ function formatContentType(contentType: string): string {
   return types[contentType] || 'File'
 }
 
-function getFileIcon(contentType: string): string {
-  if (contentType.includes('pdf')) return 'mdi-file-pdf-box'
-  if (contentType.includes('word')) return 'mdi-file-word-box'
-  if (contentType.includes('excel') || contentType.includes('spreadsheet')) return 'mdi-file-excel-box'
-  if (contentType.includes('powerpoint') || contentType.includes('presentation')) return 'mdi-file-powerpoint-box'
-  if (contentType.includes('image')) return 'mdi-file-image-box'
-  if (contentType.includes('zip') || contentType.includes('archive')) return 'mdi-file-zip-box'
-  if (contentType.includes('text')) return 'mdi-file-document-box'
-  return 'mdi-file-box'
-}
 
-function getFileTypeColor(contentType: string): string {
-  if (contentType.includes('pdf')) return 'red'
-  if (contentType.includes('word')) return 'blue'
-  if (contentType.includes('excel') || contentType.includes('spreadsheet')) return 'green'
-  if (contentType.includes('powerpoint') || contentType.includes('presentation')) return 'orange'
-  if (contentType.includes('image')) return 'purple'
-  if (contentType.includes('zip') || contentType.includes('archive')) return 'amber'
-  return 'grey'
-}
 </script>
 
 <style scoped>

@@ -33,7 +33,7 @@
           <v-card-title class="pa-4">
             <div class="d-flex justify-space-between align-center w-100">
               <div class="d-flex align-center">
-                <v-avatar color="primary" size="40" class="mr-3">
+                <v-avatar color="blue" size="40" class="mr-3">
                   <v-icon icon="mdi-account" color="white"></v-icon>
                 </v-avatar>
                 <div>
@@ -57,7 +57,7 @@
               <div class="d-flex align-center gap-3">
                 <v-text-field
                   v-model.number="grades[studentTest.id]"
-                  label="Grade (0-20)"
+                  label="Nota (0-20)"
                   type="number"
                   min="0"
                   max="20"
@@ -233,7 +233,7 @@ function viewRevisions(studentTestId: number) {
 }
 
 .grading-section {
-  background: #f8f9fa;
+  background: #424343;
   padding: 16px;
   border-radius: 8px;
   border: 1px solid #e9ecef;

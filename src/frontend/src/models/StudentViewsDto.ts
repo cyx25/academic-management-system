@@ -1,4 +1,4 @@
-export default interface UnitFinalGradeDto {
+export interface UnitFinalGradeDto {
   id: number
   name: string
   finalGrade: number | null

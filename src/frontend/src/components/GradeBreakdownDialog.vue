@@ -6,7 +6,7 @@
         <div class="grade-header pa-6">
           <div class="d-flex align-center justify-space-between w-100">
             <div class="d-flex align-center">
-              <v-avatar color="primary" size="48" class="mr-4">
+              <v-avatar color="blue" size="48" class="mr-4">
                 <v-icon icon="mdi-calculator" color="white" size="24"></v-icon>
               </v-avatar>
               <div>
@@ -28,7 +28,7 @@
 
       <!-- Loading -->
       <v-card-text v-if="loading" class="text-center py-8">
-        <v-progress-circular indeterminate size="48" color="primary"></v-progress-circular>
+        <v-progress-circular indeterminate size="48" color="blue"></v-progress-circular>
         <p class="mt-4 text-body-1">Carregando...</p>
       </v-card-text>
 

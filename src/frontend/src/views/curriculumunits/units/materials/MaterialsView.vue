@@ -186,4 +186,9 @@ async function deleteMaterial(materialId: number) {
   background-color: rgba(244, 67, 54, 0.1);
   color: #f44336;
 }
+.v-container {
+  background: rgba(var(--v-theme-surface), 0.8);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
 </style>

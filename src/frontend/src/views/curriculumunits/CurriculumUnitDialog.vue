@@ -106,14 +106,24 @@ onMounted(async () => {
 watch(() => props.modelValue, (newVal) => {
   dialog.value = newVal
   if (newVal) {
-    unit.value = { ...props.unit }
-    mainTeacherId.value = props.unit.mainTeacher?.id || null
-
-    // Preserve courses only in edit mode
-    if (props.mode === 'edit') {
-      courseIds.value = props.unit.courses?.map(c => c.id) || []
+    if (props.mode === 'create') {
+      // Reset to fresh empty unit for create mode
+      unit.value = {
+        id: 0,
+        code: '',
+        name: '',
+        semester: 1,
+        ects: 6,
+        mainTeacher: {} as PersonDto,
+        courses: []
+      }
+      mainTeacherId.value = null
+      courseIds.value = []
     } else {
-      courseIds.value = [] // Reset for create mode
+      // Use provided unit data for edit mode
+      unit.value = { ...props.unit }
+      mainTeacherId.value = props.unit.mainTeacher?.id || null
+      courseIds.value = props.unit.courses?.map(c => c.id) || []
     }
   }
 })

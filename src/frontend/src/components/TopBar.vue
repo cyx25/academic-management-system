@@ -32,11 +32,11 @@ const roleSpecificItems = {
   main_teacher: [
     { name: 'Alunos', path: '/students', icon: 'mdi-account-school' },
     { name: 'Correções Pendentes', path: '/pending-corrections', icon: 'mdi-clipboard-check-outline' },
-    { name: 'Estatísticas', path: '/statistics', icon: 'mdi-chart-bar' }
+    { name: 'Estatísticas', path: '/main-statistics', icon: 'mdi-chart-bar' }
   ],
   teaching_assistant: [
     { name: 'Tarefas de Correção', path: '/correction-tasks', icon: 'mdi-clipboard-edit' },
-    { name: 'Estatísticas', path: '/statistics', icon: 'mdi-chart-bar' }
+    { name: 'Estatísticas', path: '/assistant-statistics', icon: 'mdi-chart-bar' }
   ]
 }
 

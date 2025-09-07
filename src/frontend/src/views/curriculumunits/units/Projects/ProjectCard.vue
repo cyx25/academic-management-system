@@ -47,7 +47,7 @@
 import type ProjectDto from '@/models/ProjectDto';
 import { useRoleStore } from '@/stores/role';
 import RemoteService from '@/services/RemoteService';
-import { computed } from 'vue';
+
 
 const props = defineProps<{
   project: ProjectDto;
@@ -57,9 +57,6 @@ defineEmits(['edit', 'update']);
 
 const roleStore = useRoleStore();
 
-const isPastDueDate = computed(() => {
-  return new Date(props.project.dueDate) < new Date();
-});
 
 function viewStatement() {
   if (props.project.id) {

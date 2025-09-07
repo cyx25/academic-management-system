@@ -16,11 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.AssessmentDeliveryDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.ProgressDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.UnitFinalGradeDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.teachings.dto.PendingGradingDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.teachings.dto.TeacherStatisticsDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person.PersonType;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.TeacherStudentDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.service.PersonService;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.service.StudentService;
+import pt.ulisboa.tecnico.rnl.dei.dms.person.service.TeacherService;
 
 
 
@@ -32,6 +36,9 @@ public class PersonController {
 
 	@Autowired
     private StudentService studentService;
+
+	@Autowired
+    private TeacherService teacherService;
 
 	@GetMapping("/people")
 	public List<PersonDto> getPeople() {
@@ -128,6 +135,64 @@ public class PersonController {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             System.err.println("Unexpected error getting student progress: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+	 @GetMapping("/teacher/{teacherId}/students")
+    public ResponseEntity<List<TeacherStudentDto>> getTeacherStudents(
+            @PathVariable Long teacherId) {
+        
+        try {
+            List<TeacherStudentDto> students = teacherService.getTeacherStudents(teacherId);
+            return ResponseEntity.ok(students);
+        } catch (DEIException e) {
+            System.err.println("Error getting teacher students: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            System.err.println("Unexpected error getting teacher students: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
+     * Get assessments with pending grading tasks for the teacher
+     */
+    @GetMapping("/teacher/{teacherId}/pending-grading")
+    public ResponseEntity<List<PendingGradingDto>> getTeacherPendingGrading(
+            @PathVariable Long teacherId) {
+        
+        try {
+            List<PendingGradingDto> pendingGrading = teacherService.getTeacherPendingGrading(teacherId);
+            return ResponseEntity.ok(pendingGrading);
+        } catch (DEIException e) {
+            System.err.println("Error getting teacher pending grading: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            System.err.println("Unexpected error getting teacher pending grading: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
+     * Get teacher statistics and performance metrics
+     * Only available for main teachers
+     */
+    @GetMapping("/teacher/{teacherId}/statistics")
+    public ResponseEntity<TeacherStatisticsDto> getTeacherStatistics(
+            @PathVariable Long teacherId) {
+        
+        try {
+            TeacherStatisticsDto statistics = teacherService.getTeacherStatistics(teacherId);
+            return ResponseEntity.ok(statistics);
+        } catch (DEIException e) {
+            System.err.println("Error getting teacher statistics: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            System.err.println("Unexpected error getting teacher statistics: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }

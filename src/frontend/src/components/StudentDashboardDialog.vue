@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" max-width="1200px" persistent scrollable>
     <v-card elevation="8" rounded="lg">
       <!-- Dialog Header -->
-      <v-card-title class="d-flex align-center justify-space-between pa-4 bg-primary">
+      <v-card-title class="d-flex align-center justify-space-between pa-4 bg-blue">
         <div class="d-flex align-center">
           <v-icon icon="mdi-account-school" color="white" size="32" class="mr-3"></v-icon>
           <div>

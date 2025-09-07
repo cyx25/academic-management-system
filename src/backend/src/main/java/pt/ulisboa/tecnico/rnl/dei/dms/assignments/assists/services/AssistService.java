@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists;
+package pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.services;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,6 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.domain.Assist;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.dto.AssistDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.repository.AssistRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.repository.CurriculumUnitRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;

@@ -16,6 +16,9 @@ import RevisionsView from '@/views/curriculumunits/units/tests/RevisionsView.vue
 import StudentProfileView from '@/views/people/students/StudentProfileView.vue'
 import StudentDeadlinesView from '@/views/people/students/StudentDeadlinesView.vue'
 import StudentProgressView from '@/views/people/students/StudentProgressView.vue'
+import StudentsView from '@/views/people/teachers/StudentsView.vue'
+import TeacherPendingAssessments from '@/views/people/teachers/TeacherPendingAssessments.vue'
+import TeacherStatistics from '@/views/people/teachers/TeacherStatistics.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -59,6 +62,27 @@ const router = createRouter({
       path: '/progress',
       name: 'progress',
       component: StudentProgressView
+    },
+    // Teacher dashboard routes
+    {
+      path: '/students',
+      name: 'students',
+      component: StudentsView
+    },
+    {
+      path: '/pending-corrections',
+      name: 'pending-corrections',
+      component: TeacherPendingAssessments
+    },
+    {
+      path: '/correction-tasks',
+      name: 'correction-tasks',
+      component: TeacherPendingAssessments
+    },
+    {
+      path: '/main-statistics',
+      name: 'main-statistics',
+      component: TeacherStatistics
     },
     {
       path: '/curriculum-units/:id',

@@ -13,5 +13,6 @@ public interface CurriculumUnitRepository extends JpaRepository<CurriculumUnit, 
 
     CurriculumUnit findByCode(String code);
     List<CurriculumUnit> findByCoursesContaining(Course course);
+    List<CurriculumUnit> findByMainTeacherId(Long teacherId);
 
 }
