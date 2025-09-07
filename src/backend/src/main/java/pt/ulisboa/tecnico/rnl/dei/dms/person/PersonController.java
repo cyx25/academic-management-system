@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.dto.AssistantGradingTaskDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.dto.AssistantStatisticsDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.AssessmentDeliveryDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.ProgressDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.UnitFinalGradeDto;
@@ -22,6 +24,7 @@ import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person.PersonType;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.TeacherStudentDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.person.service.AssistantService;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.service.PersonService;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.service.StudentService;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.service.TeacherService;
@@ -39,6 +42,9 @@ public class PersonController {
 
 	@Autowired
     private TeacherService teacherService;
+
+    @Autowired
+    private AssistantService assistantService;
 
 	@GetMapping("/people")
 	public List<PersonDto> getPeople() {
@@ -193,6 +199,47 @@ public class PersonController {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             System.err.println("Unexpected error getting teacher statistics: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+    
+    /**
+     * Get grading tasks for assistant teacher
+     * Returns tasks with different priority based on due dates
+     */
+    @GetMapping("/assistant/{assistantId}/grading-tasks")
+    public ResponseEntity<List<AssistantGradingTaskDto>> getAssistantGradingTasks(
+            @PathVariable Long assistantId) {
+        
+        try {
+            List<AssistantGradingTaskDto> gradingTasks = assistantService.getAssistantGradingTasks(assistantId);
+            return ResponseEntity.ok(gradingTasks);
+        } catch (DEIException e) {
+            System.err.println("Error getting assistant grading tasks: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            System.err.println("Unexpected error getting assistant grading tasks: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
+     * Get assistant statistics and performance metrics
+     */
+    @GetMapping("/assistant/{assistantId}/statistics")
+    public ResponseEntity<AssistantStatisticsDto> getAssistantStatistics(
+            @PathVariable Long assistantId) {
+        
+        try {
+            AssistantStatisticsDto statistics = assistantService.getAssistantStatistics(assistantId);
+            return ResponseEntity.ok(statistics);
+        } catch (DEIException e) {
+            System.err.println("Error getting assistant statistics: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            System.err.println("Unexpected error getting assistant statistics: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }

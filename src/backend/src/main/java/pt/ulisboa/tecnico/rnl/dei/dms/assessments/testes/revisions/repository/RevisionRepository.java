@@ -11,4 +11,6 @@ import java.util.List;
 public interface RevisionRepository extends JpaRepository<Revision, Long> {
     
     List<Revision> findByStudentTesteId(Long studentTesteId);
+    List<Revision> findByReviewedById(Long reviewedById);
+
 }

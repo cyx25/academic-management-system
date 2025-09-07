@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.person.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,16 +23,13 @@ import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.AssessmentDeli
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.ProgressDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.UnitFinalGradeDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.repository.EnrollmentRepository;
-import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
-import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.ErrorMessage;
-import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
-import pt.ulisboa.tecnico.rnl.dei.dms.person.repository.PersonRepository;
+
 
 @Service
 @Transactional
 public class StudentService {
     
-    private final PersonRepository personRepository;
+ 
     private final EnrollmentRepository enrollmentRepository;
     private final TesteRepository testeRepository;
     private final StudentTesteRepository studentTesteRepository;
@@ -38,13 +37,13 @@ public class StudentService {
     private final StudentGroupRepository studentGroupRepository;
 
     public StudentService(
-            PersonRepository personRepository,
+           
             EnrollmentRepository enrollmentRepository,
             TesteRepository testeRepository,
             StudentTesteRepository studentTesteRepository,
             ProjectRepository projectRepository,
             StudentGroupRepository studentGroupRepository) {
-        this.personRepository = personRepository;
+    
         this.enrollmentRepository = enrollmentRepository;
         this.testeRepository = testeRepository;
         this.studentTesteRepository = studentTesteRepository;
@@ -169,9 +168,13 @@ public class StudentService {
             }
         }
         
-        // Calculate average grade
-        Float averageGrade = grades.isEmpty() ? null : 
-                (float) grades.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+        Float averageGrade = null;
+        if (!grades.isEmpty()) {
+            double avg = grades.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+            averageGrade = BigDecimal.valueOf(avg)
+            .setScale(2, RoundingMode.HALF_UP)
+            .floatValue();
+        }
         
         ProgressDto progress = new ProgressDto(
             totalProjects,

@@ -1,6 +1,6 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.service;
 
-import java.util.ArrayList;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.repository.AssistRepository;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.repository.EnrollmentRepository;
+
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.dto.CourseDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.repository.CourseRepository;

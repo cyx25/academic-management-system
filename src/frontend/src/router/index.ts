@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import PeopleView from '@/views/people/PeopleView.vue'
-import StatisticsView from '@/views/statistics/StatisticsView.vue'
 import MaterialsView from '@/views/curriculumunits/units/materials/MaterialsView.vue'
 import UnitLayout from '../views/curriculumunits/units/UnitLayout.vue'
 import SubmissionsView from '../views/curriculumunits/units/Projects/SubmissionsView.vue'
@@ -19,6 +18,8 @@ import StudentProgressView from '@/views/people/students/StudentProgressView.vue
 import StudentsView from '@/views/people/teachers/StudentsView.vue'
 import TeacherPendingAssessments from '@/views/people/teachers/TeacherPendingAssessments.vue'
 import TeacherStatistics from '@/views/people/teachers/TeacherStatistics.vue'
+import AssistantGradingTasks from '@/views/people/assistants/AssistantGradingTasks.vue'
+import AssistantStatistics from '@/views/people/assistants/AssistantStatistics.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -31,11 +32,6 @@ const router = createRouter({
       path: '/people',
       name: 'people',
       component: PeopleView
-    },
-    {
-      path: '/statistics',
-      name: 'statistics',
-      component: StatisticsView
     },
     {
       path: '/courses',
@@ -83,6 +79,16 @@ const router = createRouter({
       path: '/main-statistics',
       name: 'main-statistics',
       component: TeacherStatistics
+    },
+    {
+      path: '/correction-tasks',
+      name: 'correction-tasks',
+      component: AssistantGradingTasks
+    },
+    {
+      path: '/assistant-statistics',
+      name: 'assistant-statistics',
+      component: AssistantStatistics
     },
     {
       path: '/curriculum-units/:id',

@@ -17,6 +17,7 @@ import type RevisionDto from '@/models/RevisionDto'
 import type FinalGradeBreakdownDto from '@/models/FinalGradeBreakdownDto'
 import type { UnitFinalGradeDto, AssessmentDeliveryDto, ProgressDto } from '@/models/StudentViewsDto'
 import type { TeacherStudentDto, PendingGradingDto, TeacherStatisticsDto } from '@/models/TeacherViewsDto'
+import type { AssistantGradingTaskDto, AssistantStatisticsDto } from '@/models/AssistantViewsDto'
 
 const httpClient = axios.create()
 httpClient.defaults.timeout = 50000
@@ -136,13 +137,15 @@ export default class RemoteServices {
   static async getStudentAssessmentDeliveries(studentId: number): Promise<AssessmentDeliveryDto[]> {
     return httpClient.get(`student/${studentId}/deliveries`)
   }
-
+  // ! STUDENT
   /**
    * Get student progress statistics
    */
   static async getStudentProgress(studentId: number): Promise<ProgressDto> {
     return httpClient.get(`student/${studentId}/progress`)
   }
+
+  // ! TEACHERS
 
   static async getTeacherStudents(teacherId: number): Promise<TeacherStudentDto[]> {
     return httpClient.get(`/teacher/${teacherId}/students`)
@@ -161,6 +164,19 @@ export default class RemoteServices {
    */
   static async getTeacherStatistics(teacherId: number): Promise<TeacherStatisticsDto> {
     return httpClient.get(`/teacher/${teacherId}/statistics`)
+  }
+
+
+  // ! assistants
+  static async getAssistantGradingTasks(assistantId: number): Promise<AssistantGradingTaskDto[]> {
+    return httpClient.get(`/assistant/${assistantId}/grading-tasks`)
+  }
+
+  /**
+   * Get assistant statistics and performance metrics
+   */
+  static async getAssistantStatistics(assistantId: number): Promise<AssistantStatisticsDto> {
+    return httpClient.get(`/assistant/${assistantId}/statistics`)
   }
 
   // ! PROJECTS

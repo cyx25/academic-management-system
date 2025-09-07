@@ -297,7 +297,7 @@ function getPriorityMessage(pendingCount: number, type: string): string {
 
 function openAssessment(assessment: PendingGradingDto) {
   // Navigate to the appropriate assessment page
-  const unitId = getCurrentUnitId(assessment) // You'll need to implement this
+  const unitId = getCurrentUnitId(assessment) 
   
   if (assessment.assessmentType === 'PROJECT') {
     router.push(`/curriculum-units/${unitId}/projects`)
