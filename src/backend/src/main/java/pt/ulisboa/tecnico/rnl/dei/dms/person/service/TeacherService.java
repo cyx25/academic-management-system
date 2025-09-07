@@ -27,13 +27,12 @@ import pt.ulisboa.tecnico.rnl.dei.dms.assignments.teachings.dto.PendingGradingDt
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.teachings.dto.TeacherStatisticsDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.TeacherStudentDto;
-import pt.ulisboa.tecnico.rnl.dei.dms.person.repository.PersonRepository;
 
 @Service
 @Transactional
 public class TeacherService {
     
-    private final PersonRepository personRepository;
+   
     private final CurriculumUnitRepository curriculumUnitRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final ProjectRepository projectRepository;
@@ -43,7 +42,6 @@ public class TeacherService {
     private final RevisionRepository revisionRepository;
 
     public TeacherService(
-            PersonRepository personRepository,
             CurriculumUnitRepository curriculumUnitRepository,
             EnrollmentRepository enrollmentRepository,
             ProjectRepository projectRepository,
@@ -51,7 +49,7 @@ public class TeacherService {
             StudentGroupRepository studentGroupRepository,
             StudentTesteRepository studentTesteRepository,
             RevisionRepository revisionRepository) {
-        this.personRepository = personRepository;
+
         this.curriculumUnitRepository = curriculumUnitRepository;
         this.enrollmentRepository = enrollmentRepository;
         this.projectRepository = projectRepository;

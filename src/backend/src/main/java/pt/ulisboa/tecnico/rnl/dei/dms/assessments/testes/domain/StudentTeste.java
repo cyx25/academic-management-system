@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.revisions.domain.Revision;
-import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
 
 

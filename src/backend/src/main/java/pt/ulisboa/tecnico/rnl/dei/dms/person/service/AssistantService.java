@@ -20,10 +20,9 @@ import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.repository.TesteReposit
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.domain.Assist;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.repository.AssistRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
-
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.dto.AssistantGradingTaskDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.dto.AssistantStatisticsDto;
-import pt.ulisboa.tecnico.rnl.dei.dms.person.repository.PersonRepository;
+
 
 @Service
 @Transactional

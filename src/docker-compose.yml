@@ -8,4 +8,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=deidb
 
-  
+  mailcrab:
+    image: marlonb/mailcrab:latest
+    ports:
+      - "1080:1080"  # Web interface to view emails
+      - "1025:1025"  

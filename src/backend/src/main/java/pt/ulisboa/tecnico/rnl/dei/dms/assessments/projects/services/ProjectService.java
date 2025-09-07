@@ -18,6 +18,7 @@ import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.domain.Enrollment;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.services.FinalGradeCalculationService;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.repository.CurriculumUnitRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.email.EmailService;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.ErrorMessage;
 import pt.ulisboa.tecnico.rnl.dei.dms.files.File;
@@ -38,7 +39,7 @@ import java.util.stream.Collectors;
 public class ProjectService {
 
     private final FinalGradeCalculationService finalGradeCalculationService;
-
+    private final EmailService emailService;
     private final ProjectRepository projectRepository;
     private final CurriculumUnitRepository curriculumUnitRepository;
     private final PersonRepository personRepository;
@@ -51,6 +52,7 @@ public class ProjectService {
 
 
     public ProjectService(ProjectRepository projectRepository,
+                          EmailService emailService,
                           CurriculumUnitRepository curriculumUnitRepository,
                           PersonRepository personRepository,
                           StudentGroupRepository studentGroupRepository,
@@ -61,6 +63,7 @@ public class ProjectService {
         this.projectRepository = projectRepository;
         this.curriculumUnitRepository = curriculumUnitRepository;
         this.personRepository = personRepository;
+        this.emailService = emailService;
         this.studentGroupRepository = studentGroupRepository;
         this.assessmentFileRepository = assessmentFileRepository;
         this.testeRepository = testeRepository;
@@ -285,6 +288,24 @@ public class ProjectService {
         // Create submission
         Submission submission = new Submission(group, student, assessmentFile);
         submissionRepository.save(submission);
+
+        emailService.notifyProjectSubmitted(
+            student.getEmail(),
+            student.getName(),
+            group.getProject().getCurriculumUnit().getName(),
+            group.getProject().getTitle()
+        );
+
+        Person mainTeacher = group.getProject().getCurriculumUnit().getMainTeacher();
+        if (mainTeacher != null) {
+            emailService.notifyTeachersProjectSubmitted(
+                mainTeacher.getEmail(),
+                mainTeacher.getName(),
+                student.getName(),
+                group.getProject().getCurriculumUnit().getName(),
+                group.getProject().getTitle()
+            );
+        }
         
         System.out.println("[DEBUG] Submission created for group " + groupId + " by student " + studentId);
     }
@@ -308,7 +329,17 @@ public class ProjectService {
                 student.getId(),
                 group.getProject().getCurriculumUnit().getId()
         );
-    }
+        }
+
+        for (Person student : group.getStudents()) {
+            emailService.notifyProjectGradeAssigned(
+                student.getEmail(),
+                student.getName(),
+                group.getProject().getCurriculumUnit().getName(),
+                group.getProject().getTitle(),
+                grade.doubleValue()
+            );
+        }
     }
 
 }

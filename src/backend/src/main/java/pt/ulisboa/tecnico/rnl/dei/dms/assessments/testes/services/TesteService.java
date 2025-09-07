@@ -16,6 +16,7 @@ import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.domain.Enrollment;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.services.FinalGradeCalculationService;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.repository.CurriculumUnitRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.email.EmailService;
 import pt.ulisboa.tecnico.rnl.dei.dms.files.File;
 import pt.ulisboa.tecnico.rnl.dei.dms.files.FileService;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
@@ -31,6 +32,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class TesteService {
 
+
+    private final EmailService emailService;
     private final FinalGradeCalculationService finalGradeCalculationService;
 
     private final TesteRepository testeRepository;
@@ -41,12 +44,14 @@ public class TesteService {
     private final FileService fileService;
 
     public TesteService(TesteRepository testeRepository,
+                        EmailService emailService,
                        StudentTesteRepository studentTesteRepository,
                        CurriculumUnitRepository curriculumUnitRepository,
                        PersonRepository personRepository,
                         ProjectRepository projectRepository,
                        FileService fileService, FinalGradeCalculationService finalGradeCalculationService) {
         this.testeRepository = testeRepository;
+        this.emailService = emailService;
         this.studentTesteRepository = studentTesteRepository;
         this.curriculumUnitRepository = curriculumUnitRepository;
         this.projectRepository = projectRepository;
@@ -164,6 +169,14 @@ public class TesteService {
         studentTeste.setGrade(grade);
         studentTeste.setGradedTeacher(teacher);
         studentTesteRepository.save(studentTeste);
+
+        emailService.notifyTestGradeAssigned(
+            studentTeste.getStudent().getEmail(),
+            studentTeste.getStudent().getName(),
+            studentTeste.getTeste().getCurriculumUnit().getName(),
+            studentTeste.getTeste().getTitle(),
+            grade.doubleValue()
+        );
 
         finalGradeCalculationService.calculateAndUpdateFinalGrade(
             studentTeste.getStudent().getId(),

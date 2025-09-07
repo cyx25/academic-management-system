@@ -2,30 +2,23 @@ package pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.domain.Project;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.domain.StudentGroup;
-import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.repository.ProjectRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.repository.StudentGroupRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.domain.StudentTeste;
-import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.domain.Teste;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.repository.StudentTesteRepository;
-import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.repository.TesteRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.domain.Enrollment;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.AssessmentDeliveryDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.AssessmentDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.EnrollmentDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.FinalGradeBreakdownDto;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.ProgressDto;
-import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.UnitFinalGradeDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.repository.EnrollmentRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.repository.CurriculumUnitRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.email.EmailService;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.ErrorMessage;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
@@ -41,15 +34,18 @@ public class EnrollmentService {
     private final StudentTesteRepository studentTesteRepository;
     private final StudentGroupRepository studentGroupRepository;
     private final CurriculumUnitRepository curriculumUnitRepository;
+    private final EmailService emailService;
 
     public EnrollmentService(
             EnrollmentRepository enrollmentRepository,
             PersonRepository personRepository,
+            EmailService emailService,
             StudentTesteRepository studentTesteRepository,
             CurriculumUnitRepository curriculumUnitRepository,
             StudentGroupRepository studentGroupRepository) {
         this.enrollmentRepository = enrollmentRepository;
         this.personRepository = personRepository;
+        this.emailService = emailService;
         this.studentTesteRepository = studentTesteRepository;
         this.curriculumUnitRepository = curriculumUnitRepository;
         this.studentGroupRepository = studentGroupRepository;
@@ -69,6 +65,12 @@ public class EnrollmentService {
 
         Enrollment enrollment = new Enrollment(student, curriculumUnit);
         enrollmentRepository.save(enrollment);
+
+        emailService.notifyStudentEnrolled(
+            student.getEmail(),
+            student.getName(),
+            curriculumUnit.getName()
+        );
 
         return new EnrollmentDto(enrollment);
     }

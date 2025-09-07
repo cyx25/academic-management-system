@@ -9,6 +9,7 @@ import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.revisions.dto.CreateRev
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.revisions.dto.RevisionDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.revisions.repository.RevisionRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.services.FinalGradeCalculationService;
+import pt.ulisboa.tecnico.rnl.dei.dms.email.EmailService;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.repository.PersonRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
@@ -23,15 +24,17 @@ import java.util.stream.Collectors;
 public class RevisionService {
 
     private final FinalGradeCalculationService finalGradeCalculationService;
-
+    private final EmailService emailService;
     private final RevisionRepository revisionRepository;
     private final StudentTesteRepository studentTesteRepository;
     private final PersonRepository personRepository;
 
     public RevisionService(RevisionRepository revisionRepository,
+                          EmailService emailService,
                           StudentTesteRepository studentTesteRepository,
                           PersonRepository personRepository, FinalGradeCalculationService finalGradeCalculationService) {
         this.revisionRepository = revisionRepository;
+        this.emailService = emailService;
         this.studentTesteRepository = studentTesteRepository;
         this.personRepository = personRepository;
         this.finalGradeCalculationService = finalGradeCalculationService;
@@ -49,7 +52,26 @@ public class RevisionService {
         CreateRevisionDto createRevisionDto = new CreateRevisionDto(studentTesteId, justification);
         Revision revision = new Revision(createRevisionDto, studentTeste);
         Revision savedRevision = revisionRepository.save(revision);
+
+        emailService.notifyRevisionRequested(
+            studentTeste.getStudent().getEmail(),
+            studentTeste.getStudent().getName(),
+            studentTeste.getTeste().getCurriculumUnit().getName(),
+            studentTeste.getTeste().getTitle()
+        );
         
+        // Send notification to main teacher
+        Person mainTeacher = studentTeste.getTeste().getCurriculumUnit().getMainTeacher();
+        if (mainTeacher != null) {
+            emailService.notifyTeachersRevisionRequested(
+                mainTeacher.getEmail(),
+                mainTeacher.getName(),
+                studentTeste.getStudent().getName(),
+                studentTeste.getTeste().getCurriculumUnit().getName(),
+                studentTeste.getTeste().getTitle()
+            );
+        }
+
         return new RevisionDto(savedRevision);
     }
 
@@ -101,6 +123,14 @@ public class RevisionService {
         revision.setReviewDate(LocalDateTime.now());
 
         Revision savedRevision = revisionRepository.save(revision);
+
+        emailService.notifyRevisionStatusChanged(
+            revision.getStudentTeste().getStudent().getEmail(),
+            revision.getStudentTeste().getStudent().getName(),
+            revision.getStudentTeste().getTeste().getCurriculumUnit().getName(),
+            revision.getStudentTeste().getTeste().getTitle(),
+            "REVISTO PELO ASSISTENTE"
+        );
         return new RevisionDto(savedRevision);
     }
 
@@ -143,6 +173,15 @@ public class RevisionService {
         revision.setReviewDate(LocalDateTime.now());
 
         Revision savedRevision = revisionRepository.save(revision);
+
+        emailService.notifyRevisionStatusChanged(
+            revision.getStudentTeste().getStudent().getEmail(),
+            revision.getStudentTeste().getStudent().getName(),
+            revision.getStudentTeste().getTeste().getCurriculumUnit().getName(),
+            revision.getStudentTeste().getTeste().getTitle(),
+            action
+        );
+
         return new RevisionDto(savedRevision);
     }
 

@@ -14,11 +14,8 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.dto.CreateTesteDto;
-import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.dto.TesteDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.files.File;
-
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;

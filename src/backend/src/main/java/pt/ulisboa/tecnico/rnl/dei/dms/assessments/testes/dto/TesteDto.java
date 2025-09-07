@@ -1,8 +1,7 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.dto;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 
+import java.time.LocalDateTime;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.domain.Teste;
 import pt.ulisboa.tecnico.rnl.dei.dms.files.FileDto;
 

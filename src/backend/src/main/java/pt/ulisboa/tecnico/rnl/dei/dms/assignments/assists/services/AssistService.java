@@ -2,8 +2,6 @@ package pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.services;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +10,7 @@ import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.dto.AssistDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.repository.AssistRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.repository.CurriculumUnitRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.email.EmailService;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.ErrorMessage;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
@@ -21,14 +20,21 @@ import pt.ulisboa.tecnico.rnl.dei.dms.person.repository.PersonRepository;
 @Transactional
 public class AssistService {
 
-    @Autowired
-    private AssistRepository assistRepository;
+    private final EmailService emailService;
+    private final AssistRepository assistRepository;
+    private final CurriculumUnitRepository curriculumUnitRepository;
+    private final PersonRepository personRepository;
 
-    @Autowired
-    private CurriculumUnitRepository curriculumUnitRepository;
-
-    @Autowired
-    private PersonRepository personRepository;
+    public AssistService(
+            AssistRepository assistRepository,
+            CurriculumUnitRepository curriculumUnitRepository,
+            PersonRepository personRepository,
+            EmailService emailService) {
+        this.assistRepository = assistRepository;
+        this.curriculumUnitRepository = curriculumUnitRepository;
+        this.personRepository = personRepository;
+        this.emailService = emailService;
+    }
 
     public AssistDto createAssist(long curriculumUnitId, long assistantId) {
         CurriculumUnit curriculumUnit = curriculumUnitRepository.findById(curriculumUnitId)
@@ -45,6 +51,11 @@ public class AssistService {
         Assist assist = new Assist(curriculumUnit, assistant);
         assistRepository.save(assist);
 
+        emailService.notifyAssistantAssigned(
+            assistant.getEmail(),
+            assistant.getName(),
+            curriculumUnit.getName()
+        );
         return new AssistDto(assist);
     }
 
