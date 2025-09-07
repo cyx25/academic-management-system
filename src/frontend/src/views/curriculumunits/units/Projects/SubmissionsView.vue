@@ -13,7 +13,7 @@
           >
           </v-btn>
           <div>
-            <h1 class="text-h4 font-weight-bold text-primary mb-1">Project Submissions</h1>
+            <h1 class="text-h4 font-weight-bold text-primary mb-1">Submissões de Projetos</h1>
             <p v-if="project" class="text-h6 text-medium-emphasis mb-0">{{ project.title }}</p>
           </div>
         </div>
@@ -42,9 +42,9 @@
                     <v-icon icon="mdi-account-group"></v-icon>
                   </v-avatar>
                   <div>
-                    <h3 class="text-h6 font-weight-bold mb-1">Group {{ group.groupId }}</h3>
+                    <h3 class="text-h6 font-weight-bold mb-1">Grupo {{ group.groupId }}</h3>
                     <p class="text-body-2 text-medium-emphasis mb-0">
-                      {{ group.members.length }} member{{ group.members.length !== 1 ? 's' : '' }}
+                      {{ group.members.length }} membro{{ group.members.length !== 1 ? 's' : '' }}
                     </p>
                   </div>
                 </div>
@@ -63,7 +63,7 @@
             <v-card-text class="pa-4 pt-0">
               <div class="d-flex align-center mb-2">
                 <v-icon icon="mdi-account-multiple" size="small" class="mr-2" color="primary"></v-icon>
-                <span class="font-weight-medium text-on-surface">Members:</span>
+                <span class="font-weight-medium text-on-surface">Membros:</span>
               </div>
               <div class="d-flex flex-wrap gap-2 mb-4">
                 <v-chip 
@@ -83,7 +83,7 @@
               <div v-if="group.submissions.length > 0" class="submission-section">
                 <div class="d-flex align-center mb-3">
                   <v-icon icon="mdi-file-upload" color="success" size="small" class="mr-2"></v-icon>
-                  <span class="font-weight-medium text-success">Latest Submission</span>
+                  <span class="font-weight-medium text-success">Última submissão</span>
                 </div>
                 
                 <v-card variant="tonal" color="success" class="submission-details pa-3 mb-4">
@@ -93,7 +93,7 @@
                         {{ group.submissions[0].submissionFile?.fileName || 'Unknown file' }}
                       </p>
                       <p class="text-caption text-medium-emphasis mb-1">
-                        Submitted {{ formatDate(group.submissions[0].submissionDate) }}
+                        Submetido {{ formatDate(group.submissions[0].submissionDate) }}
                       </p>
                       <p class="text-caption text-medium-emphasis mb-0">
                         Avaliação Automática: {{ group.submissions[0].grade !== null ? group.submissions[0].grade.toFixed(1) : 'Not graded' }}
@@ -117,7 +117,7 @@
                 <v-alert type="info" variant="tonal" density="compact">
                   <div class="d-flex align-center">
                     <v-icon icon="mdi-file-question" class="mr-2"></v-icon>
-                    <span>No submissions yet</span>
+                    <span>Sem submissões</span>
                   </div>
                 </v-alert>
               </div>
@@ -128,7 +128,7 @@
                 <div class="d-flex align-center">
                   <v-icon icon="mdi-account-check" size="small" color="success" class="mr-2"></v-icon>
                   <span class="text-body-2">
-                    <span class="font-weight-medium">Graded by:</span> {{ group.gradedTeacherName }}
+                    <span class="font-weight-medium">Corrigido por:</span> {{ group.gradedTeacherName }}
                   </span>
                 </div>
               </div>
@@ -173,7 +173,7 @@
                       class="grade-btn"
                     >
                       <v-icon icon="mdi-check" size="small" class="mr-1"></v-icon>
-                      Grade
+                      ATRIBUIR
                     </v-btn>
                   </div>
                 </v-card>
@@ -196,8 +196,8 @@
                     <v-icon icon="mdi-account-group" color="primary" size="24"></v-icon>
                   </v-avatar>
                   <div>
-                    <h2 class="text-h5 font-weight-bold mb-1">My Group</h2>
-                    <p class="text-body-1 text-on-primary mb-0">Group {{ myGroup.groupId }}</p>
+                    <h2 class="text-h5 font-weight-bold mb-1">O Meu Grupo</h2>
+                    <p class="text-body-1 text-on-primary mb-0">Grupo {{ myGroup.groupId }}</p>
                   </div>
                 </div>
                 <v-chip 
@@ -221,7 +221,7 @@
               <div class="members-section mb-6">
                 <div class="d-flex align-center mb-4">
                   <v-icon icon="mdi-account-multiple" color="primary" size="20" class="mr-3"></v-icon>
-                  <h3 class="text-h6 font-weight-bold">Team Members</h3>
+                  <h3 class="text-h6 font-weight-bold">Membros da Equipa</h3>
                 </div>
                 <div class="d-flex flex-wrap gap-2">
                   <v-chip 
@@ -242,7 +242,7 @@
               <div class="submissions-section">
                 <div class="d-flex align-center mb-4">
                   <v-icon icon="mdi-history" color="primary" size="20" class="mr-3"></v-icon>
-                  <h3 class="text-h6 font-weight-bold">Submission History</h3>
+                  <h3 class="text-h6 font-weight-bold">Histórico de Submissões</h3>
                 </div>
                 
                 <div v-if="myGroup.submissions.length > 0" class="submission-list">
@@ -277,12 +277,12 @@
                             color="success" 
                             variant="elevated"
                           >
-                            Latest
+                            Mais recente
                           </v-chip>
                         </div>
                         
                         <p class="text-body-2 mb-1">
-                          <span class="font-weight-medium">Submitted by:</span> {{ submission.submittedBy }}
+                          <span class="font-weight-medium">Submetido por:</span> {{ submission.submittedBy }}
                         </p>
                         
                         <p class="text-caption text-medium-emphasis mb-0">
@@ -307,8 +307,8 @@
                   <div class="d-flex align-center">
                     <v-icon icon="mdi-information" class="mr-3"></v-icon>
                     <div>
-                      <p class="font-weight-bold mb-1">No submissions yet</p>
-                      <p class="text-body-2 mb-0">Start by uploading your first project submission below.</p>
+                      <p class="font-weight-bold mb-1">Sem submissões</p>
+                      <p class="text-body-2 mb-0">Carrega a tua primeira submissão do projeto abaixo.</p>
                     </div>
                   </div>
                 </v-alert>
@@ -322,7 +322,7 @@
                 
                 <div class="d-flex align-center mb-4">
                   <v-icon icon="mdi-upload" color="primary" size="20" class="mr-3"></v-icon>
-                  <h3 class="text-h6 font-weight-bold">New Submission</h3>
+                  <h3 class="text-h6 font-weight-bold">Nova submissão</h3>
                 </div>
                 
                 <div class="upload-area">
@@ -371,7 +371,7 @@
                     height="56"
                   >
                     <v-icon icon="mdi-upload" class="mr-2"></v-icon>
-                    <span class="font-weight-bold">Submit Project</span>
+                    <span class="font-weight-bold">Submeter Projeto</span>
                   </v-btn>
                 </div>
               </div>
@@ -382,8 +382,8 @@
                 <div class="d-flex align-center">
                   <v-icon icon="mdi-clock-alert" class="mr-3"></v-icon>
                   <div>
-                    <p class="font-weight-bold mb-1">Submission Deadline Passed</p>
-                    <p class="text-body-2 mb-0">The deadline for submissions has expired.</p>
+                    <p class="font-weight-bold mb-1">Prazo de Submissão Expirado</p>
+                    <p class="text-body-2 mb-0">O prazo para submissões expirou.</p>
                   </div>
                 </div>
               </v-alert>

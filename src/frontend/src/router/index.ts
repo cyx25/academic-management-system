@@ -20,6 +20,7 @@ import TeacherPendingAssessments from '@/views/people/teachers/TeacherPendingAss
 import TeacherStatistics from '@/views/people/teachers/TeacherStatistics.vue'
 import AssistantGradingTasks from '@/views/people/assistants/AssistantGradingTasks.vue'
 import AssistantStatistics from '@/views/people/assistants/AssistantStatistics.vue'
+import UnitStatisticsView from '@/views/curriculumunits/units/statistics/UnitStatisticsView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -134,6 +135,11 @@ const router = createRouter({
           path: 'revisions',
           name: 'RevisionsView',
           component: RevisionsView,
+        },
+        {
+          path: 'statistics',
+          name: 'UnitStatisticsView',
+          component: UnitStatisticsView,
         }
       ]
     },

@@ -22,8 +22,6 @@ import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.domain.Enrollment;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.repository.EnrollmentRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.repository.CurriculumUnitRepository;
-import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
-import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.ErrorMessage;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.domain.Person;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.teachings.dto.PendingGradingDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.teachings.dto.TeacherStatisticsDto;
@@ -152,10 +150,7 @@ public class TeacherService {
     public TeacherStatisticsDto getTeacherStatistics(Long teacherId) {
         System.out.println("[DEBUG] Getting statistics for teacher: " + teacherId);
         
-        
-        Person teacher = personRepository.findById(teacherId)
-                .orElseThrow(() -> new DEIException(ErrorMessage.NO_SUCH_PERSON, Long.toString(teacherId)));
-    
+
     
         List<CurriculumUnit> curriculumUnits = curriculumUnitRepository.findByMainTeacherId(teacherId);
         int totalCurriculumUnits = curriculumUnits.size();

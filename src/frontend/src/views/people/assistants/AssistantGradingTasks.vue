@@ -221,17 +221,7 @@
                   </v-alert>
                 </v-card-text>
 
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn 
-                    variant="elevated" 
-                    :color="getActionButtonColor(task)"
-                    :prepend-icon="getActionIcon(task)"
-                    @click="openAssessment(task)"
-                  >
-                    {{ getActionLabel(task) }}
-                  </v-btn>
-                </v-card-actions>
+
               </v-card>
             </v-col>
           </v-row>
@@ -466,12 +456,7 @@ function formatDueDate(dateString: string): string {
   })
 }
 
-function openAssessment(task: AssistantGradingTaskDto) {
-  // Navigate to the appropriate assessment page
-  // This would need curriculum unit ID which isn't in the DTO
-  // For now, redirect to curriculum units page
-  router.push('/curriculum-units')
-}
+
 </script>
 
 <style scoped>

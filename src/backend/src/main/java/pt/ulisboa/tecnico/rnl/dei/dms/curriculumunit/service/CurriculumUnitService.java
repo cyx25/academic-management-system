@@ -1,21 +1,39 @@
 package pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.service;
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
-
+import org.springframework.transaction.annotation.Transactional;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.domain.Project;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.domain.StudentGroup;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.repository.ProjectRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.repository.StudentGroupRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.domain.StudentTeste;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.domain.Teste;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.repository.StudentTesteRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.repository.TesteRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.revisions.domain.Revision;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.revisions.repository.RevisionRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.domain.Enrollment;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.repository.EnrollmentRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.domain.Course;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.dto.CourseDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.courses.repository.CourseRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
+import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.AssessmentAverageDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.CurriculumUnitDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.CurriculumUnitStatisticsDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.RevisionStatisticsDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.repository.CurriculumUnitRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
 import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.ErrorMessage;
@@ -27,23 +45,41 @@ import pt.ulisboa.tecnico.rnl.dei.dms.person.repository.PersonRepository;
 @Service
 public class CurriculumUnitService {
 
-    @Autowired
-    private CurriculumUnitRepository curriculumUnitRepository;
+    private final CurriculumUnitRepository curriculumUnitRepository;
+    private final EnrollmentRepository enrollmentRepository;
+    private final ProjectRepository projectRepository;
+    private final StudentGroupRepository studentGroupRepository;
+    private final TesteRepository testeRepository;
+    private final StudentTesteRepository studentTesteRepository;
+    private final RevisionRepository revisionRepository;
+    private final CourseRepository courseRepository;
+    private final PersonRepository personRepository;
 
-    @Autowired
-    private PersonRepository personRepository;
+    public CurriculumUnitService(
+            CurriculumUnitRepository curriculumUnitRepository,
+            EnrollmentRepository enrollmentRepository,
+            ProjectRepository projectRepository,
+            StudentGroupRepository studentGroupRepository,
+            TesteRepository testeRepository,
+            StudentTesteRepository studentTesteRepository,
+            RevisionRepository revisionRepository,
+            CourseRepository courseRepository,
+            PersonRepository personRepository) {
+        this.curriculumUnitRepository = curriculumUnitRepository;
+        this.enrollmentRepository = enrollmentRepository;
+        this.projectRepository = projectRepository;
+        this.courseRepository = courseRepository;
+        this.personRepository = personRepository;
+        this.studentGroupRepository = studentGroupRepository;
+        this.testeRepository = testeRepository;
+        this.studentTesteRepository = studentTesteRepository;
+        this.revisionRepository = revisionRepository;
+    }
 
-    @Autowired
-    private CourseRepository courseRepository;
 
 
-/* 
-    @Autowired
-    private AssistRepository assistRepository;
 
-    @Autowired
-    private EnrollmentRepository enrollmentRepository;
- */
+
 
     private CurriculumUnit fetchCurriculumUnitOrThrow(long id) {
 		return curriculumUnitRepository.findById(id)
@@ -227,47 +263,7 @@ public class CurriculumUnitService {
 		}
     }
 
-    // !talvez implementar se tiver tempo
-   /*  @Transactional
-    public List<CurriculumUnitDto> getCurriculumUnitsByPerson(Long personId) {
-        Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new DEIException(ErrorMessage.NO_SUCH_PERSON));
-
-        List<CurriculumUnit> curriculumUnits = new ArrayList<>();
-
-        switch (person.getType().toString()) {
-            case "TEACHER":
-                curriculumUnits.addAll(
-                        teachingRepository.findByTeacherId(personId).stream()
-                                .map(Teaching::getCurriculumUnit)
-                                .toList()
-                );
-                // A teacher can also be an assistant in other CUs
-            case "TEACHING_ASSISTANT":
-                curriculumUnits.addAll(
-                        assistRepository.findByAssistantId(personId).stream()
-                                .map(Assist::getCurriculumUnit)
-                                .toList()
-                );
-                break;
-            case "STUDENT":
-                curriculumUnits.addAll(
-                        enrollmentRepository.findByStudentId(personId).stream()
-                                .map(Enrollment::getCurriculumUnit)
-                                .toList()
-                );
-                break;
-            default:
-                
-                break;
-        }
-
-        // Remove duplicates in case a person is both a main teacher and an assistant
-        return curriculumUnits.stream()
-                .map(CurriculumUnitDto::new)
-                .collect(Collectors.toList());
-    }
- */
+   
 
    @Transactional
     public void deleteCurriculumUnit(long curriculumUnitId) {
@@ -281,6 +277,170 @@ public class CurriculumUnitService {
         curriculumUnitRepository.deleteById(curriculumUnitId);
     }
 
+
+    @Transactional(readOnly = true)
+    public CurriculumUnitStatisticsDto getCurriculumUnitStatistics(Long curriculumUnitId) {
+        System.out.println("[DEBUG] Getting statistics for curriculum unit: " + curriculumUnitId);
+        
+        // Validate curriculum unit exists
+        if (!curriculumUnitRepository.existsById(curriculumUnitId)) {
+            throw new DEIException(ErrorMessage.NO_SUCH_CU, Long.toString(curriculumUnitId));
+        }
+        
+
+        List<Integer> finalGrades = getFinalGrades(curriculumUnitId);
+      
+        List<AssessmentAverageDto> assessmentAverages = getAssessmentAverages(curriculumUnitId);
+        
+
+        RevisionStatisticsDto revisionStats = getRevisionStatistics(curriculumUnitId);
+        
+        CurriculumUnitStatisticsDto statistics = new CurriculumUnitStatisticsDto(
+            finalGrades,
+            assessmentAverages,
+            revisionStats
+        );
+        
+        System.out.println("[DEBUG] Statistics generated for curriculum unit " + curriculumUnitId);
+        return statistics;
+    }
+
+  
+    private List<Integer> getFinalGrades(Long curriculumUnitId) {
+        List<Enrollment> enrollments = enrollmentRepository.findByCurriculumUnitId(curriculumUnitId);
+        
+        return enrollments.stream()
+                .map(Enrollment::getFinalGrade)
+                .filter(grade -> grade != null)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Calculate average grades for all assessments (tests and projects)
+     */
+    private List<AssessmentAverageDto> getAssessmentAverages(Long curriculumUnitId) {
+        List<AssessmentAverageDto> averages = new ArrayList<>();
+        
+        // Get total enrolled students for percentage calculations
+        int totalEnrolledStudents = enrollmentRepository.findByCurriculumUnitId(curriculumUnitId).size();
+        
+        // Process tests
+        List<Teste> tests = testeRepository.findByCurriculumUnitId(curriculumUnitId);
+        for (Teste test : tests) {
+            List<StudentTeste> studentTests = studentTesteRepository.findByTesteId(test.getId());
+            
+            List<Float> gradedTests = studentTests.stream()
+                    .map(StudentTeste::getGrade)
+                    .filter(grade -> grade != null)
+                    .collect(Collectors.toList());
+            
+            Double averageGrade = null;
+            if (!gradedTests.isEmpty()) {
+                double avg = gradedTests.stream()
+                        .mapToDouble(Float::doubleValue)
+                        .average()
+                        .orElse(0.0);
+                averageGrade = BigDecimal.valueOf(avg)
+                        .setScale(2, RoundingMode.HALF_UP)
+                        .doubleValue();
+            }
+            
+            averages.add(new AssessmentAverageDto(
+                "TEST",
+                test.getTitle(),
+                averageGrade,
+                gradedTests.size(),
+                totalEnrolledStudents
+            ));
+        }
+        
+        // Process projects
+        List<Project> projects = projectRepository.findByCurriculumUnitId(curriculumUnitId);
+        for (Project project : projects) {
+            List<StudentGroup> studentGroups = studentGroupRepository.findByProjectId(project.getId());
+            
+            List<Float> gradedProjects = studentGroups.stream()
+                    .map(StudentGroup::getGrade)
+                    .filter(grade -> grade != null)
+                    .collect(Collectors.toList());
+            
+            Double averageGrade = null;
+            if (!gradedProjects.isEmpty()) {
+                double avg = gradedProjects.stream()
+                        .mapToDouble(Float::doubleValue)
+                        .average()
+                        .orElse(0.0);
+                averageGrade = BigDecimal.valueOf(avg)
+                        .setScale(2, RoundingMode.HALF_UP)
+                        .doubleValue();
+            }
+            
+            // For projects, calculate total students based on group memberships
+            int totalStudentsInGroups = studentGroups.stream()
+                    .mapToInt(group -> group.getStudents().size())
+                    .sum();
+            
+            averages.add(new AssessmentAverageDto(
+                "PROJECT",
+                project.getTitle(),
+                averageGrade,
+                gradedProjects.size(),
+                Math.max(totalStudentsInGroups, studentGroups.size()) // Ensure we don't have 0
+            ));
+        }
+        
+        return averages;
+    }
+
+    /**
+     * Calculate revision statistics for all tests in the curriculum unit
+     */
+    private RevisionStatisticsDto getRevisionStatistics(Long curriculumUnitId) {
+        int totalSubmitted = 0;
+        int totalApproved = 0;
+        int totalDenied = 0;
+        int totalPending = 0;
+        
+        // Get all tests for this curriculum unit
+        List<Teste> tests = testeRepository.findByCurriculumUnitId(curriculumUnitId);
+        
+        for (Teste test : tests) {
+            // Get all student tests for this test
+            List<StudentTeste> studentTests = studentTesteRepository.findByTesteId(test.getId());
+            
+            for (StudentTeste studentTest : studentTests) {
+                // Each student test can have revisions
+                List<Revision> revisions = revisionRepository.findByStudentTesteId(studentTest.getId());
+                
+                for (Revision revision : revisions) {
+                    totalSubmitted++;
+                    
+                    switch (revision.getStatus()) {
+                        case APPROVED:
+                            totalApproved++;
+                            break;
+                        case REJECTED:
+                            totalDenied++;
+                            break;
+                        case PENDING:
+                            totalPending++;
+                            break;
+                        default:
+                            // Handle any other status that might exist
+                            totalPending++;
+                            break;
+                    }
+                }
+            }
+        }
+        
+        return new RevisionStatisticsDto(
+            totalSubmitted,
+            totalApproved,
+            totalDenied,
+            totalPending
+        );
+    }
    
 
 }

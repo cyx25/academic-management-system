@@ -8,25 +8,25 @@
         <v-form ref="form" v-model="valid">
           <v-text-field
             v-model="editableProject.title"
-            label="Title*"
+            label="Titulo*"
             :rules="[rules.required]"
             :disabled="isEdit"
           ></v-text-field>
           <v-text-field
             v-model.number="editableProject.weight"
-            label="Weight (%)*"
+            label="Peso (%)*"
             type="number"
             :rules="[rules.required, rules.number, rules.percentage]"
           ></v-text-field>
           <v-text-field
             v-model="editableProject.dueDate"
-            label="Due Date*"
+            label="Entrega*"
             type="datetime-local"
             :rules="[rules.required]"
           ></v-text-field>
           <v-text-field
             v-model.number="editableProject.maxGroupSize"
-            label="Max Group Size*"
+            label="Tamanho Max Grupo*"
             type="number"
             :rules="[rules.required, rules.number, rules.minOne]"
             :disabled="isEdit"
@@ -34,7 +34,7 @@
           
           <!-- Replace v-file-input with standard HTML file input -->
           <div class="mb-3">
-            <label for="statement-file" class="text-subtitle-1 d-block mb-1">Statement File*</label>
+            <label for="statement-file" class="text-subtitle-1 d-block mb-1">Enunciado*</label>
             <input
               id="statement-file"
               type="file"
@@ -43,20 +43,20 @@
               :required="!isEdit"
             />
             <div v-if="selectedFile" class="text-caption mt-1">
-              Selected: {{ selectedFile.name }} ({{ formatFileSize(selectedFile.size) }})
+              Selecionado: {{ selectedFile.name }} ({{ formatFileSize(selectedFile.size) }})
             </div>
             <div v-if="isEdit && editableProject.statementFile" class="text-caption mt-1">
-              Current file: {{ editableProject.statementFile.fileName }}
+              Ficheiro atual: {{ editableProject.statementFile.fileName }}
             </div>
           </div>
-          
-          <small v-if="isEdit">Uploading a new file will replace the existing one.</small>
+
+          <small v-if="isEdit">Carregar um novo ficheiro vai substituir o existente.</small>
         </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text @click="close">Cancel</v-btn>
-        <v-btn color="primary" @click="save" :disabled="!valid">Save</v-btn>
+        <v-btn text @click="close">Cancelar</v-btn>
+        <v-btn color="primary" @click="save" :disabled="!valid">Salvar</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

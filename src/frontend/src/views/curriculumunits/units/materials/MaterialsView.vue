@@ -3,9 +3,9 @@
     <v-row class="mb-4">
       <v-col cols="12" class="d-flex justify-space-between align-items-center">
         <div>
-          <h1 class="text-h4 font-weight-bold text-primary mb-2">Materials</h1>
+          <h1 class="text-h4 font-weight-bold text-primary mb-2">Materiais</h1>
           <p class="text-body-1 text-medium-emphasis">
-            {{ roleStore.isStudent ? 'Access course materials and resources' : 'Manage and organize curriculum unit materials' }}
+            {{ roleStore.isStudent ? 'Aceda aos materiais e recursos do curso' : 'Gerir e organizar os materiais da unidade curricular' }}
           </p>
         </div>
         <v-btn
@@ -15,7 +15,7 @@
           size="large"
           @click="openCreateDialog"
         >
-          Add Material
+          Adicionar Material
         </v-btn>
       </v-col>
     </v-row>
@@ -77,11 +77,11 @@
       <v-col cols="12">
         <v-alert type="info" variant="tonal" class="text-center py-8">
           <v-icon icon="mdi-book-open-outline" size="48" class="mb-4"></v-icon>
-          <h3 class="text-h5 font-weight-bold mb-2">No Materials Available</h3>
+          <h3 class="text-h5 font-weight-bold mb-2">Sem Materiais Disponíveis</h3>
           <p class="text-body-1 mb-4">
             {{ roleStore.isTeacher 
-              ? 'Add your first material to help students learn.' 
-              : 'Materials will appear here when teachers add them.' 
+              ? 'Adicione o seu primeiro material para ajudar os alunos a aprender.' 
+              : 'Os materiais aparecerão aqui quando os professores os adicionarem.' 
             }}
           </p>
           <v-btn
@@ -90,7 +90,7 @@
             prepend-icon="mdi-plus"
             @click="openCreateDialog"
           >
-            Add First Material
+            Adicionar Primeiro Material
           </v-btn>
         </v-alert>
       </v-col>

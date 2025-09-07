@@ -4,7 +4,7 @@
       <div>
         <h2 class="text-h6 font-weight-medium mb-1">{{ material.name }}</h2>
         <p class="text-body-2 text-medium-emphasis mb-0">
-          {{ material.files.length }} file{{ material.files.length !== 1 ? 's' : '' }}
+          {{ material.files.length }} ficheiro{{ material.files.length !== 1 ? 's' : '' }}
         </p>
       </div>
       <v-btn
@@ -14,7 +14,7 @@
         prepend-icon="mdi-upload"
         @click="triggerFileUpload"
       >
-        Add File
+        Adicionar Ficheiro
       </v-btn>
     </div>
 
@@ -45,7 +45,7 @@
           </v-list-item-title>
           
           <v-list-item-subtitle class="text-body-2 text-medium-emphasis">
-            {{ formatFileSize(file.size) }} • {{ formatContentType(file.contentType) }}
+            {{ formatContentType(file.contentType) }}
           </v-list-item-subtitle>
 
           <template v-slot:append>
@@ -74,9 +74,9 @@
     <!-- Empty State -->
     <div v-else class="text-center py-8">
       <v-icon icon="mdi-file-outline" size="48" color="surface-variant" class="mb-3"></v-icon>
-      <p class="text-body-1 font-weight-medium mb-1">No files yet</p>
+      <p class="text-body-1 font-weight-medium mb-1">Sem ficheiros</p>
       <p class="text-body-2 text-medium-emphasis mb-0">
-        {{ canEdit ? 'Click "Add File" to upload your first file.' : 'Files will appear here when teachers add them.' }}
+        {{ canEdit ? 'Clique em "Adicionar Ficheiro" para enviar o seu primeiro ficheiro.' : 'Os ficheiros aparecerão aqui quando os professores os adicionarem.' }}
       </p>
     </div>
 
@@ -94,7 +94,7 @@
 import { ref } from 'vue'
 import RemoteService from '@/services/RemoteService'
 import type MaterialDto from '@/models/MaterialDto'
-import type FileDto from '@/models/FileDto'
+
 
 interface Props {
   material: MaterialDto
@@ -155,10 +155,7 @@ function downloadFile(fileId: number) {
   window.open(url, '_blank')
 }
 
-function formatFileSize(sizeKb: number): string {
-  if (sizeKb < 1024) return `${sizeKb} KB`
-  else return `${(sizeKb / 1024).toFixed(1)} MB`
-}
+
 
 function formatContentType(contentType: string): string {
   const types: { [key: string]: string } = {
@@ -184,7 +181,7 @@ function formatContentType(contentType: string): string {
 
 <style scoped>
 .file-item {
-  background: rgb(var(--v-theme-surface-variant));
+  background: rgb(var(--v-theme-surface));
   border: 1px solid rgb(var(--v-border-color));
   transition: all 0.2s ease;
 }

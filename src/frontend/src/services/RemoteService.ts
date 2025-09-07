@@ -4,7 +4,7 @@ import { useAppearanceStore } from '@/stores/appearance'
 import DeiError from '@/models/DeiError'
 import type PersonDto from '@/models/PersonDto'
 import type CourseDto from '@/models/CourseDto'
-import type CurriculumUnitDto from '@/models/CurriculumUnitDto'
+import type { CurriculumUnitDto, CurriculumUnitStatisticsDto } from '@/models/CurriculumUnitDto'
 import type EnrollmentDto from '@/models/EnrollmentDto'
 import type AssistDto from '@/models/AssistDto'
 import type StudentGroupDto from '@/models/StudentGroupDto'
@@ -90,6 +90,11 @@ export default class RemoteServices {
   static async deleteCurriculumUnit(id: number): Promise<void> {
     return httpClient.delete(`/curriculum-units/${id}`)
    
+  }
+
+  // ! unit statistics
+  static async getCurriculumUnitStatistics(unitId: number): Promise<CurriculumUnitStatisticsDto> {
+    return httpClient.get(`${unitId}/statistics`)
   }
 
   static async getAssistants(unitId: number): Promise<AssistDto[]> {

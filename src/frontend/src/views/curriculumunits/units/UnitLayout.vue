@@ -12,12 +12,14 @@
       <!-- Drawer Header -->
       <div class="drawer-header pa-6">
         <div class="d-flex align-center mb-3">
-          <v-avatar size="48" color="primary" class="mr-3" variant="tonal">
-            <v-icon icon="mdi-school" color="primary" size="24"></v-icon>
+          <v-avatar size="56" color="primary" class="mr-4" variant="elevated">
+        <v-icon icon="mdi-school-outline" color="black" size="32"></v-icon>
           </v-avatar>
           <div>
-            <h3 class="text-h6 font-weight-medium mb-0">Unidade Curricular</h3>
-            <p class="text-caption text-medium-emphasis mb-0">Navegação</p>
+        <h3 class="text-h6 font-weight-bold mb-1">Unidade Curricular</h3>
+        <p class="text-caption text-medium-emphasis mb-0">
+          Gestão e navegação da unidade
+        </p>
           </div>
         </div>
         <v-divider></v-divider>
@@ -30,7 +32,7 @@
           :key="item.route"
           :class="['nav-item mb-1', { 'nav-item-active': isActiveRoute(item.route) }]"
           :prepend-icon="item.icon"
-          :title="item.title"
+        
           @click="navigateTo(item.route)"
           rounded="lg"
           :color="item.color"
@@ -54,7 +56,6 @@
           v-if="roleStore.isTeacher"
           :class="['nav-item mb-1', { 'nav-item-active': isActiveRoute('RevisionsView') }]"
           prepend-icon="mdi-comment-question-outline"
-          title="Revisions"
           @click="navigateTo('RevisionsView')"
           rounded="lg"
           color="purple"
@@ -69,7 +70,7 @@
           </template>
           
           <v-list-item-title class="font-weight-medium">
-            Revisions
+            Revisões
           </v-list-item-title>
 
           <template v-slot:append v-if="pendingRevisionsCount > 0">
@@ -87,15 +88,19 @@
       <template v-slot:append>
         <div class="drawer-footer pa-4">
           <v-divider class="mb-4"></v-divider>
-          <div class="text-center">
-            <v-chip 
-              color="primary" 
-              variant="tonal" 
-              size="small"
-              prepend-icon="mdi-calendar"
-            >
-              2024/25
-            </v-chip>
+          <div class="text-center mb-2">
+        <v-chip 
+          color="primary" 
+          variant="elevated" 
+          size="large"
+          prepend-icon="mdi-calendar"
+          class="mb-1"
+        >
+          2025/26
+        </v-chip>
+          </div>
+          <div class="text-caption text-medium-emphasis text-center">
+        Ano letivo atual
           </div>
         </div>
       </template>
@@ -143,35 +148,40 @@ interface NavigationItem {
 const navigationItems = computed<NavigationItem[]>(() => [
   {
     route: 'UnitView',
-    title: 'Overview',
+    title: 'Visão Geral',
     icon: 'mdi-view-dashboard',
     color: 'primary'
   },
   {
     route: 'PersonnelView',
-    title: 'Personnel',
+    title: 'Pessoal',
     icon: 'mdi-account-group',
     color: 'success'
   },
   {
     route: 'ProjectsView',
-    title: 'Projects',
+    title: 'Projetos',
     icon: 'mdi-folder-multiple',
     color: 'warning'
   },
   {
     route: 'TestsView',
-    title: 'Tests',
+    title: 'Testes',
     icon: 'mdi-clipboard-check',
     color: 'error'
   },
   {
     route: 'MaterialsView',
-    title: 'Materials',
+    title: 'Materiais',
     icon: 'mdi-book-open-variant',
     color: 'info'
-  }
-])
+  },
+  {
+  route: 'UnitStatisticsView',
+  title: 'Estatísticas',
+  icon: 'mdi-chart-box',
+  color: 'purple'
+}])
 
 const isActiveRoute = (routeName: string): boolean => {
   return route.name === routeName
@@ -188,7 +198,7 @@ const getIconColor = (itemColor: string, isActive: boolean): string => {
 }
 
 const navigateTo = (routeName: string) => {
-  const validRoutes = ['PersonnelView', 'ProjectsView', 'MaterialsView', 'UnitView', 'TestsView', 'StudentTestsView', 'RevisionsView']
+  const validRoutes = ['PersonnelView', 'ProjectsView', 'MaterialsView', 'UnitView', 'TestsView', 'StudentTestsView', 'RevisionsView', 'UnitStatisticsView']
   
   if (validRoutes.includes(routeName)) {
     router.push({ name: routeName, params: { id: route.params.id } })

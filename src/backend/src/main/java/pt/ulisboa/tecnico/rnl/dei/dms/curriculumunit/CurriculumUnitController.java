@@ -3,24 +3,24 @@ package pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RestController;
 
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.dto.AssistDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.assists.services.AssistService;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.EnrollmentDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.services.EnrollmentService;
-import pt.ulisboa.tecnico.rnl.dei.dms.courses.dto.CourseDto;
-import pt.ulisboa.tecnico.rnl.dei.dms.courses.service.CourseService;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.CurriculumUnitDto;
-import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.SimpleCurriculumUnitDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.dto.CurriculumUnitStatisticsDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.service.CurriculumUnitService;
+import pt.ulisboa.tecnico.rnl.dei.dms.exceptions.DEIException;
 import pt.ulisboa.tecnico.rnl.dei.dms.person.dto.PersonDto;
 
 @RestController
@@ -96,9 +96,22 @@ public class CurriculumUnitController {
         return assistService.getAssists(id);
     }
 
+    @GetMapping("/{curriculumUnitId}/statistics")
+    public ResponseEntity<CurriculumUnitStatisticsDto> getCurriculumUnitStatistics(
+            @PathVariable Long curriculumUnitId) {
+        
+        try {
+            CurriculumUnitStatisticsDto statistics = curriculumUnitService.getCurriculumUnitStatistics(curriculumUnitId);
+            return ResponseEntity.ok(statistics);
+        } catch (DEIException e) {
+            System.err.println("Error getting curriculum unit statistics: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            System.err.println("Unexpected error getting curriculum unit statistics: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
-  /*   @GetMapping("/curriculum-units/person/{personId}")
-    public List<CurriculumUnitDto> getCurriculumUnitsByPerson(@PathVariable Long personId) {
-        return curriculumUnitService.getCurriculumUnitsByPerson(personId);
-    } */
+
 }

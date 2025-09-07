@@ -4,7 +4,7 @@
       <v-card-title class="pa-6 pb-4">
         <div class="d-flex align-center">
           <v-icon icon="mdi-plus-circle" color="primary" size="24" class="mr-3"></v-icon>
-          <h2 class="text-h6 font-weight-medium">Create Material Tab</h2>
+          <h2 class="text-h6 font-weight-medium">Criar secção de Materiais</h2>
         </div>
       </v-card-title>
 
@@ -12,8 +12,8 @@
         <v-form ref="form" v-model="valid">
           <v-text-field
             v-model="material.name"
-            label="Material Name"
-            placeholder="e.g., Lecture Slides, Lab Materials"
+            label="Nome da Secção"
+            placeholder="e.g., Aulas Teóricas, Práticas"
             variant="outlined"
             density="comfortable"
             :rules="nameRules"
@@ -21,7 +21,7 @@
           ></v-text-field>
 
           <div class="mb-4">
-            <label class="text-body-2 font-weight-medium mb-2 d-block">Choose Icon</label>
+            <label class="text-body-2 font-weight-medium mb-2 d-block">Escolher Icon</label>
             <div class="icon-grid">
               <v-btn
                 v-for="icon in availableIcons"
@@ -45,7 +45,7 @@
 
       <v-card-actions class="pa-6 pt-0">
         <v-spacer></v-spacer>
-        <v-btn variant="text" @click="closeDialog">Cancel</v-btn>
+        <v-btn variant="text" @click="closeDialog">Cancelar</v-btn>
         <v-btn
           color="primary"
           variant="elevated"
@@ -53,7 +53,7 @@
           :loading="loading"
           @click="createMaterial"
         >
-          Create Material
+          Criar Material
         </v-btn>
       </v-card-actions>
     </v-card>

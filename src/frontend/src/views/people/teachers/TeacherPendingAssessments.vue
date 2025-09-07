@@ -155,17 +155,7 @@
                   </v-alert>
                 </v-card-text>
 
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn 
-                    variant="elevated" 
-                    :color="getAssessmentColor(assessment.assessmentType)"
-                    prepend-icon="mdi-pencil"
-                    @click="openAssessment(assessment)"
-                  >
-                    Corrigir
-                  </v-btn>
-                </v-card-actions>
+
               </v-card>
             </v-col>
           </v-row>
@@ -295,16 +285,7 @@ function getPriorityMessage(pendingCount: number, type: string): string {
   return `${pendingCount} ${itemType} para corrigir`
 }
 
-function openAssessment(assessment: PendingGradingDto) {
-  // Navigate to the appropriate assessment page
-  const unitId = getCurrentUnitId(assessment) 
-  
-  if (assessment.assessmentType === 'PROJECT') {
-    router.push(`/curriculum-units/${unitId}/projects`)
-  } else {
-    router.push(`/curriculum-units/${unitId}/tests`)
-  }
-}
+
 
 function getCurrentUnitId(assessment: PendingGradingDto): number {
   // This would need to be implemented based on how you can get the unit ID

@@ -4,9 +4,9 @@
     <v-row class="mb-4">
       <v-col cols="12" class="d-flex justify-space-between align-items-center">
         <div>
-          <h1 class="text-h4 font-weight-bold text-primary mb-2">Projects</h1>
+          <h1 class="text-h4 font-weight-bold text-primary mb-2">Projetos</h1>
           <p class="text-body-1 text-medium-emphasis">
-            {{ roleStore.isStudent ? 'View your project assignments and submit your work' : 'Manage curriculum unit projects and student submissions' }}
+            {{ roleStore.isStudent ? 'Ver e entregar os teus projetos' : 'Gerir projetos da unidade curricular e submissões dos alunos' }}
           </p>
         </div>
         <v-btn
@@ -16,7 +16,7 @@
           size="large"
           @click="openCreateDialog"
         >
-          Create Project
+          Criar Projeto
         </v-btn>
       </v-col>
     </v-row>
@@ -39,11 +39,11 @@
       <v-col cols="12">
         <v-alert type="info" variant="tonal" class="text-center py-8">
           <v-icon icon="mdi-folder-outline" size="48" class="mb-4"></v-icon>
-          <h3 class="text-h5 font-weight-bold mb-2">No Projects Available</h3>
+          <h3 class="text-h5 font-weight-bold mb-2">Sem Projetos Disponíveis</h3>
           <p class="text-body-1 mb-4">
             {{ roleStore.isMainTeacher 
-              ? 'Create your first project to get started with assignments.' 
-              : 'Projects will appear here when teachers create them.' 
+              ? 'Crie o seu primeiro projeto para começar a trabalhar nas atribuições.' 
+              : 'Os projetos aparecerão aqui quando os professores os criarem.' 
             }}
           </p>
           <v-btn
@@ -52,7 +52,7 @@
             prepend-icon="mdi-plus"
             @click="openCreateDialog"
           >
-            Create First Project
+            Criar Primeiro Projeto
           </v-btn>
         </v-alert>
       </v-col>

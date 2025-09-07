@@ -11,34 +11,35 @@
       <!-- Header Section -->
       <v-row class="mb-6">
         <v-col cols="12">
-          <v-card class="pa-6 mb-4" elevation="2">
-            <div class="d-flex align-center mb-4">
-              <v-avatar color="primary" size="64" class="mr-4">
-                <v-icon icon="mdi-school" size="32"></v-icon>
-              </v-avatar>
-              <div>
-                <h1 class="text-h3 font-weight-bold text-primary mb-2">
-                  {{ curriculumUnit.name }}
-                </h1>
-                <p class="text-h6 text-medium-emphasis mb-1">
-                  {{ curriculumUnit.course?.name }}
-                </p>
-                <v-chip color="primary" variant="tonal" size="big" >
-                  {{ curriculumUnit.ects }} ECTS
-                </v-chip>
-              </div>
+          <v-card class="pa-6 mb-4" elevation="3">
+        <div class="d-flex align-center mb-4">
+          <v-avatar color="primary" size="72" class="mr-5 elevation-2">
+            <v-icon icon="mdi-school" size="36"></v-icon>
+          </v-avatar>
+          <div>
+            <h1 class="text-h3 font-weight-bold text-primary mb-1">
+          {{ curriculumUnit.name }}
+            </h1>
+            <div class="d-flex align-center mb-2">
+          <v-chip color="primary" variant="tonal" size="large" class="mr-2">
+            {{ curriculumUnit.ects }} ECTS
+          </v-chip>
+          <v-chip
+            v-if="curriculumUnit.semester"
+            color="success"
+            variant="outlined"
+            size="small"
+            class="mr-2"
+          >
+            {{ curriculumUnit.semester }}º Semestre
+          </v-chip>
+          <span class="text-h6 text-medium-emphasis">
+            {{ curriculumUnit.course?.name }}
+          </span>
             </div>
-            
-            <v-divider class="my-4"></v-divider>
-            
-            <div class="text-body-1">
-              <p v-if="curriculumUnit.description">
-                {{ curriculumUnit.description }}
-              </p>
-              <p v-else class="text-medium-emphasis font-italic">
-                Ano Letivo 25/26
-              </p>
-            </div>
+        
+          </div>
+        </div>
           </v-card>
         </v-col>
       </v-row>
@@ -56,9 +57,9 @@
                 :to="{ name: 'TestsView', params: { id: $route.params.id } }"
               >
                 <v-icon icon="mdi-clipboard-check" size="48" color="primary" class="mb-3"></v-icon>
-                <h3 class="text-h6 font-weight-bold mb-2">Tests</h3>
+                <h3 class="text-h6 font-weight-bold mb-2">Testes</h3>
                 <p class="text-body-2 text-medium-emphasis">
-                  {{ roleStore.isStudent ? 'View your test results' : 'Manage tests and grading' }}
+                  {{ roleStore.isStudent ? 'Ver resultados dos testes' : 'Gerir testes e classificações' }}
                 </p>
               </v-card>
             </v-col>
@@ -71,7 +72,7 @@
                 :to="{ name: 'ProjectsView', params: { id: $route.params.id } }"
               >
                 <v-icon icon="mdi-folder-outline" size="48" color="secondary" class="mb-3"></v-icon>
-                <h3 class="text-h6 font-weight-bold mb-2">Projects</h3>
+                <h3 class="text-h6 font-weight-bold mb-2">Projetos</h3>
                 <p class="text-body-2 text-medium-emphasis">
                   {{ roleStore.isStudent ? 'Submit your assignments' : 'Manage project assignments' }}
                 </p>
@@ -86,7 +87,7 @@
                 :to="{ name: 'MaterialsView', params: { id: $route.params.id } }"
               >
                 <v-icon icon="mdi-book-open-outline" size="48" color="success" class="mb-3"></v-icon>
-                <h3 class="text-h6 font-weight-bold mb-2">Materials</h3>
+                <h3 class="text-h6 font-weight-bold mb-2">Materiais</h3>
                 <p class="text-body-2 text-medium-emphasis">
                   {{ roleStore.isStudent ? 'Access course materials' : 'Organize learning resources' }}
                 </p>
@@ -101,9 +102,9 @@
                 :to="{ name: 'PersonnelView', params: { id: $route.params.id } }"
               >
                 <v-icon icon="mdi-account-group" size="48" color="warning" class="mb-3"></v-icon>
-                <h3 class="text-h6 font-weight-bold mb-2">Personnel</h3>
+                <h3 class="text-h6 font-weight-bold mb-2">Pessoal</h3>
                 <p class="text-body-2 text-medium-emphasis">
-                  View teachers and enrolled students
+                  Ver professores e alunos inscritos
                 </p>
               </v-card>
             </v-col>
@@ -111,57 +112,11 @@
         </v-col>
       </v-row>
 
-      <!-- Statistics Overview (if student) -->
-      <v-row v-if="roleStore.isStudent" class="mb-6">
-        <v-col cols="12">
-          <h2 class="text-h5 font-weight-bold mb-4">Your Progress</h2>
-          <v-row>
-            <v-col cols="12" md="4">
-              <v-card class="pa-4 text-center" elevation="2">
-                <v-icon icon="mdi-star" size="32" color="success" class="mb-2"></v-icon>
-                <h3 class="text-h6 font-weight-bold">Final Grade</h3>
-                <p class="text-h4 font-weight-bold text-success">
-                  {{ studentGrade || 'N/A' }}
-                </p>
-              </v-card>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-card class="pa-4 text-center" elevation="2">
-                <v-icon icon="mdi-clipboard-check" size="32" color="primary" class="mb-2"></v-icon>
-                <h3 class="text-h6 font-weight-bold">Tests Completed</h3>
-                <p class="text-h4 font-weight-bold text-primary">
-                  {{ completedTests }}
-                </p>
-              </v-card>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-card class="pa-4 text-center" elevation="2">
-                <v-icon icon="mdi-folder" size="32" color="secondary" class="mb-2"></v-icon>
-                <h3 class="text-h6 font-weight-bold">Projects Submitted</h3>
-                <p class="text-h4 font-weight-bold text-secondary">
-                  {{ submittedProjects }}
-                </p>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
+     
+     
 
-      <!-- Recent Activity (if teacher) -->
-      <v-row v-if="roleStore.isTeacher">
-        <v-col cols="12">
-          <h2 class="text-h5 font-weight-bold mb-4">Recent Activity</h2>
-          <v-card elevation="2">
-            <v-card-text>
-              <div class="d-flex align-center">
-                <v-icon icon="mdi-information" color="info" class="mr-3"></v-icon>
-                <span>Activity tracking and recent changes will be displayed here.</span>
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
     </div>
+     
 
     <!-- Error State -->
     <v-row v-else>
@@ -183,16 +138,15 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRoleStore } from '@/stores/role'
 import RemoteService from '@/services/RemoteService'
-import type CurriculumUnitDto from '@/models/CurriculumUnitDto'
+import type {CurriculumUnitDto, CurriculumUnitStatisticsDto, GradeDistributionDto } from '@/models/CurriculumUnitDto'
+
 
 const route = useRoute()
 const roleStore = useRoleStore()
 
 const curriculumUnit = ref<CurriculumUnitDto | null>(null)
 const loading = ref(true)
-const studentGrade = ref<string>('--')
-const completedTests = ref<number>(0)
-const submittedProjects = ref<number>(0)
+
 
 const unitId = computed(() => Number(route.params.id))
 
@@ -200,17 +154,15 @@ onMounted(async () => {
   await loadUnitData()
 })
 
+
+
+
+
 async function loadUnitData() {
   try {
     loading.value = true
-    
-    // Load curriculum unit information
     curriculumUnit.value = await RemoteService.getCurriculumUnit(unitId.value)
-    
-    // Load student-specific data if student
-    if (roleStore.isStudent && roleStore.getCurrentUserID) {
-      await loadStudentData()
-    }
+ 
   } catch (error) {
     console.error('Failed to load unit data:', error)
   } finally {
@@ -218,23 +170,7 @@ async function loadUnitData() {
   }
 }
 
-async function loadStudentData() {
-  try {
-    // These methods should be implemented in your RemoteService
-    // For now, we'll use placeholder values
-    studentGrade.value = 'TBD'
-    completedTests.value = 0
-    submittedProjects.value = 0
-    
-    // TODO: Implement actual data fetching
-    // const tests = await RemoteService.getStudentTestsForStudent(unitId.value, roleStore.getCurrentUserID)
-    // const projects = await RemoteService.getStudentProjectsForStudent(unitId.value, roleStore.getCurrentUserID)
-    // completedTests.value = tests.filter(t => t.grade !== null).length
-    // submittedProjects.value = projects.filter(p => p.submitted).length
-  } catch (error) {
-    console.error('Failed to load student data:', error)
-  }
-}
+
 </script>
 
 <style scoped>
