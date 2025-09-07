@@ -12,9 +12,9 @@
     </v-toolbar-items>
     <v-spacer />
     <span v-if="roleStore.isLoggedIn">
-      Welcome, {{ roleStore.currentUser?.name }} ({{ currentRole }})
+      Bem-vindo, {{ roleStore.currentUser?.name }} ({{ currentRole }})
     </span>
-    <span v-else>Current Role: {{ currentRole }}</span>
+    <span v-else>Cargo: {{ currentRole }}</span>
     <v-spacer />
     <v-toolbar-items class="align-center">
       <DarkModeSwitch />

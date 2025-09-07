@@ -2,19 +2,27 @@ package pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.domain.Project;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.domain.StudentGroup;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.repository.ProjectRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.projects.repository.StudentGroupRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.domain.StudentTeste;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.domain.Teste;
 import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.repository.StudentTesteRepository;
+import pt.ulisboa.tecnico.rnl.dei.dms.assessments.testes.repository.TesteRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.domain.Enrollment;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.AssessmentDeliveryDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.AssessmentDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.EnrollmentDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.FinalGradeBreakdownDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.ProgressDto;
+import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.dto.UnitFinalGradeDto;
 import pt.ulisboa.tecnico.rnl.dei.dms.assignments.enrollments.repository.EnrollmentRepository;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.domain.CurriculumUnit;
 import pt.ulisboa.tecnico.rnl.dei.dms.curriculumunit.repository.CurriculumUnitRepository;
@@ -29,23 +37,23 @@ public class EnrollmentService {
 
    
     private final EnrollmentRepository enrollmentRepository;
-    private final CurriculumUnitRepository curriculumUnitRepository;
     private final PersonRepository personRepository;
     private final StudentTesteRepository studentTesteRepository;
     private final StudentGroupRepository studentGroupRepository;
+    private final CurriculumUnitRepository curriculumUnitRepository;
 
-
-    public EnrollmentService(EnrollmentRepository enrollmentRepository,
-                        CurriculumUnitRepository curriculumUnitRepository,
-                        PersonRepository personRepository,
-                        StudentTesteRepository studentTesteRepository,
-                        StudentGroupRepository studentGroupRepository) {
-    this.enrollmentRepository = enrollmentRepository;
-    this.curriculumUnitRepository = curriculumUnitRepository;
-    this.personRepository = personRepository;
-    this.studentTesteRepository = studentTesteRepository;
-    this.studentGroupRepository = studentGroupRepository;
-}
+    public EnrollmentService(
+            EnrollmentRepository enrollmentRepository,
+            PersonRepository personRepository,
+            StudentTesteRepository studentTesteRepository,
+            CurriculumUnitRepository curriculumUnitRepository,
+            StudentGroupRepository studentGroupRepository) {
+        this.enrollmentRepository = enrollmentRepository;
+        this.personRepository = personRepository;
+        this.studentTesteRepository = studentTesteRepository;
+        this.curriculumUnitRepository = curriculumUnitRepository;
+        this.studentGroupRepository = studentGroupRepository;
+    }
 
     public EnrollmentDto createEnrollment(long curriculumUnitId, long studentId) {
         CurriculumUnit curriculumUnit = curriculumUnitRepository.findById(curriculumUnitId)
@@ -164,4 +172,8 @@ public class EnrollmentService {
 
         return assessments;
     }
+
+   
+
+    
 }

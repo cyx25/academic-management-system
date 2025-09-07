@@ -45,20 +45,39 @@
         Aluno
       </v-chip>
     </template>
-    <template v-slot:[`item.actions`]="{ item }" v-if="isAdmin">
-      <v-tooltip text="Edit">
+    
+    <template v-slot:[`item.actions`]="{ item }">
+      <!-- Student Dashboard Icon - Only for students and only visible to admins -->
+      <v-tooltip v-if="item.type === 'STUDENT' && isAdmin" text="Ver Dashboard do Estudante">
         <template v-slot:activator="{ props }">
-          <v-icon v-bind="props" @click="editPerson(item)" class="mr-2">mdi-pencil</v-icon>
+          <v-icon 
+            v-bind="props" 
+            @click="openStudentDashboard(item)" 
+            class="mr-2"
+            color="primary"
+          >
+            mdi-account-school
+          </v-icon>
         </template>
       </v-tooltip>
-      <v-tooltip text="Delete">
-        <template v-slot:activator="{ props }">
-          <v-icon v-bind="props" @click="deletePerson(item)">mdi-delete</v-icon>
-        </template>
-      </v-tooltip>
-    </template>
 
+      <!-- Regular Admin Actions -->
+      <template v-if="isAdmin">
+        <v-tooltip text="Edit">
+          <template v-slot:activator="{ props }">
+            <v-icon v-bind="props" @click="editPerson(item)" class="mr-2">mdi-pencil</v-icon>
+          </template>
+        </v-tooltip>
+        <v-tooltip text="Delete">
+          <template v-slot:activator="{ props }">
+            <v-icon v-bind="props" @click="deletePerson(item)">mdi-delete</v-icon>
+          </template>
+        </v-tooltip>
+      </template>
+    </template>
   </v-data-table>
+
+  <!-- Existing Dialogs -->
   <PersonDialog
     mode="edit"
     v-model="editDialog"
@@ -72,6 +91,11 @@
     @confirm="confirmDelete"
   />
 
+  <!-- New Student Dashboard Dialog -->
+  <StudentDashboardDialog
+    v-model="studentDashboardDialog"
+    :student="selectedStudent"
+  />
 </template>
 
 <script setup lang="ts">
@@ -81,8 +105,8 @@ import PersonDialog from './PersonDialog.vue'
 import { reactive, ref, computed } from 'vue'
 import { fuzzySearch } from '@/utils/utilities'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog.vue'
+import StudentDashboardDialog from '@/components/StudentDashboardDialog.vue'
 import { useRoleStore } from '../../stores/role'
-
 
 let search = ref('')
 let loading = ref(true)
@@ -90,8 +114,10 @@ const people: PersonDto[] = reactive([])
 const editDialog = ref(false)
 const createDialog = ref(false)
 const deleteDialog = ref(false)
+const studentDashboardDialog = ref(false)
 const personToDelete = ref<PersonDto | null>(null)
-const editingPerson = ref<PersonDto>({  // Initialize with empty object instead of null
+const selectedStudent = ref<PersonDto | null>(null)
+const editingPerson = ref<PersonDto>({
   id: 0,
   name: '',
   istId: '',
@@ -103,49 +129,55 @@ const editingPerson = ref<PersonDto>({  // Initialize with empty object instead 
 const roleStore = useRoleStore()
 const isAdmin = computed(() => roleStore.isAdministrator)
 
+// Update headers to be conditional based on admin status
+const headers = computed(() => {
+  const baseHeaders = [
+    { title: 'ID', key: 'id', value: 'id', sortable: true, filterable: false },
+    {
+      title: 'Nome',
+      key: 'name',
+      value: 'name',
+      sortable: true,
+      filterable: true
+    },
+    {
+      title: 'IST ID',
+      key: 'istId',
+      value: 'istId',
+      sortable: true,
+      filterable: true
+    },
+    {
+      title: "Email",
+      key: 'email',
+      value: 'email',
+      sortable: true,
+      filterable: true
+    },
+    {
+      title: 'Tipo',
+      key: 'type',
+      value: 'type',
+      sortable: true,
+      filterable: true
+    }
+  ]
 
-// remover id dos headers
-const headers = [
-  { title: 'ID', key: 'id', value: 'id', sortable: true, filterable: false },
-  {
-    title: 'Nome',
-    key: 'name',
-    value: 'name',
-    sortable: true,
-    filterable: true
-  },
-  {
-    title: 'IST ID',
-    key: 'istId',
-    value: 'istId',
-    sortable: true,
-    filterable: true
-  },
-  {
-    title: "Email",
-    key: 'email',
-    value: 'email',
-    sortable: true,
-    filterable: true
-  },
-  {
-    title: 'Tipo',
-    key: 'type',
-    value: 'type',
-    sortable: true,
-    filterable: true
-  },
-  {
-    title: 'Ações',
-    key: 'actions',
-    value: 'actions',
-    sortable: false,
-    filterable: false
+  // Only add actions column for admins
+  if (isAdmin.value) {
+    baseHeaders.push({
+      title: 'Ações',
+      key: 'actions',
+      value: 'actions',
+      sortable: false,
+      filterable: false
+    })
   }
 
-]
+  return baseHeaders
+})
 
-
+// Existing methods
 getPeople()
 async function getPeople() {
   people.splice(0, people.length)
@@ -172,5 +204,9 @@ const confirmDelete = async () => {
   }
 }
 
-
+// New method for opening student dashboard
+const openStudentDashboard = (student: PersonDto) => {
+  selectedStudent.value = student
+  studentDashboardDialog.value = true
+}
 </script>

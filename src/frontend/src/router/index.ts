@@ -13,6 +13,9 @@ import ProjectsView from '@/views/curriculumunits/units/Projects/ProjectsView.vu
 import TestsView from '@/views/curriculumunits/units/tests/TestsView.vue'
 import StudentTestsView from '@/views/curriculumunits/units/tests/StudentTestsView.vue'
 import RevisionsView from '@/views/curriculumunits/units/tests/RevisionsView.vue'
+import StudentProfileView from '@/views/people/students/StudentProfileView.vue'
+import StudentDeadlinesView from '@/views/people/students/StudentDeadlinesView.vue'
+import StudentProgressView from '@/views/people/students/StudentProgressView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -40,6 +43,22 @@ const router = createRouter({
       path: '/curriculum-units',
       name: 'curriculum-units',
       component: CurriculumUnitsView
+    },
+    // Student dashboard routes
+    {
+      path: '/profile',
+      name: 'profile',
+      component: StudentProfileView
+    },
+    {
+      path: '/deadlines',
+      name: 'deadlines',
+      component: StudentDeadlinesView
+    },
+    {
+      path: '/progress',
+      name: 'progress',
+      component: StudentProgressView
     },
     {
       path: '/curriculum-units/:id',

@@ -12,15 +12,17 @@ POR FAZER
 
 
 -- input validation no frontend
--- soma dos pesos nota final nao pode ser mais que 100
 -- nos projetos para cada submissao aparecer a nota automatica
 
 
-- Criar, visualizar e gerir testes e projetos associados a uma UC;
-- Atribuir notas a alunos em testes e projetos (pelos Professores Regentes e Assistentes);
-- Submissão de projetos por parte dos alunos (individual ou em grupo);
-- Implementar o workflow completo de revisão de provas conforme descrito;
-- Consultar notas individuais de cada aluno numa UC, bem como a sua média final (com base nos pesos dos testes e projetos);
 - Visualizar calendário de avaliações com deteção de conflitos;
-- Consultar o perfil do aluno, onde contém as suas UCs, notas, avaliações pendentes e projetos submetidos (apenas visível para o próprio aluno e Administradores).
 
+
+**Sistema de estatísticas avançado** da UC: distribuição de notas, médias por teste/projeto, número de revisões submetidas/aprovadas...
+
+**Dashboard personalizado**
+  
+  - Vista do professor: alunos, correções pendentes, estatísticas
+  - Vista do assistente: tarefas de correção, estatísticas
+
+**Notificações na aplicação e/ou Email** para eventos importantes (ex: submissão de projeto, atribuição de nota, pedido de revisão...).

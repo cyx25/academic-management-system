@@ -15,6 +15,9 @@ import type { CreateTesteDto } from '@/models/TesteDto'
 import type StudentTesteDto from '@/models/StudentTesteDto'
 import type RevisionDto from '@/models/RevisionDto'
 import type FinalGradeBreakdownDto from '@/models/FinalGradeBreakdownDto'
+import type UnitFinalGradeDto from '@/models/StudentViewsDto'
+import type AssessmentDeliveryDto from '@/models/StudentViewsDto'
+import type ProgressDto from '@/models/StudentViewsDto'
 
 const httpClient = axios.create()
 httpClient.defaults.timeout = 50000
@@ -122,6 +125,24 @@ export default class RemoteServices {
     return httpClient.get(
         `/final-grade-breakdown?studentId=${studentId}&curriculumUnitId=${curriculumUnitId}`
         )
+  }
+
+  static async getStudentProfile(studentId: number): Promise<UnitFinalGradeDto[]> {
+    return httpClient.get(`student/${studentId}/profile`)
+  }
+
+  /**
+   * Get student assessment deliveries for calendar view
+   */
+  static async getStudentAssessmentDeliveries(studentId: number): Promise<AssessmentDeliveryDto[]> {
+    return httpClient.get(`student/${studentId}/deliveries`)
+  }
+
+  /**
+   * Get student progress statistics
+   */
+  static async getStudentProgress(studentId: number): Promise<ProgressDto> {
+    return httpClient.get(`student/${studentId}/progress`)
   }
 
   // ! PROJECTS

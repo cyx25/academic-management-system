@@ -2,12 +2,12 @@
   <v-dialog v-model="dialog" max-width="400px" persistent>
     <v-card>
       <v-card-title>
-        <span class="text-h5">Login as {{ roleName }}</span>
+        <span class="text-h5">Entrar como {{ roleName }}</span>
       </v-card-title>
       <v-card-text>
         <v-text-field
           v-model="personId"
-          label="Insert ID"
+          label="Inserir ID"
           type="text"
           inputmode="numeric"
           autofocus
@@ -17,8 +17,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text @click="close">Cancel</v-btn>
-        <v-btn color="primary" @click="submit">Login</v-btn>
+        <v-btn text @click="close">Cancelar</v-btn>
+        <v-btn color="primary" @click="submit">Iniciar Sessão</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
