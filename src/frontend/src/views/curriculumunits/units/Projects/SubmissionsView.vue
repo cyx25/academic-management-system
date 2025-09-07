@@ -96,6 +96,9 @@
                         Submitted {{ formatDate(group.submissions[0].submissionDate) }}
                       </p>
                       <p class="text-caption text-medium-emphasis mb-0">
+                        Avaliação Automática: {{ group.submissions[0].grade !== null ? group.submissions[0].grade.toFixed(1) : 'Not graded' }}
+                      </p>
+                      <p class="text-caption text-medium-emphasis mb-0">
                         by <span class="font-weight-medium">{{ group.submissions[0].submittedBy }}</span>
                       </p>
                     </div>
@@ -138,7 +141,8 @@
                 <v-card variant="tonal" color="surface-variant" class="pa-3">
                   <div class="d-flex align-center mb-3">
                     <v-icon icon="mdi-star" color="warning" size="small" class="mr-2"></v-icon>
-                    <span class="font-weight-medium">Grade Assignment</span>
+                    <span class="font-weight-medium">Atribuir Nota</span>
+                    
                   </div>
                   
                   <div class="d-flex align-center gap-2">
@@ -283,6 +287,9 @@
                         
                         <p class="text-caption text-medium-emphasis mb-0">
                           {{ formatDate(submission.submissionDate) }}
+                        </p>
+                        <p class="text-caption text-medium-emphasis mb-0">
+                          Avaliação Automática: {{ submission.grade !== null ? submission.grade.toFixed(1) : 'Not graded' }}
                         </p>
                       </div>
                       
