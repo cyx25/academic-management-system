@@ -13,7 +13,7 @@
           >
           </v-btn>
           <div>
-            <h1 class="text-h4 font-weight-bold text-primary mb-1">Student Test Grades</h1>
+            <h1 class="text-h4 font-weight-bold text-primary mb-1">Testes dos Estudantes</h1>
             <p v-if="test" class="text-h6 text-grey-darken-1 mb-0">{{ test.title }}</p>
           </div>
         </div>
@@ -23,7 +23,7 @@
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-12">
       <v-progress-circular indeterminate size="64" color="primary" class="mb-4"></v-progress-circular>
-      <p class="text-h5 font-weight-medium text-grey-darken-1">Loading student tests...</p>
+      <p class="text-h5 font-weight-medium text-grey-darken-1">A carregar testes dos estudantes...</p>
     </div>
 
     <!-- Student Tests Grid -->
@@ -38,7 +38,7 @@
                 </v-avatar>
                 <div>
                   <h3 class="text-h6 font-weight-bold mb-1">{{ studentTest.studentName }}</h3>
-                  <p class="text-body-2 text-grey-darken-1 mb-0">Student ID: {{ studentTest.studentId }}</p>
+                
                 </div>
               </div>
               <v-chip 
@@ -78,7 +78,7 @@
                   :disabled="isInvalidGrade(grades[studentTest.id])"
                   :loading="gradingLoading[studentTest.id]"
                 >
-                  Grade
+                  NOTA
                 </v-btn>
               </div>
             </div>
@@ -89,7 +89,7 @@
               <div class="d-flex align-center">
                 <v-icon icon="mdi-account-check" size="small" color="success" class="mr-2"></v-icon>
                 <span class="text-body-2 text-success">
-                  Graded by: {{ studentTest.gradedTeacherName }}
+                  Avaliado por: {{ studentTest.gradedTeacherName }}
                 </span>
               </div>
             </div>
@@ -99,7 +99,7 @@
               <v-alert type="warning" variant="tonal" density="compact">
                 <div class="d-flex align-center">
                   <v-icon icon="mdi-alert" class="mr-2"></v-icon>
-                  <span class="font-weight-medium">Revision requested by student</span>
+                  <span class="font-weight-medium">Revisão solicitada pelo estudante</span>
                 </div>
               </v-alert>
               
@@ -111,7 +111,7 @@
                 class="mt-2"
                 @click="viewRevisions(studentTest.id)"
               >
-                Review Revisions
+                Revisar Revisões
               </v-btn>
             </div>
           </v-card-text>
@@ -124,8 +124,8 @@
       <v-alert type="info" variant="tonal" max-width="500" class="mx-auto">
         <div class="text-center">
           <v-icon icon="mdi-information" size="48" class="mb-3"></v-icon>
-          <p class="text-h6 font-weight-bold mb-2">No Students Found</p>
-          <p class="text-body-2 mb-0">No students are enrolled in this test.</p>
+          <p class="text-h6 font-weight-bold mb-2">Sem estudantes encontrados</p>
+          <p class="text-body-2 mb-0">Não há estudantes inscritos neste teste.</p>
         </div>
       </v-alert>
     </div>
@@ -233,9 +233,9 @@ function viewRevisions(studentTestId: number) {
 }
 
 .grading-section {
-  background: #424343;
+  background-color: var(--v-surface-container-low);
   padding: 16px;
   border-radius: 8px;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--v-border-color, #e9ecef);
 }
 </style>

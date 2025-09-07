@@ -48,66 +48,84 @@
       <v-row class="mb-6">
         <v-col cols="12">
           <h2 class="text-h5 font-weight-bold mb-4">Quick Actions</h2>
+          <!-- First row: 3 cards -->
           <v-row>
-            <!-- Tests Card -->
-            <v-col cols="12" sm="6" md="3">
-              <v-card 
-                class="pa-4 text-center hover-card" 
-                elevation="2"
-                :to="{ name: 'TestsView', params: { id: $route.params.id } }"
-              >
-                <v-icon icon="mdi-clipboard-check" size="48" color="primary" class="mb-3"></v-icon>
-                <h3 class="text-h6 font-weight-bold mb-2">Testes</h3>
-                <p class="text-body-2 text-medium-emphasis">
-                  {{ roleStore.isStudent ? 'Ver resultados dos testes' : 'Gerir testes e classificações' }}
-                </p>
-              </v-card>
-            </v-col>
+        <!-- Tests Card -->
+        <v-col cols="12" sm="6" md="4">
+          <v-card 
+            class="pa-4 text-center hover-card" 
+            elevation="2"
+            :to="{ name: 'TestsView', params: { id: $route.params.id } }"
+          >
+            <v-icon icon="mdi-clipboard-check" size="48" color="primary" class="mb-3"></v-icon>
+            <h3 class="text-h6 font-weight-bold mb-2">Testes</h3>
+            <p class="text-body-2 text-medium-emphasis">
+          {{ roleStore.isStudent ? 'Ver resultados dos testes' : 'Gerir testes e classificações' }}
+            </p>
+          </v-card>
+        </v-col>
 
-            <!-- Projects Card -->
-            <v-col cols="12" sm="6" md="3">
-              <v-card 
-                class="pa-4 text-center hover-card" 
-                elevation="2"
-                :to="{ name: 'ProjectsView', params: { id: $route.params.id } }"
-              >
-                <v-icon icon="mdi-folder-outline" size="48" color="secondary" class="mb-3"></v-icon>
-                <h3 class="text-h6 font-weight-bold mb-2">Projetos</h3>
-                <p class="text-body-2 text-medium-emphasis">
-                  {{ roleStore.isStudent ? 'Submit your assignments' : 'Manage project assignments' }}
-                </p>
-              </v-card>
-            </v-col>
+        <!-- Projects Card -->
+        <v-col cols="12" sm="6" md="4">
+          <v-card 
+            class="pa-4 text-center hover-card" 
+            elevation="2"
+            :to="{ name: 'ProjectsView', params: { id: $route.params.id } }"
+          >
+            <v-icon icon="mdi-folder-outline" size="48" color="secondary" class="mb-3"></v-icon>
+            <h3 class="text-h6 font-weight-bold mb-2">Projetos</h3>
+            <p class="text-body-2 text-medium-emphasis">
+          {{ roleStore.isStudent ? 'Submit your assignments' : 'Manage project assignments' }}
+            </p>
+          </v-card>
+        </v-col>
 
-            <!-- Materials Card -->
-            <v-col cols="12" sm="6" md="3">
-              <v-card 
-                class="pa-4 text-center hover-card" 
-                elevation="2"
-                :to="{ name: 'MaterialsView', params: { id: $route.params.id } }"
-              >
-                <v-icon icon="mdi-book-open-outline" size="48" color="success" class="mb-3"></v-icon>
-                <h3 class="text-h6 font-weight-bold mb-2">Materiais</h3>
-                <p class="text-body-2 text-medium-emphasis">
-                  {{ roleStore.isStudent ? 'Access course materials' : 'Organize learning resources' }}
-                </p>
-              </v-card>
-            </v-col>
+        <!-- Materials Card -->
+        <v-col cols="12" sm="6" md="4">
+          <v-card 
+            class="pa-4 text-center hover-card" 
+            elevation="2"
+            :to="{ name: 'MaterialsView', params: { id: $route.params.id } }"
+          >
+            <v-icon icon="mdi-book-open-outline" size="48" color="success" class="mb-3"></v-icon>
+            <h3 class="text-h6 font-weight-bold mb-2">Materiais</h3>
+            <p class="text-body-2 text-medium-emphasis">
+          {{ roleStore.isStudent ? 'Access course materials' : 'Organize learning resources' }}
+            </p>
+          </v-card>
+        </v-col>
+          </v-row>
+          <!-- Second row: 2 cards -->
+          <v-row>
+        <!-- Personnel Card -->
+        <v-col cols="12" sm="6" md="6">
+          <v-card 
+            class="pa-4 text-center hover-card" 
+            elevation="2"
+            :to="{ name: 'PersonnelView', params: { id: $route.params.id } }"
+          >
+            <v-icon icon="mdi-account-group" size="48" color="warning" class="mb-3"></v-icon>
+            <h3 class="text-h6 font-weight-bold mb-2">Pessoal</h3>
+            <p class="text-body-2 text-medium-emphasis">
+          Ver professores e alunos inscritos
+            </p>
+          </v-card>
+        </v-col>
 
-            <!-- Personnel Card -->
-            <v-col cols="12" sm="6" md="3">
-              <v-card 
-                class="pa-4 text-center hover-card" 
-                elevation="2"
-                :to="{ name: 'PersonnelView', params: { id: $route.params.id } }"
-              >
-                <v-icon icon="mdi-account-group" size="48" color="warning" class="mb-3"></v-icon>
-                <h3 class="text-h6 font-weight-bold mb-2">Pessoal</h3>
-                <p class="text-body-2 text-medium-emphasis">
-                  Ver professores e alunos inscritos
-                </p>
-              </v-card>
-            </v-col>
+        <!-- Statistics Card -->
+        <v-col cols="12" sm="6" md="6">
+          <v-card 
+            class="pa-4 text-center hover-card" 
+            elevation="2"
+            :to="{ name: 'UnitStatisticsView', params: { id: $route.params.id } }"
+          >
+            <v-icon icon="mdi-format-list-numbered" size="48" color="red" class="mb-3"></v-icon>
+            <h3 class="text-h6 font-weight-bold mb-2">Estatísticas</h3>
+            <p class="text-body-2 text-medium-emphasis">
+          Ver estatísticas da UC
+            </p>
+          </v-card>
+        </v-col>
           </v-row>
         </v-col>
       </v-row>
@@ -138,7 +156,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRoleStore } from '@/stores/role'
 import RemoteService from '@/services/RemoteService'
-import type {CurriculumUnitDto, CurriculumUnitStatisticsDto, GradeDistributionDto } from '@/models/CurriculumUnitDto'
+import type {CurriculumUnitDto } from '@/models/CurriculumUnitDto'
 
 
 const route = useRoute()

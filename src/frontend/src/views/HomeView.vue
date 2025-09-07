@@ -5,7 +5,7 @@
       <v-card class="mx-auto pa-8" max-width="600" elevation="8" rounded="lg">
         <v-icon icon="mdi-account-key" size="64" color="primary" class="mb-4"></v-icon>
         <h1 class="text-h3 font-weight-bold text-primary mb-4">
-          Bem-vindo ao {{ appName }}
+          Bem-vindo ao AMS
         </h1>
         <h2 class="text-h5 text-medium-emphasis mb-6">
           Por favor, inicie sessão para continuar

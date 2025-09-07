@@ -24,7 +24,7 @@
         <div class="d-flex align-center">
           <v-icon icon="mdi-star" class="mr-2"></v-icon>
           <span class="font-weight-medium">
-            Grade: {{ studentTestData.grade !== null ? `${studentTestData.grade}/20` : 'Not graded' }}
+            Nota: {{ studentTestData.grade !== null ? `${studentTestData.grade}/20` : 'Not graded' }}
           </span>
         </div>
       </v-alert>
@@ -56,7 +56,7 @@
           @click="triggerStatementUpload"
           :loading="uploadingStatement"
         >
-          Add Statement
+          Adicionar enunciado
         </v-btn>
         
         <v-btn
@@ -68,7 +68,7 @@
           @click="triggerCorrectionUpload"
           :loading="uploadingCorrection"
         >
-          Add Correction
+          Adicionar correção
         </v-btn>
       </div>
 
@@ -92,13 +92,13 @@
       <!-- View Files -->
       <v-btn
         v-if="teste.statementFile"
-        color="secondary"
+        color="primary"
         variant="outlined"
         size="small"
         prepend-icon="mdi-file-document-outline"
         @click="viewStatement"
       >
-        Statement
+        Enunciado
       </v-btn>
 
       <v-btn
@@ -109,7 +109,7 @@
         prepend-icon="mdi-file-check-outline"
         @click="viewCorrection"
       >
-        Correction
+        Correção
       </v-btn>
 
       <v-spacer></v-spacer>
@@ -123,7 +123,7 @@
         prepend-icon="mdi-comment-question-outline"
         @click="openRevisionDialog"
       >
-        Request Revision
+        Solicitar Revisão
       </v-btn>
 
       <v-btn
@@ -134,7 +134,7 @@
         prepend-icon="mdi-eye-outline"
         @click="viewRevisionStatus"
       >
-        View Revision
+        Ver revisão
       </v-btn>
 
       <!-- Teacher Action -->
@@ -146,7 +146,7 @@
         prepend-icon="mdi-account-school-outline"
         @click="navigateToGrading"
       >
-        Grade Students
+        Avaliar Estudantes
       </v-btn>
     </v-card-actions>
 
@@ -160,25 +160,25 @@
     <!-- Revision Status Dialog -->
     <v-dialog v-model="revisionStatusDialog" max-width="500px">
       <v-card v-if="revisionData">
-        <v-card-title>Revision Status</v-card-title>
+        <v-card-title>Status da Revisão</v-card-title>
         <v-card-text>
           <div class="mb-3">
             <strong>Status:</strong> {{ revisionData.status }}
           </div>
           <div class="mb-3">
-            <strong>Your Justification:</strong>
+            <strong>A sua justificação:</strong>
             <p>{{ revisionData.justification }}</p>
           </div>
           <div v-if="revisionData.newGrade !== null" class="mb-3">
-            <strong>New Grade:</strong> {{ revisionData.newGrade }}/20
+            <strong>Nova Nota:</strong> {{ revisionData.newGrade }}/20
           </div>
           <div v-if="revisionData.reviewedBy">
-            <strong>Reviewed by:</strong> {{ revisionData.reviewedBy }}
+            <strong>Avaliado por:</strong> {{ revisionData.reviewedBy }}
           </div>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text @click="revisionStatusDialog = false">Close</v-btn>
+          <v-btn text @click="revisionStatusDialog = false">Fechar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

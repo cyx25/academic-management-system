@@ -13,13 +13,13 @@
     </v-card-title>
 
     <v-card-subtitle>
-      <strong>Test:</strong> {{ revision.testeTitle }} | 
-      <strong>Current Grade:</strong> {{ revision.currentGrade }}/20
+      <strong>Teste:</strong> {{ revision.testeTitle }} | 
+      <strong>Nota atual:</strong> {{ revision.currentGrade }}/20
     </v-card-subtitle>
 
     <v-card-text>
       <div class="mb-3">
-        <strong>Student Justification:</strong>
+        <strong>Justificação do Aluno:</strong>
         <p class="mt-1">{{ revision.justification }}</p>
       </div>
 
@@ -31,7 +31,7 @@
           <v-col cols="12" md="6">
             <v-text-field
               v-model.number="newGrade"
-              label="New Grade (0-20)*"
+              label="Nova nota (0-20)*"
               type="number"
               min="0"
               max="20"
@@ -48,7 +48,7 @@
               :loading="submitting"
               :disabled="!isGradeValid"
             >
-              Submit New Grade
+              Submeter Nova Nota
             </v-btn>
           </v-col>
         </v-row>
@@ -61,9 +61,9 @@
                class="mb-3">
         <div class="d-flex justify-space-between align-items-center">
           <div>
-            <strong>TA New Grade:</strong> {{ revision.newGrade }}/20
+            <strong>Nota do Professor Assistente:</strong> {{ revision.newGrade }}/20
             <br>
-            <strong>Reviewed by:</strong> {{ revision.reviewedBy }}
+            <strong>Atribuido por:</strong> {{ revision.reviewedBy }}
           </div>
           <!-- Approval buttons for Main Teacher -->
           <div v-if="roleStore.isMainTeacher" class="d-flex gap-2">
@@ -73,7 +73,7 @@
               @click="approveGrade"
               :loading="approvingGrade"
             >
-              Approve
+              Approvar
             </v-btn>
             <v-btn 
               color="error" 
@@ -81,7 +81,7 @@
               @click="rejectGrade"
               :loading="rejectingGrade"
             >
-              Reject
+              Rejeitar
             </v-btn>
           </div>
         </div>
@@ -91,9 +91,9 @@
       <v-alert v-if="['APPROVED', 'REJECTED'].includes(revision.status)" 
                :type="revision.status === 'APPROVED' ? 'success' : 'error'" 
                variant="tonal">
-        Revision {{ revision.status.toLowerCase() }} by {{ revision.reviewedBy }}
+        Revisão {{ revision.status.toLowerCase() }} by {{ revision.reviewedBy }}
         <div v-if="revision.status === 'APPROVED'" class="mt-1">
-          <strong>Final Grade:</strong> {{ revision.newGrade }}/20
+          <strong>Nota Final:</strong> {{ revision.newGrade }}/20
         </div>
       </v-alert>
 

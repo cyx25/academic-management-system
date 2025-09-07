@@ -3,9 +3,9 @@
     <!-- Header -->
     <v-row class="mb-4">
       <v-col cols="12">
-        <h1 class="text-h4 font-weight-bold text-primary mb-2">Pending Revisions</h1>
+        <h1 class="text-h4 font-weight-bold text-primary mb-2">Revisões Pendentes</h1>
         <p class="text-body-1 text-medium-emphasis">
-          Review student revision requests and provide new grades
+          Revise os pedidos de revisão dos alunos e forneça novas notas
         </p>
       </v-col>
     </v-row>
@@ -31,9 +31,9 @@
       <v-col cols="12">
         <v-alert type="info" variant="tonal" class="text-center py-8">
           <v-icon icon="mdi-comment-check" size="48" class="mb-4"></v-icon>
-          <h3 class="text-h5 font-weight-bold mb-2">No Pending Revisions</h3>
+          <h3 class="text-h5 font-weight-bold mb-2">Sem Revisões Pendentes</h3>
           <p class="text-body-1">
-            All revision requests have been processed.
+            Todos os pedidos de revisão foram processados.
           </p>
         </v-alert>
       </v-col>

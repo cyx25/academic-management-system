@@ -2,14 +2,14 @@
   <v-dialog v-model="dialog" max-width="600px" persistent>
     <v-card>
       <v-card-title>
-        <span class="text-h5">Create New Test</span>
+        <span class="text-h5">Criar novo Teste</span>
       </v-card-title>
 
       <v-form ref="form" @submit.prevent="saveTest">
         <v-card-text>
           <v-text-field
             v-model="testData.title"
-            label="Test Title*"
+            label="Título*"
             :rules="titleRules"
             required
             variant="outlined"
@@ -18,7 +18,7 @@
 
           <v-text-field
             v-model.number="testData.weight"
-            label="Weight (%)*"
+            label="Peso (%)*"
             type="number"
             min="0"
             max="100"
@@ -30,7 +30,7 @@
 
           <v-text-field
             v-model="testData.date"
-            label="Date and Time*"
+            label="Data e Hora*"
             type="datetime-local"
             :rules="dateRules"
             required
@@ -42,23 +42,23 @@
             <v-col cols="6">
               <v-text-field
                 v-model.number="durationHours"
-                label="Duration (Hours)"
+                label="Duração (Horas)"
                 type="number"
                 min="0"
                 max="23"
                 variant="outlined"
-                :rules="[v => v >= 0 || 'Hours must be 0 or greater']"
+                :rules="[v => v >= 0 || 'Horas devem ser 0 ou mais']"
               ></v-text-field>
             </v-col>
             <v-col cols="6">
               <v-text-field
                 v-model.number="durationMinutes"
-                label="Duration (Minutes)"
+                label="Duração (Minutos)"
                 type="number"
                 min="0"
                 max="59"
                 variant="outlined"
-                :rules="[v => v >= 0 && v <= 59 || 'Minutes must be between 0 and 59']"
+                :rules="[v => v >= 0 && v <= 59 || 'Minutos devem estar entre 0 e 59']"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -67,7 +67,7 @@
           <v-alert v-if="durationDisplay" type="info" variant="tonal" class="mb-3">
             <div class="d-flex align-center">
               <v-icon icon="mdi-clock" class="mr-2"></v-icon>
-              <span>Duration: {{ durationDisplay }}</span>
+              <span>Duração: {{ durationDisplay }}</span>
             </div>
           </v-alert>
 
@@ -78,14 +78,14 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text @click="dialog = false">Cancel</v-btn>
+          <v-btn text @click="dialog = false">Cancelar</v-btn>
           <v-btn 
             color="primary" 
             type="submit"
             :loading="saving"
             :disabled="!isFormValid"
           >
-            Create Test
+            Criar Teste
           </v-btn>
         </v-card-actions>
       </v-form>

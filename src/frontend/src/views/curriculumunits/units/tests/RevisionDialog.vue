@@ -2,21 +2,21 @@
   <v-dialog v-model="dialog" max-width="600px" persistent>
     <v-card>
       <v-card-title>
-        <span class="text-h5">Request Test Revision</span>
+        <span class="text-h5">Pedir Revisão de Teste</span>
       </v-card-title>
 
       <v-form ref="form" @submit.prevent="submitRevision">
         <v-card-text>
           <v-textarea
             v-model="justification"
-            label="Justification for Revision*"
+            label="Justificação para Revisão*"
             :rules="justificationRules"
             required
             variant="outlined"
             rows="4"
             counter="1000"
             class="mb-3"
-            placeholder="Please explain why you believe your test should be reviewed..."
+            placeholder="Por favor explique por que acreditas que o teu teste deve ser revisto..."
           ></v-textarea>
 
           <v-alert v-if="error" type="error" variant="tonal" class="mt-3">
@@ -26,14 +26,14 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn variant="text" @click="dialog = false">Cancel</v-btn>
+          <v-btn variant="text" @click="dialog = false">Cancelar</v-btn>
           <v-btn 
             color="primary" 
             type="submit"
             :loading="submitting"
             :disabled="!isFormValid"
           >
-            Request Revision
+            Pedir Revisão
           </v-btn>
         </v-card-actions>
       </v-form>

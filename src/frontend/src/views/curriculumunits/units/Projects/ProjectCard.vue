@@ -15,7 +15,7 @@
     <v-card-actions>
       <v-btn
         v-if="project.statementFile"
-        color="secondary"
+        color="primary"
         text
         @click="viewStatement"
         prepend-icon="mdi-file-eye-outline"
