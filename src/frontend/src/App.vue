@@ -21,7 +21,7 @@ import ErrorMessage from '@/components/ErrorMessage.vue';
 import LoadingOverlay from '@/components/LoadingOverlay.vue';
 
 
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 
 import { useAppearanceStore } from './stores/appearance';
 import { onMounted, onUnmounted } from 'vue';

@@ -24,7 +24,14 @@
       <v-btn size="small" @click="promptLogin('student')">Aluno</v-btn>
       <v-btn size="small" @click="promptLogin('teaching_assistant')">Professor Assistente</v-btn>
       <v-btn size="small" @click="promptLogin('main_teacher')">Professor Regente</v-btn>
-      <v-btn size="small" @click="handleRoleChange('administrator')">Administrador</v-btn>
+      <v-btn
+    @click="handleAdminLogin"
+    size="small"
+    variant="text"
+    color="primary"
+  >
+    Administrator
+  </v-btn>
     </v-toolbar-items>
     <v-toolbar-items class="ms-2">
       <v-btn size="small" @click="handleLogout" variant="text">
@@ -74,8 +81,9 @@ const handleLogin = async (personId: number) => {
   }
 }
 
-const handleRoleChange = (role: string) => {
-  roleStore.setRole(role)
+const handleAdminLogin = () => {
+  roleStore.setRole('administrator')
+  router.push('/')
 }
 
 const handleLogout = () => {

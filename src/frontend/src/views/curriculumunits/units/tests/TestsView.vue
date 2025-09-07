@@ -1,4 +1,3 @@
-<!-- filepath: /home/paulo/DEI/candidatura-projeto/projeto-dei/src/frontend/src/views/curriculumunits/units/tests/TestsView.vue -->
 <template>
   <v-container fluid class="pa-6">
     <!-- Header -->

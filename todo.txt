@@ -12,17 +12,6 @@ POR FAZER
 
 
 -- input validation no frontend
--- nos projetos para cada submissao aparecer a nota automatica
 
-
-- Visualizar calendário de avaliações com deteção de conflitos;
-
-
-**Sistema de estatísticas avançado** da UC: distribuição de notas, médias por teste/projeto, número de revisões submetidas/aprovadas...
-
-**Dashboard personalizado**
-  
-  - Vista do professor: alunos, correções pendentes, estatísticas
-  - Vista do assistente: tarefas de correção, estatísticas
 
 **Notificações na aplicação e/ou Email** para eventos importantes (ex: submissão de projeto, atribuição de nota, pedido de revisão...).

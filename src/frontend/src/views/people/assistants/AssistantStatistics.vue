@@ -1,4 +1,3 @@
-<!-- filepath: /home/paulo/DEI/candidatura-projeto/projeto-dei/src/frontend/src/views/people/assistants/AssistantStatistics.vue -->
 <template>
   <v-container fluid class="pa-6">
     <v-row justify="center">

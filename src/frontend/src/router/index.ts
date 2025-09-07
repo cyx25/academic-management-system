@@ -21,6 +21,7 @@ import TeacherStatistics from '@/views/people/teachers/TeacherStatistics.vue'
 import AssistantGradingTasks from '@/views/people/assistants/AssistantGradingTasks.vue'
 import AssistantStatistics from '@/views/people/assistants/AssistantStatistics.vue'
 import UnitStatisticsView from '@/views/curriculumunits/units/statistics/UnitStatisticsView.vue'
+import { useRoleStore } from '@/stores/role'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -144,6 +145,17 @@ const router = createRouter({
       ]
     },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const roleStore = useRoleStore()
+  
+  // If role is 'none' and trying to navigate away from home, redirect to home
+  if (roleStore.currentRole === 'none' && to.name !== 'home') {
+    next({ name: 'home' })
+  } else {
+    next()
+  }
 })
 
 export default router

@@ -1,4 +1,3 @@
-<!-- filepath: /home/paulo/DEI/candidatura-projeto/projeto-dei/src/frontend/src/components/TopBar.vue -->
 <template>
   <UtilBar />
   <NavBar :navbarItems="navbarItems" />

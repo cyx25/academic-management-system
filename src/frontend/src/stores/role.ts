@@ -58,10 +58,12 @@ export const useRoleStore = defineStore('role', {
       this.currentUser = null
     },
     setRole(role: string) {
-      // For roles without login, like administrator
-      if (role === 'administrator' || role === 'none') {
-        this.logout()
+      // Handle administrator role without login
+      if (role === 'administrator') {
         this.currentRole = role
+       
+      } else if (role === 'none') {
+        this.logout()
       }
     },
   },

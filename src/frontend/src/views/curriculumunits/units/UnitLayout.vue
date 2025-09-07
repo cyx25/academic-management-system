@@ -1,4 +1,3 @@
-<!-- filepath: /home/paulo/DEI/candidatura-projeto/projeto-dei/src/frontend/src/views/curriculumunits/units/UnitLayout.vue -->
 <template>
   <v-layout class="unit-layout">
     <!-- Enhanced Navigation Drawer -->
