@@ -92,9 +92,7 @@ A solução que cumpra os requisitos descritos acima será avaliada com a **cota
 
 **Nota:** Quando alguma situação ou detalhe não estiver explicitamente descrito neste enunciado, deve ser usado o **bom senso** e tomar decisões consistentes com a lógica do sistema, documentando-as no ficheiro `README` se necessário.
 
-### Funcionalidades Adicionais para Notas Superiores
-
-Para alcançar uma **nota até 17 valores**, deve implementar **duas** das seguintes funcionalidades adicionais:
+### Funcionalidades Adicionais
 
 - **Submissões múltiplas de projetos** com histórico de versões, sendo a última submissão considerada como válida.
 - **Avaliação automática de projetos** com feedback detalhado (ex: testes unitários acionados pelo backend).
@@ -105,42 +103,5 @@ Para alcançar uma **nota até 17 valores**, deve implementar **duas** das segui
 - **Sistema de estatísticas avançado** da UC: distribuição de notas, médias por teste/projeto, número de revisões submetidas/aprovadas...
 - **Notificações na aplicação e/ou Email** para eventos importantes (ex: submissão de projeto, atribuição de nota, pedido de revisão...). Para envio de emails, é recomendado usar [MailCrab](https://github.com/tweedegolf/mailcrab).
 
-Para alcançar a **nota máxima de 20 valores**, deve implementar **quatro** das funcionalidades mencionadas acima, ou outras funcionalidades que considere relevantes e que melhorem significativamente a experiência do utilizador e a gestão académica.
 
----
 
-O sistema será utilizado por membros do DEI e deve proporcionar uma interface intuitiva e funcional para a gestão académica das Unidades Curriculares.
-
-É permitida e valorizada (mas **não obrigatória**) a implementação de funcionalidades adicionais às acima, especialmente se considerar que algum aspeto melhoraria significativamente a _User Experience (UX)_ durante a utilização do sistema (por exemplo, uma homepage, um dashboard, sistema de mensagens internas, etc.).
-
-É-lhe fornecido **código base** que deve analisar e utilizar como ponto de partida, estando algumas das funcionalidades acima já parcial ou integralmente implementadas. Será penalizada qualquer falta de validação de input do utilizador.
-
-Alguns aspetos do código base poderão não estar de acordo com as melhores práticas de desenvolvimento, pelo que é sugerido que use o seu discernimento para melhorar o código existente, se assim o entender. Um exemplo de boa prática poderá ser a criação de componentes reutilizáveis para código repetido.
-
-Deve realizar o exercício de forma modular. Serão valorizadas qualidade e estética do código e da interface web apresentada.
-
-Dúvidas sobre os requisitos do exercício devem ser esclarecidas por email.
-
-_Note-se que a situação descrita neste enunciado foi simplificada e não retrata necessariamente a realidade. A sua solução será usada apenas para fins de avaliação._
-
-## Submissão
-
-É obrigatório e alvo de avaliação a utilização de um sistema de controlo de versões (especificamente, [git](https://git-scm.com/)) durante o desenvolvimento do exercício. Deve submeter a sua solução no repositório privado que lhe foi atribuído para o efeito, na instância de [GitLab da RNL](https://gitlab.rnl.tecnico.ulisboa.pt/), e que inicialmente contém o código base, do qual deve partir. Não é necessária a utilização de nenhuma funcionalidade específica do GitLab (e.g., _Issues_ e _Merge Requests_), apenas da ferramenta `git` em si. Assim, ser-nos-á possível validar a sua capacidade de utilização desta ferramenta, podendo até ser-lhe benéfico durante a componente de entrevista.
-
-Deve incluir, junto da sua solução, um ficheiro `README` que descreva o procedimento para iniciar um servidor local de testes. Pode incluir nesse ficheiro `README` qualquer informação que considere relevante para a avaliação do seu trabalho, tal como alguma eventual justificação de decisões tomadas. Não submeta artefactos irrelevantes (e.g., pasta `node_modules`).
-
-Deve incluir também um ficheiro `populate.sql` com um _dump_ da base de dados que permita popular a base de dados com dados para testes e avaliação. Este ficheiro pode ser gerado usando [`pg_dump`](https://www.postgresql.org/docs/current/app-pgdump.html), por exemplo com o comando `pg_dump -U <USER> -p <PORT> > populate.sql`.
-
-O exercício prático tem a **nota miníma de 12 valores**. Soluções com nota inferior a 12 valores serão reprovadas.
-
-**Prazo máximo de entrega: domingo, dia 7 de Setembro de 2025, às 23h59 (hora de Lisboa).**
-
-Não serão aceites quaisquer entregas após o prazo limite, por qualquer razão. Qualquer candidato que não entregue uma solução até ao prazo limite será automaticamente avaliado com a cotação de 0 (zero) valores na componente de seleção correspondente ao exercício prático.
-
-**Boa sorte!**
-
-## Recursos Potencialmente Úteis
-
-- [https://vuetifyjs.com/en/](https://vuetifyjs.com/en/)
-- [https://spring.io/guides](https://spring.io/guides)
-- [https://www.javatpoint.com/spring-boot-architecture](https://www.javatpoint.com/spring-boot-architecture)
